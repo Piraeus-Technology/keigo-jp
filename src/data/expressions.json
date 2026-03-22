@@ -1,0 +1,632 @@
+{
+  "お忙しいところ恐れ入りますが": {
+    "reading": "おいそがしいところおそれいりますが",
+    "translation": "I'm sorry to bother you when you're busy, but...",
+    "level": "basic",
+    "category": "opening",
+    "usage": "Used at the beginning of a request to a superior or client. Shows consideration for their time.",
+    "examples": [
+      { "ja": "お忙しいところ恐れ入りますが、こちらの書類にサインをいただけますか。", "en": "I'm sorry to bother you when you're busy, but could you sign this document?" }
+    ]
+  },
+  "お世話になっております": {
+    "reading": "おせわになっております",
+    "translation": "Thank you for your continued support",
+    "level": "basic",
+    "category": "greeting",
+    "usage": "Standard business greeting used at the start of emails and phone calls with people from other companies.",
+    "examples": [
+      { "ja": "いつもお世話になっております。山田商事の田中でございます。", "en": "Thank you for your continued support. This is Tanaka from Yamada Trading." }
+    ]
+  },
+  "お疲れ様です": {
+    "reading": "おつかれさまです",
+    "translation": "Thank you for your hard work",
+    "level": "basic",
+    "category": "greeting",
+    "usage": "Used to greet colleagues within the same company. Also used when someone finishes work.",
+    "examples": [
+      { "ja": "お疲れ様です。明日の会議の件でご連絡いたしました。", "en": "Hi (thank you for your hard work). I'm contacting you about tomorrow's meeting." }
+    ]
+  },
+  "恐れ入りますが": {
+    "reading": "おそれいりますが",
+    "translation": "I'm sorry to trouble you, but...",
+    "level": "basic",
+    "category": "opening",
+    "usage": "A polite softener used before making a request. Less specific than お忙しいところ恐れ入りますが.",
+    "examples": [
+      { "ja": "恐れ入りますが、もう一度ご説明いただけますか。", "en": "I'm sorry to trouble you, but could you explain that again?" }
+    ]
+  },
+  "お手数ですが": {
+    "reading": "おてすうですが",
+    "translation": "I'm sorry for the trouble, but...",
+    "level": "basic",
+    "category": "opening",
+    "usage": "Used when asking someone to do something that requires effort on their part.",
+    "examples": [
+      { "ja": "お手数ですが、こちらのフォームにご記入いただけますか。", "en": "I'm sorry for the trouble, but could you fill in this form?" }
+    ]
+  },
+  "よろしくお願いいたします": {
+    "reading": "よろしくおねがいいたします",
+    "translation": "I look forward to working with you / Please take care of this",
+    "level": "basic",
+    "category": "closing",
+    "usage": "Essential closing phrase for emails, meetings, and requests. More formal than よろしくお願いします.",
+    "examples": [
+      { "ja": "今後ともよろしくお願いいたします。", "en": "I look forward to your continued support." }
+    ]
+  },
+  "ご確認のほど、よろしくお願いいたします": {
+    "reading": "ごかくにんのほど、よろしくおねがいいたします",
+    "translation": "Please kindly confirm / check",
+    "level": "intermediate",
+    "category": "closing",
+    "usage": "Common email closing when you need someone to review or confirm something.",
+    "examples": [
+      { "ja": "添付ファイルをお送りいたします。ご確認のほど、よろしくお願いいたします。", "en": "I'm sending the attached file. Please kindly confirm it." }
+    ]
+  },
+  "申し訳ございませんが": {
+    "reading": "もうしわけございませんが",
+    "translation": "I'm very sorry, but...",
+    "level": "basic",
+    "category": "apology",
+    "usage": "Very formal apology used before delivering bad news or declining a request. More formal than すみませんが.",
+    "examples": [
+      { "ja": "申し訳ございませんが、本日は定休日でございます。", "en": "I'm very sorry, but today is our regular holiday." }
+    ]
+  },
+  "お待たせいたしました": {
+    "reading": "おまたせいたしました",
+    "translation": "I'm sorry to have kept you waiting",
+    "level": "basic",
+    "category": "apology",
+    "usage": "Used when you kept someone waiting, such as when returning to a phone call or serving a customer.",
+    "examples": [
+      { "ja": "大変お待たせいたしました。ご注文の品はこちらでございます。", "en": "I'm sorry to have kept you waiting. Here is what you ordered." }
+    ]
+  },
+  "ご迷惑をおかけして申し訳ございません": {
+    "reading": "ごめいわくをおかけしてもうしわけございません",
+    "translation": "I sincerely apologize for the inconvenience",
+    "level": "intermediate",
+    "category": "apology",
+    "usage": "Strong formal apology acknowledging that you caused trouble or inconvenience.",
+    "examples": [
+      { "ja": "システム障害によりご迷惑をおかけして申し訳ございません。", "en": "I sincerely apologize for the inconvenience caused by the system failure." }
+    ]
+  },
+  "かしこまりました": {
+    "reading": "かしこまりました",
+    "translation": "Certainly / Understood (very formal)",
+    "level": "basic",
+    "category": "response",
+    "usage": "Very formal way of saying 'understood' or 'certainly'. Used by service staff and in formal business contexts.",
+    "examples": [
+      { "ja": "かしこまりました。すぐにお持ちいたします。", "en": "Certainly. I will bring it right away." }
+    ]
+  },
+  "承知いたしました": {
+    "reading": "しょうちいたしました",
+    "translation": "Understood / Acknowledged (formal)",
+    "level": "basic",
+    "category": "response",
+    "usage": "Formal way of confirming you understand and will comply. Common in business emails and conversations.",
+    "examples": [
+      { "ja": "承知いたしました。来週の月曜日までに提出いたします。", "en": "Understood. I will submit it by next Monday." }
+    ]
+  },
+  "おっしゃる通りです": {
+    "reading": "おっしゃるとおりです",
+    "translation": "You are absolutely right",
+    "level": "intermediate",
+    "category": "response",
+    "usage": "Respectful way of agreeing with a superior or client. Literally 'It is as you say.'",
+    "examples": [
+      { "ja": "おっしゃる通りです。早急に対応いたします。", "en": "You are absolutely right. I will address this promptly." }
+    ]
+  },
+  "ご検討いただければ幸いです": {
+    "reading": "ごけんとういただければさいわいです",
+    "translation": "I would be grateful if you could consider this",
+    "level": "intermediate",
+    "category": "closing",
+    "usage": "Soft way of requesting consideration of a proposal. Common in business emails.",
+    "examples": [
+      { "ja": "弊社の提案をご検討いただければ幸いです。", "en": "I would be grateful if you could consider our proposal." }
+    ]
+  },
+  "お力添えいただけますと幸いです": {
+    "reading": "おちからぞえいただけますとさいわいです",
+    "translation": "I would appreciate your support/assistance",
+    "level": "advanced",
+    "category": "closing",
+    "usage": "Formal way of requesting help or support from a superior or another department.",
+    "examples": [
+      { "ja": "本プロジェクトにお力添えいただけますと幸いです。", "en": "I would appreciate your support on this project." }
+    ]
+  },
+  "ご査収ください": {
+    "reading": "ごさしゅうください",
+    "translation": "Please review and accept (the attached)",
+    "level": "advanced",
+    "category": "closing",
+    "usage": "Formal email closing when sending documents or deliverables for review.",
+    "examples": [
+      { "ja": "請求書を添付いたしましたので、ご査収ください。", "en": "I have attached the invoice. Please review and accept it." }
+    ]
+  },
+  "お目にかかれて光栄です": {
+    "reading": "おめにかかれてこうえいです",
+    "translation": "It's an honor to meet you",
+    "level": "intermediate",
+    "category": "greeting",
+    "usage": "Very formal greeting when meeting someone important for the first time.",
+    "examples": [
+      { "ja": "かねてよりお噂は伺っております。お目にかかれて光栄です。", "en": "I've heard much about you. It's an honor to meet you." }
+    ]
+  },
+  "ご無沙汰しております": {
+    "reading": "ごぶさたしております",
+    "translation": "It has been a long time / I apologize for not being in touch",
+    "level": "intermediate",
+    "category": "greeting",
+    "usage": "Used when contacting someone you haven't been in touch with for a while.",
+    "examples": [
+      { "ja": "ご無沙汰しております。お変わりなくお過ごしでしょうか。", "en": "It's been a long time. I hope you've been well." }
+    ]
+  },
+  "お先に失礼いたします": {
+    "reading": "おさきにしつれいいたします",
+    "translation": "Excuse me for leaving before you",
+    "level": "basic",
+    "category": "farewell",
+    "usage": "Said when leaving the office before your colleagues or superiors.",
+    "examples": [
+      { "ja": "本日はこれで失礼いたします。お疲れ様でした。", "en": "I'll be leaving now. Thank you for your hard work today." }
+    ]
+  },
+  "ご足労いただきありがとうございます": {
+    "reading": "ごそくろういただきありがとうございます",
+    "translation": "Thank you for taking the trouble to come",
+    "level": "advanced",
+    "category": "greeting",
+    "usage": "Used to thank someone (especially a client) for making the effort to visit your office.",
+    "examples": [
+      { "ja": "本日はご足労いただきありがとうございます。", "en": "Thank you for taking the trouble to come today." }
+    ]
+  },
+  "お気になさらないでください": {
+    "reading": "おきになさらないでください",
+    "translation": "Please don't worry about it",
+    "level": "intermediate",
+    "category": "response",
+    "usage": "Used to reassure someone who is apologizing. Polite way of saying 'no problem.'",
+    "examples": [
+      { "ja": "とんでもございません。どうぞお気になさらないでください。", "en": "Not at all. Please don't worry about it." }
+    ]
+  },
+  "ご都合のよい日時をお知らせください": {
+    "reading": "ごつごうのよいにちじをおしらせください",
+    "translation": "Please let me know a convenient date and time",
+    "level": "intermediate",
+    "category": "request",
+    "usage": "Used when trying to schedule a meeting or appointment with someone.",
+    "examples": [
+      { "ja": "打ち合わせの件ですが、ご都合のよい日時をお知らせいただけますか。", "en": "Regarding the meeting, could you let me know a convenient date and time?" }
+    ]
+  },
+  "ご教示いただけますでしょうか": {
+    "reading": "ごきょうじいただけますでしょうか",
+    "translation": "Could you kindly teach/inform me?",
+    "level": "advanced",
+    "category": "request",
+    "usage": "Very formal way of asking someone to share information or knowledge with you.",
+    "examples": [
+      { "ja": "手続きの方法についてご教示いただけますでしょうか。", "en": "Could you kindly inform me of the procedure?" }
+    ]
+  },
+  "ご了承ください": {
+    "reading": "ごりょうしょうください",
+    "translation": "Please understand / Please accept this",
+    "level": "intermediate",
+    "category": "closing",
+    "usage": "Used when asking for understanding about a decision or situation that may not be ideal for the other party.",
+    "examples": [
+      { "ja": "ご不便をおかけしますが、何卒ご了承ください。", "en": "I apologize for the inconvenience. Please understand." }
+    ]
+  },
+  "何卒よろしくお願い申し上げます": {
+    "reading": "なにとぞよろしくおねがいもうしあげます",
+    "translation": "I humbly ask for your kind cooperation",
+    "level": "advanced",
+    "category": "closing",
+    "usage": "The most formal closing phrase. Used in important business emails and formal documents.",
+    "examples": [
+      { "ja": "ご多忙のところ恐縮ですが、何卒よろしくお願い申し上げます。", "en": "I apologize for troubling you when you are busy, but I humbly ask for your kind cooperation." }
+    ]
+  },
+  "つまらないものですが": {
+    "reading": "つまらないものですが",
+    "translation": "It's nothing special, but... (when giving a gift)",
+    "level": "intermediate",
+    "category": "gift",
+    "usage": "Humble phrase used when presenting a gift. Shows modesty about the gift's value.",
+    "examples": [
+      { "ja": "つまらないものですが、どうぞお召し上がりください。", "en": "It's nothing special, but please enjoy it." }
+    ]
+  },
+  "ささやかですが": {
+    "reading": "ささやかですが",
+    "translation": "It's a small thing, but...",
+    "level": "intermediate",
+    "category": "gift",
+    "usage": "Modern alternative to つまらないものですが. Used when presenting a gift.",
+    "examples": [
+      { "ja": "ささやかですが、お口に合えば幸いです。", "en": "It's a small thing, but I hope it suits your taste." }
+    ]
+  },
+  "お忙しいとは存じますが": {
+    "reading": "おいそがしいとはぞんじますが",
+    "translation": "I know you must be busy, but...",
+    "level": "advanced",
+    "category": "opening",
+    "usage": "Very formal opener before making a request. Uses humble form of 思う (存じる).",
+    "examples": [
+      { "ja": "お忙しいとは存じますが、ご出席いただけますと幸いです。", "en": "I know you must be busy, but I would appreciate your attendance." }
+    ]
+  },
+  "お差し支えなければ": {
+    "reading": "おさしつかえなければ",
+    "translation": "If it's not too much trouble / If you don't mind",
+    "level": "advanced",
+    "category": "opening",
+    "usage": "Polite way of prefacing a potentially sensitive question or request.",
+    "examples": [
+      { "ja": "お差し支えなければ、ご連絡先をお教えいただけますか。", "en": "If you don't mind, could you give me your contact information?" }
+    ]
+  },
+  "お変わりなくお過ごしでしょうか": {
+    "reading": "おかわりなくおすごしでしょうか",
+    "translation": "I hope you've been doing well",
+    "level": "advanced",
+    "category": "greeting",
+    "usage": "Formal way of asking about someone's well-being, used after a period of no contact.",
+    "examples": [
+      { "ja": "ご無沙汰しております。お変わりなくお過ごしでしょうか。", "en": "It's been a while. I hope you've been doing well." }
+    ]
+  },
+  "お電話ありがとうございます": {
+    "reading": "おでんわありがとうございます",
+    "translation": "Thank you for calling",
+    "level": "basic",
+    "category": "greeting",
+    "usage": "Standard phone greeting when answering a business call. Often followed by the company name.",
+    "examples": [
+      { "ja": "お電話ありがとうございます。株式会社山田でございます。", "en": "Thank you for calling. This is Yamada Corporation." }
+    ]
+  },
+  "少々お待ちくださいませ": {
+    "reading": "しょうしょうおまちくださいませ",
+    "translation": "Please wait a moment",
+    "level": "basic",
+    "category": "request",
+    "usage": "Polite way to ask someone to wait briefly, commonly used on the phone when transferring a call or checking information.",
+    "examples": [
+      { "ja": "担当者に確認いたしますので、少々お待ちくださいませ。", "en": "I will check with the person in charge, so please wait a moment." }
+    ]
+  },
+  "お電話が遠いようでございますが": {
+    "reading": "おでんわがとおいようでございますが",
+    "translation": "The phone connection seems poor",
+    "level": "intermediate",
+    "category": "opening",
+    "usage": "Polite way to tell someone you cannot hear them well on the phone, without blaming them for speaking too quietly.",
+    "examples": [
+      { "ja": "恐れ入りますが、お電話が遠いようでございますが、もう一度お願いできますでしょうか。", "en": "I'm sorry, but the connection seems poor. Could you please repeat that?" }
+    ]
+  },
+  "折り返しお電話いたします": {
+    "reading": "おりかえしおでんわいたします",
+    "translation": "I will call you back",
+    "level": "basic",
+    "category": "response",
+    "usage": "Used on business phone calls when you need to call someone back after checking information or when the person they want is unavailable.",
+    "examples": [
+      { "ja": "確認の上、折り返しお電話いたします。", "en": "I will confirm and call you back." }
+    ]
+  },
+  "お伝えいただけますでしょうか": {
+    "reading": "おつたえいただけますでしょうか",
+    "translation": "Could you please pass along a message?",
+    "level": "intermediate",
+    "category": "request",
+    "usage": "Used on the phone when the person you want to speak with is unavailable and you want to leave a message.",
+    "examples": [
+      { "ja": "恐れ入りますが、折り返しお電話をいただきたい旨、お伝えいただけますでしょうか。", "en": "I'm sorry to trouble you, but could you please pass along that I'd like a return call?" }
+    ]
+  },
+  "初めてメールをお送りいたします": {
+    "reading": "はじめてめーるをおおくりいたします",
+    "translation": "This is the first time I am emailing you",
+    "level": "intermediate",
+    "category": "opening",
+    "usage": "Used as an email opener when contacting someone for the first time, replacing お世話になっております which is only for existing relationships.",
+    "examples": [
+      { "ja": "突然のご連絡失礼いたします。初めてメールをお送りいたします。株式会社ABCの鈴木と申します。", "en": "I apologize for the sudden contact. This is the first time I am emailing you. I am Suzuki from ABC Corporation." }
+    ]
+  },
+  "ご返信いただけますと幸いです": {
+    "reading": "ごへんしんいただけますとさいわいです",
+    "translation": "I would appreciate it if you could reply",
+    "level": "intermediate",
+    "category": "closing",
+    "usage": "Polite email closing used when you need a reply from the recipient. Softer than directly asking for a response.",
+    "examples": [
+      { "ja": "お忙しいところ恐縮ですが、今週中にご返信いただけますと幸いです。", "en": "I'm sorry to bother you when you're busy, but I would appreciate a reply by the end of this week." }
+    ]
+  },
+  "取り急ぎご報告まで": {
+    "reading": "とりいそぎごほうこくまで",
+    "translation": "Just a quick report for now",
+    "level": "intermediate",
+    "category": "closing",
+    "usage": "Used to close a brief email that provides a quick update. Indicates a more detailed follow-up may come later.",
+    "examples": [
+      { "ja": "先ほどの件、無事完了いたしました。取り急ぎご報告まで。", "en": "The matter from earlier has been completed successfully. Just a quick report for now." }
+    ]
+  },
+  "ご査収のほどよろしくお願いいたします": {
+    "reading": "ごさしゅうのほどよろしくおねがいいたします",
+    "translation": "Please kindly review and accept the attached",
+    "level": "advanced",
+    "category": "closing",
+    "usage": "Softer variant of ご査収ください. The のほど construction makes the request less direct and more polite.",
+    "examples": [
+      { "ja": "見積書を添付いたしました。ご査収のほどよろしくお願いいたします。", "en": "I have attached the quotation. Please kindly review and accept it." }
+    ]
+  },
+  "ご多忙のところ恐縮ですが": {
+    "reading": "ごたぼうのところきょうしゅくですが",
+    "translation": "I'm sorry to trouble you when you are so busy, but...",
+    "level": "advanced",
+    "category": "opening",
+    "usage": "Very formal email opener before a request. 恐縮 conveys a stronger sense of being sorry for imposing than 恐れ入ります.",
+    "examples": [
+      { "ja": "ご多忙のところ恐縮ですが、資料をご確認いただけますでしょうか。", "en": "I'm sorry to trouble you when you are so busy, but could you review the materials?" }
+    ]
+  },
+  "お手数をおかけいたしますが": {
+    "reading": "おてすうをおかけいたしますが",
+    "translation": "I apologize for the trouble, but...",
+    "level": "intermediate",
+    "category": "opening",
+    "usage": "A more formal version of お手数ですが, commonly used in business emails before a request that involves effort from the reader.",
+    "examples": [
+      { "ja": "お手数をおかけいたしますが、修正版をご送付いただけますでしょうか。", "en": "I apologize for the trouble, but could you send the revised version?" }
+    ]
+  },
+  "ご意見をお聞かせいただけますか": {
+    "reading": "ごいけんをおきかせいただけますか",
+    "translation": "Could you share your opinion?",
+    "level": "intermediate",
+    "category": "request",
+    "usage": "Used in meetings to politely ask someone, especially a superior, for their opinion or feedback on a matter.",
+    "examples": [
+      { "ja": "この企画について、ご意見をお聞かせいただけますか。", "en": "Could you share your opinion about this project plan?" }
+    ]
+  },
+  "ご不明な点がございましたら": {
+    "reading": "ごふめいなてんがございましたら",
+    "translation": "If you have any questions or unclear points",
+    "level": "intermediate",
+    "category": "closing",
+    "usage": "Common email or presentation closing that invites the reader to ask questions. Often followed by お気軽にお問い合わせください.",
+    "examples": [
+      { "ja": "ご不明な点がございましたら、お気軽にお問い合わせください。", "en": "If you have any questions, please feel free to contact us." }
+    ]
+  },
+  "お気軽にお申し付けください": {
+    "reading": "おきがるにおもうしつけください",
+    "translation": "Please feel free to let me know",
+    "level": "intermediate",
+    "category": "closing",
+    "usage": "Used to invite the other person to make requests freely. Common in customer service and business emails.",
+    "examples": [
+      { "ja": "何かご要望がございましたら、お気軽にお申し付けください。", "en": "If you have any requests, please feel free to let me know." }
+    ]
+  },
+  "ご容赦ください": {
+    "reading": "ごようしゃください",
+    "translation": "Please forgive / Please pardon",
+    "level": "advanced",
+    "category": "apology",
+    "usage": "Formal way of asking for forgiveness or understanding. Used in business emails when something cannot be changed or when delivering inconvenient news.",
+    "examples": [
+      { "ja": "事前の通知なく変更となりましたこと、ご容赦ください。", "en": "Please pardon the change that was made without prior notice." }
+    ]
+  },
+  "ご遠慮なくお申し出ください": {
+    "reading": "ごえんりょなくおもうしでください",
+    "translation": "Please do not hesitate to let us know",
+    "level": "intermediate",
+    "category": "closing",
+    "usage": "Encourages the other party to speak up or make requests without holding back. Common in service contexts and business correspondence.",
+    "examples": [
+      { "ja": "ご質問がございましたら、ご遠慮なくお申し出ください。", "en": "If you have any questions, please do not hesitate to let us know." }
+    ]
+  },
+  "ご理解いただけますようお願い申し上げます": {
+    "reading": "ごりかいいただけますようおねがいもうしあげます",
+    "translation": "I humbly ask for your understanding",
+    "level": "advanced",
+    "category": "closing",
+    "usage": "Very formal phrase used when asking for understanding regarding a policy, decision, or inconvenience. Common in official announcements.",
+    "examples": [
+      { "ja": "メンテナンスのため一時的にサービスを停止いたします。ご理解いただけますようお願い申し上げます。", "en": "We will temporarily suspend the service for maintenance. I humbly ask for your understanding." }
+    ]
+  },
+  "せっかくのお誘いですが": {
+    "reading": "せっかくのおさそいですが",
+    "translation": "Thank you for the kind invitation, but...",
+    "level": "intermediate",
+    "category": "apology",
+    "usage": "Used to politely decline an invitation. せっかく acknowledges the kindness of the offer before refusing.",
+    "examples": [
+      { "ja": "せっかくのお誘いですが、あいにく先約がございまして、参加できません。", "en": "Thank you for the kind invitation, but unfortunately I have a prior commitment and cannot attend." }
+    ]
+  },
+  "ご期待に沿えず申し訳ございません": {
+    "reading": "ごきたいにそえずもうしわけございません",
+    "translation": "I'm sorry for not meeting your expectations",
+    "level": "advanced",
+    "category": "apology",
+    "usage": "Used when declining a request or when results did not meet what was expected. Shows regret about not being able to help.",
+    "examples": [
+      { "ja": "今回はご期待に沿えず申し訳ございません。次回は改善いたします。", "en": "I'm sorry for not meeting your expectations this time. We will improve next time." }
+    ]
+  },
+  "お引き受けいたしかねます": {
+    "reading": "おひきうけいたしかねます",
+    "translation": "I'm afraid I cannot accept/undertake this",
+    "level": "advanced",
+    "category": "response",
+    "usage": "Formal way to decline a request or task. The ~かねます construction softens the refusal by expressing that you want to but cannot.",
+    "examples": [
+      { "ja": "誠に恐縮ですが、スケジュールの都合上、お引き受けいたしかねます。", "en": "I'm terribly sorry, but due to scheduling constraints, I'm afraid I cannot undertake this." }
+    ]
+  },
+  "ご意向に沿えず恐縮ですが": {
+    "reading": "ごいこうにそえずきょうしゅくですが",
+    "translation": "I regret that I cannot accommodate your wishes, but...",
+    "level": "advanced",
+    "category": "opening",
+    "usage": "Very formal expression used when you must decline or go against what the other party wanted. Common in business negotiations.",
+    "examples": [
+      { "ja": "ご意向に沿えず恐縮ですが、今回の値引きは対応いたしかねます。", "en": "I regret that I cannot accommodate your wishes, but we are unable to offer a discount this time." }
+    ]
+  },
+  "心より感謝申し上げます": {
+    "reading": "こころよりかんしゃもうしあげます",
+    "translation": "I express my heartfelt gratitude",
+    "level": "advanced",
+    "category": "closing",
+    "usage": "The most formal expression of thanks. Used in important business letters, speeches, and emails to express deep gratitude.",
+    "examples": [
+      { "ja": "長年にわたるご支援に、心より感謝申し上げます。", "en": "I express my heartfelt gratitude for your many years of support." }
+    ]
+  },
+  "厚く御礼申し上げます": {
+    "reading": "あつくおんれいもうしあげます",
+    "translation": "I offer my deepest thanks",
+    "level": "advanced",
+    "category": "closing",
+    "usage": "Extremely formal expression of gratitude. Used in formal business letters, year-end greetings, and speeches.",
+    "examples": [
+      { "ja": "日頃よりご愛顧を賜り、厚く御礼申し上げます。", "en": "I offer my deepest thanks for your continued patronage." }
+    ]
+  },
+  "ご多用のところありがとうございます": {
+    "reading": "ごたようのところありがとうございます",
+    "translation": "Thank you for your time despite your busy schedule",
+    "level": "intermediate",
+    "category": "greeting",
+    "usage": "Used to thank someone for attending a meeting or event despite being busy. A polite acknowledgment of their effort.",
+    "examples": [
+      { "ja": "ご多用のところお集まりいただき、ありがとうございます。", "en": "Thank you for gathering here despite your busy schedules." }
+    ]
+  },
+  "時下ますますご清栄のこととお慶び申し上げます": {
+    "reading": "じかますますごせいえいのこととおよろこびもうしあげます",
+    "translation": "I trust that your business continues to prosper",
+    "level": "advanced",
+    "category": "greeting",
+    "usage": "Formal seasonal greeting used at the beginning of business letters. Not season-specific and can be used year-round.",
+    "examples": [
+      { "ja": "拝啓　時下ますますご清栄のこととお慶び申し上げます。", "en": "Dear Sir/Madam, I trust that your business continues to prosper." }
+    ]
+  },
+  "本年もよろしくお願い申し上げます": {
+    "reading": "ほんねんもよろしくおねがいもうしあげます",
+    "translation": "I look forward to your continued support this year",
+    "level": "intermediate",
+    "category": "greeting",
+    "usage": "New Year business greeting used in January emails and cards. Expresses hope for a continued good relationship.",
+    "examples": [
+      { "ja": "旧年中は大変お世話になりました。本年もよろしくお願い申し上げます。", "en": "Thank you very much for your support last year. I look forward to your continued support this year." }
+    ]
+  },
+  "残暑お見舞い申し上げます": {
+    "reading": "ざんしょおみまいもうしあげます",
+    "translation": "Wishing you well during the lingering summer heat",
+    "level": "advanced",
+    "category": "greeting",
+    "usage": "Seasonal greeting used in business correspondence during late summer (August). Shows consideration for the recipient's health during hot weather.",
+    "examples": [
+      { "ja": "残暑お見舞い申し上げます。まだまだ暑い日が続きますが、くれぐれもご自愛ください。", "en": "Wishing you well during the lingering summer heat. The hot days continue, so please take good care of yourself." }
+    ]
+  },
+  "それでは、始めさせていただきます": {
+    "reading": "それでは、はじめさせていただきます",
+    "translation": "Well then, let me begin",
+    "level": "basic",
+    "category": "opening",
+    "usage": "Common phrase to start a meeting or presentation. Uses the させていただく construction to humbly ask permission to begin.",
+    "examples": [
+      { "ja": "皆様お揃いのようですので、それでは、始めさせていただきます。", "en": "It seems everyone is here, so well then, let me begin." }
+    ]
+  },
+  "ご質問はございますでしょうか": {
+    "reading": "ごしつもんはございますでしょうか",
+    "translation": "Are there any questions?",
+    "level": "basic",
+    "category": "request",
+    "usage": "Standard phrase used at the end of a presentation or meeting segment to invite questions from the audience.",
+    "examples": [
+      { "ja": "以上が今回のご提案でございます。ご質問はございますでしょうか。", "en": "That concludes our proposal. Are there any questions?" }
+    ]
+  },
+  "失礼ですが、もう一度お名前をお伺いしてもよろしいでしょうか": {
+    "reading": "しつれいですが、もういちどおなまえをおうかがいしてもよろしいでしょうか",
+    "translation": "Excuse me, but may I ask your name again?",
+    "level": "intermediate",
+    "category": "request",
+    "usage": "Polite way to ask someone to repeat their name. The 失礼ですが prefix acknowledges that the question might seem rude.",
+    "examples": [
+      { "ja": "失礼ですが、もう一度お名前をお伺いしてもよろしいでしょうか。", "en": "Excuse me, but may I ask your name again?" }
+    ]
+  },
+  "お言葉を返すようですが": {
+    "reading": "おことばをかえすようですが",
+    "translation": "I don't mean to contradict you, but...",
+    "level": "advanced",
+    "category": "opening",
+    "usage": "Used in meetings when you need to respectfully disagree with a superior or client. Acknowledges the social risk of contradicting someone.",
+    "examples": [
+      { "ja": "お言葉を返すようですが、データを見る限り別の結論も考えられます。", "en": "I don't mean to contradict you, but looking at the data, another conclusion is also possible." }
+    ]
+  },
+  "失礼いたします": {
+    "reading": "しつれいいたします",
+    "translation": "Excuse me (I'm being rude)",
+    "level": "basic",
+    "category": "farewell",
+    "usage": "Versatile phrase used when entering or leaving a room, ending a phone call, or excusing yourself. Literally means 'I commit a rudeness.'",
+    "examples": [
+      { "ja": "それでは、失礼いたします。", "en": "Well then, excuse me (goodbye)." }
+    ]
+  },
+  "お忙しい中お時間をいただきありがとうございました": {
+    "reading": "おいそがしいなかおじかんをいただきありがとうございました",
+    "translation": "Thank you for your time despite your busy schedule",
+    "level": "intermediate",
+    "category": "farewell",
+    "usage": "Used at the end of a meeting or visit to thank someone for making time. Appropriate for clients and superiors.",
+    "examples": [
+      { "ja": "本日はお忙しい中お時間をいただきありがとうございました。", "en": "Thank you for your time today despite your busy schedule." }
+    ]
+  }
+}

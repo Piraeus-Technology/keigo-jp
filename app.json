@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "KeiGo!",
+    "slug": "keigo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#00695C"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.lkh9596.keigo",
+      "buildNumber": "1",
+      "infoPlist": {
+        "CFBundleDisplayName": "KeiGo!",
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#00695C"
+      },
+      "package": "com.lkh9596.keigo",
+      "versionCode": 1
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": ""
+      }
+    }
+  }
+}
