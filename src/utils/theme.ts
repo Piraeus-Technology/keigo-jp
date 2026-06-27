@@ -1,27 +1,27 @@
 import { useThemeStore } from '../store/themeStore';
 
 const lightColors = {
-  primary: '#00695C',
-  primaryLight: '#009688',
-  primaryDark: '#004D40',
+  primary: '#DB4E05',
+  primaryLight: '#FE7A1A',
+  primaryDark: '#A83C04',
 
-  accent: '#FF6F00',
-  accentLight: '#FFF3E0',
+  accent: '#FE690A',
+  accentLight: '#FFF1E6',
 
-  bg: '#FAFAFA',
+  bg: '#FFFBF8',
   card: '#FFFFFF',
-  searchBg: '#F0EEEB',
+  searchBg: '#F6F0EA',
 
   textPrimary: '#1A1A1A',
   textSecondary: '#6B6B6B',
   textMuted: '#9E9E9E',
 
-  border: '#E8E5E0',
-  divider: '#F0EEEB',
+  border: '#EDE6DF',
+  divider: '#F4EEE8',
 
-  pillBg: '#F0EEEB',
-  pillActiveBg: '#00695C',
-  pillText: '#4A4A4A',
+  pillBg: '#F6F0EA',
+  pillActiveBg: '#DB4E05',
+  pillText: '#5A5046',
   pillActiveText: '#FFFFFF',
 
   sonkeigoTag: '#E8F5E9',
@@ -42,28 +42,28 @@ const lightColors = {
 };
 
 const darkColors = {
-  primary: '#4DB6AC',
-  primaryLight: '#80CBC4',
-  primaryDark: '#B2DFDB',
+  primary: '#FF8A4D',
+  primaryLight: '#FFA570',
+  primaryDark: '#FFB98C',
 
-  accent: '#FFB74D',
-  accentLight: '#3D2A1A',
+  accent: '#FF8A4D',
+  accentLight: '#3A2415',
 
-  bg: '#121212',
-  card: '#1E1E1E',
-  searchBg: '#2A2A2A',
+  bg: '#141210',
+  card: '#211E1B',
+  searchBg: '#2C2722',
 
-  textPrimary: '#F0F0F0',
-  textSecondary: '#A0A0A0',
-  textMuted: '#666666',
+  textPrimary: '#F2EDE9',
+  textSecondary: '#A89F98',
+  textMuted: '#6B635C',
 
-  border: '#333333',
-  divider: '#2A2A2A',
+  border: '#37312B',
+  divider: '#2C2722',
 
-  pillBg: '#2A2A2A',
-  pillActiveBg: '#4DB6AC',
-  pillText: '#A0A0A0',
-  pillActiveText: '#FFFFFF',
+  pillBg: '#2C2722',
+  pillActiveBg: '#FF8A4D',
+  pillText: '#A89F98',
+  pillActiveText: '#2A1607',
 
   sonkeigoTag: '#1B3A1B',
   sonkeigoTagText: '#66BB6A',
