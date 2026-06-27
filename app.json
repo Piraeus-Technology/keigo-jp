@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "KeiGo!",
-    "slug": "keigo",
+    "name": "KeiGo JP",
+    "slug": "keigo-jp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,10 +13,10 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.lkh9596.keigo",
+      "bundleIdentifier": "com.lkh9596.keigojp",
       "buildNumber": "1",
       "infoPlist": {
-        "CFBundleDisplayName": "KeiGo!",
+        "CFBundleDisplayName": "KeiGo JP",
         "ITSAppUsesNonExemptEncryption": false
       }
     },
@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#00695C"
       },
-      "package": "com.lkh9596.keigo",
+      "package": "com.piraeus.keigojp",
       "versionCode": 1
     },
     "web": {

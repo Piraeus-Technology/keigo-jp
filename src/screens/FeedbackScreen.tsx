@@ -24,9 +24,9 @@ export default function FeedbackScreen() {
 
   const handleRateApp = () => {
     const url = Platform.select({
-      ios: 'https://apps.apple.com/app/keigo', // TODO: update with real App Store ID
-      android: 'market://details?id=com.lkh9596.keigo',
-      default: 'https://apps.apple.com/app/keigo',
+      ios: 'https://apps.apple.com/app/keigo-jp', // TODO: update with real App Store ID
+      android: 'market://details?id=com.piraeus.keigojp',
+      default: 'https://apps.apple.com/app/keigo-jp',
     });
     Linking.openURL(url).catch(() => {
       Alert.alert('Not Available Yet', 'Rating will be available once the app is on the App Store.');
@@ -34,7 +34,7 @@ export default function FeedbackScreen() {
   };
 
   const handleSendEmail = () => {
-    const subject = encodeURIComponent('KeiGo! Feedback');
+    const subject = encodeURIComponent('KeiGo JP Feedback');
     const url = `mailto:contact@piraeus.app?subject=${subject}`;
 
     Linking.openURL(url).catch(() => {
@@ -89,7 +89,7 @@ export default function FeedbackScreen() {
         >
           <Text style={styles.rowEmoji}>⭐</Text>
           <View style={styles.rowInfo}>
-            <Text style={[styles.rowTitle, { color: colors.textPrimary }]}>Enjoying KeiGo!?</Text>
+            <Text style={[styles.rowTitle, { color: colors.textPrimary }]}>Enjoying KeiGo JP?</Text>
             <Text style={[styles.rowSubtitle, { color: colors.textSecondary }]}>Rate us on the App Store</Text>
           </View>
           <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
@@ -100,14 +100,14 @@ export default function FeedbackScreen() {
           style={[styles.rowCard, { backgroundColor: colors.card }]}
           onPress={() => {
             Share.share({
-              message: 'Check out KeiGo! — master Japanese business keigo!',
+              message: 'Check out KeiGo JP — master Japanese business keigo!',
             });
           }}
           activeOpacity={0.7}
         >
           <Text style={styles.rowEmoji}>🔗</Text>
           <View style={styles.rowInfo}>
-            <Text style={[styles.rowTitle, { color: colors.textPrimary }]}>Share KeiGo!</Text>
+            <Text style={[styles.rowTitle, { color: colors.textPrimary }]}>Share KeiGo JP</Text>
             <Text style={[styles.rowSubtitle, { color: colors.textSecondary }]}>Tell a friend about the app</Text>
           </View>
           <Ionicons name="share-outline" size={20} color={colors.textMuted} />
@@ -116,7 +116,7 @@ export default function FeedbackScreen() {
         {/* Privacy Policy */}
         <TouchableOpacity
           style={[styles.rowCard, { backgroundColor: colors.card }]}
-          onPress={() => Linking.openURL('https://piraeus-technology.github.io/keigo/')}
+          onPress={() => Linking.openURL('https://piraeus-technology.github.io/keigo-jp/')}
           activeOpacity={0.7}
         >
           <Ionicons name="shield-checkmark-outline" size={20} color={colors.textSecondary} style={{ marginRight: spacing.md }} />
@@ -126,7 +126,7 @@ export default function FeedbackScreen() {
 
         {/* Version */}
         <Text style={[styles.version, { color: colors.textMuted }]}>
-          KeiGo! v{APP_VERSION}
+          KeiGo JP v{APP_VERSION}
         </Text>
       </ScrollView>
     </KeyboardAvoidingView>
