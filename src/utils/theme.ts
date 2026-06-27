@@ -39,6 +39,19 @@ const lightColors = {
   intermediateTagText: '#F57F17',
   advancedTag: '#FFEBEE',
   advancedTagText: '#C62828',
+
+  successBg: '#E8F5E9',
+  successText: '#2E7D32',
+  errorBg: '#FFEBEE',
+  errorText: '#C62828',
+
+  // Activity heatmap — orange intensity ramp (on-brand with the fox palette)
+  calLow: '#FFE8D6',
+  calLowText: '#B4480A',
+  calMid: '#FDB87A',
+  calMidText: '#7A3206',
+  calHigh: '#EF6C00',
+  calHighText: '#FFFFFF',
 };
 
 const darkColors = {
@@ -80,6 +93,19 @@ const darkColors = {
   intermediateTagText: '#FFD54F',
   advancedTag: '#3E1A1A',
   advancedTagText: '#EF9A9A',
+
+  successBg: '#1B3A1B',
+  successText: '#66BB6A',
+  errorBg: '#3E1A1A',
+  errorText: '#EF5350',
+
+  // Activity heatmap — orange intensity ramp on dark surfaces
+  calLow: '#2E1C10',
+  calLowText: '#FFB98C',
+  calMid: '#5A3310',
+  calMidText: '#FFCBA0',
+  calHigh: '#C2510A',
+  calHighText: '#FFE9D6',
 };
 
 export type ThemeColors = typeof lightColors;
