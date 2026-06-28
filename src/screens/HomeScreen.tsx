@@ -21,10 +21,10 @@ import expressions from '../data/expressions.json';
 import { useColors, fonts, spacing, radius } from '../utils/theme';
 import { useHistoryStore } from '../store/historyStore';
 import { useFavoritesStore } from '../store/favoritesStore';
-import type { RootStackParamList } from '../types/navigation';
+import type { SearchStackParamList } from '../types/navigation';
 import { VerbData, ExpressionData, BusinessLevel, LEVEL_LABELS } from '../utils/keigoTypes';
 
-type NavProp = NativeStackNavigationProp<RootStackParamList>;
+type NavProp = NativeStackNavigationProp<SearchStackParamList>;
 
 const verbEntries = Object.entries(verbs as Record<string, VerbData>);
 const expressionEntries = Object.entries(expressions as Record<string, ExpressionData>);

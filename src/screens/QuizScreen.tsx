@@ -1,36 +1,33 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useMemo, useCallback } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
-  FlatList,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import * as StoreReview from 'expo-store-review';
-import { speak } from '../utils/speech';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { stopSpeech } from '../utils/speech';
 import verbs from '../data/verbs.json';
 import {
   VerbData,
   KeigoForm,
   BusinessLevel,
   KEIGO_FORM_LABELS,
-  ALL_FORMS,
-  ALL_LEVELS,
-  LEVEL_LABELS,
 } from '../utils/keigoTypes';
 import { useColors, fonts, spacing, radius } from '../utils/theme';
+import { useSessionAutosave } from '../hooks/useSessionAutosave';
+import { getTodayKey } from '../utils/dayKey';
 import { useQuizStore } from '../store/quizStore';
 import { useSpacedRepStore } from '../store/spacedRepStore';
+import { useSessionStore } from '../store/sessionStore';
+import { usePracticeSettingsStore } from '../store/practiceSettingsStore';
+import type { QuizStackParamList } from '../types/navigation';
 
 const allVerbEntries = Object.entries(verbs as Record<string, VerbData>);
-
-const quizzableForms: { key: KeigoForm; label: string }[] = [
-  { key: 'sonkeigo', label: '尊敬語' },
-  { key: 'kenjougo', label: '謙譲語' },
-];
 
 interface Question {
   verb: string;
@@ -111,126 +108,130 @@ function generateQuestion(
 
 export default function QuizScreen() {
   const colors = useColors();
+  const navigation = useNavigation<NativeStackNavigationProp<QuizStackParamList, 'QuizMain'>>();
   const { totalQuestions, totalCorrect, bestStreak, loadStats, recordAnswer } = useQuizStore();
   const { loaded: weightsLoaded, loadWeights, recordResult, getWeight } = useSpacedRepStore();
-  const [activeForms, setActiveForms] = useState<KeigoForm[]>(quizzableForms.map(f => f.key));
-  const [activeLevels, setActiveLevels] = useState<BusinessLevel[]>([...ALL_LEVELS]);
+  const { activeForms, activeLevels, loaded: settingsLoaded, loadPracticeSettings } = usePracticeSettingsStore();
+  const { sessions, loadSessions, saveSession } = useSessionStore();
   const [question, setQuestion] = useState<Question | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [sessionScore, setSessionScore] = useState(0);
-  const [sessionTotal, setSessionTotal] = useState(0);
+  // This-visit answers (monotonic); persisted as deltas by useSessionAutosave.
+  const [newCorrect, setNewCorrect] = useState(0);
+  const [newTotal, setNewTotal] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [bestSessionStreak, setBestSessionStreak] = useState(0);
+  const hasRecordedAnswer = React.useRef(false);
 
   useEffect(() => {
     loadStats();
     loadWeights();
+    loadPracticeSettings();
+    loadSessions();
   }, []);
 
+  useFocusEffect(useCallback(() => () => stopSpeech(), []));
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => navigation.navigate('PracticeSettings', { mode: 'quiz' })}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginRight: 8 }}
+          accessibilityRole="button"
+          accessibilityLabel="Open form and level settings"
+        >
+          <Text style={{ color: colors.primary, fontSize: 14, fontWeight: '600' }}>Forms</Text>
+          <Ionicons name="options-outline" size={18} color={colors.primary} />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, colors]);
+
   const filteredEntries = useMemo(() =>
-    allVerbEntries.filter(([, d]) => activeLevels.includes(d.level)),
+    allVerbEntries.filter(([, d]) => activeLevels.includes(d.level as BusinessLevel)),
     [activeLevels]
   );
 
   useEffect(() => {
-    if (weightsLoaded && activeForms.length > 0 && filteredEntries.length > 0) {
+    if (weightsLoaded && settingsLoaded && activeForms.length > 0 && filteredEntries.length > 0) {
       setQuestion(generateQuestion(activeForms, getWeight, filteredEntries));
       setSelectedAnswer(null);
+      hasRecordedAnswer.current = false;
     }
-  }, [weightsLoaded, activeForms, activeLevels]);
+  }, [weightsLoaded, settingsLoaded, activeForms, activeLevels]);
 
   const isCorrect = selectedAnswer === question?.correctAnswer;
   const answered = selectedAnswer !== null;
-  const allFormsSelected = activeForms.length === quizzableForms.length;
-  const allLevelsSelected = activeLevels.length === ALL_LEVELS.length;
-
-  const toggleForm = (form: KeigoForm) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setActiveForms(prev => {
-      if (prev.includes(form)) {
-        if (prev.length <= 1) return prev;
-        return prev.filter(f => f !== form);
-      }
-      return [...prev, form];
-    });
-  };
-
-  const toggleAllForms = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    if (allFormsSelected) {
-      setActiveForms(['sonkeigo']);
-    } else {
-      setActiveForms(quizzableForms.map(f => f.key));
-    }
-  };
-
-  const toggleLevel = (level: BusinessLevel) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setActiveLevels(prev => {
-      if (prev.includes(level)) {
-        if (prev.length <= 1) return prev;
-        return prev.filter(l => l !== level);
-      }
-      return [...prev, level];
-    });
-  };
-
-  const toggleAllLevels = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    if (allLevelsSelected) {
-      setActiveLevels(['basic']);
-    } else {
-      setActiveLevels([...ALL_LEVELS]);
-    }
-  };
 
   const handleAnswer = (answer: string) => {
-    if (answered || !question) return;
+    if (hasRecordedAnswer.current || !question) return;
+    hasRecordedAnswer.current = true;
     setSelectedAnswer(answer);
-    setSessionTotal(t => t + 1);
+    setNewTotal(t => t + 1);
 
     const correct = answer === question.correctAnswer;
     if (correct) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      setSessionScore(s => s + 1);
+      setNewCorrect(s => s + 1);
       const newStreak = streak + 1;
       setStreak(newStreak);
+      if (newStreak > bestSessionStreak) setBestSessionStreak(newStreak);
       recordAnswer(true, newStreak);
       if (newStreak === 10) {
         StoreReview.isAvailableAsync().then((available) => {
           if (available) StoreReview.requestReview();
-        });
+        }).catch(() => {});
       }
     } else {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       setStreak(0);
       recordAnswer(false, 0);
     }
-    recordResult(question.verb, correct);
+    recordResult(question.verb, correct).catch(() => {});
   };
 
   const handleNext = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setQuestion(generateQuestion(activeForms, getWeight, filteredEntries));
     setSelectedAnswer(null);
+    hasRecordedAnswer.current = false;
   };
+
+  // Auto-save new answers on blur / background / unmount (delta-based).
+  const { unsavedCount, unsavedCorrect } = useSessionAutosave({
+    count: newTotal,
+    correct: newCorrect,
+    bestStreak: bestSessionStreak,
+    save: async ({ count, correct, bestStreak }) => {
+      if (!(await saveSession({ total: count, correct, streak: bestStreak }))) {
+        throw new Error('quiz session save failed');
+      }
+    },
+  });
+
+  // Today's cumulative totals plus any unsaved in-memory progress.
+  const todaySession = sessions.find(s => s.day === getTodayKey());
+  const sessionTotal = (todaySession?.total || 0) + unsavedCount;
+  const sessionScore = (todaySession?.correct || 0) + unsavedCorrect;
 
   const getOptionStyle = (option: string) => {
     if (!answered || !question) {
       return { backgroundColor: colors.card, borderColor: colors.border };
     }
     if (option === question.correctAnswer) {
-      return { backgroundColor: '#E8F5E9', borderColor: '#4CAF50' };
+      return { backgroundColor: colors.successBg, borderColor: colors.successText };
     }
     if (option === selectedAnswer && !isCorrect) {
-      return { backgroundColor: '#FFEBEE', borderColor: '#E53935' };
+      return { backgroundColor: colors.errorBg, borderColor: colors.errorText };
     }
     return { backgroundColor: colors.card, borderColor: colors.border, opacity: 0.4 };
   };
 
   const getOptionTextColor = (option: string) => {
     if (!answered || !question) return colors.textPrimary;
-    if (option === question.correctAnswer) return '#2E7D32';
-    if (option === selectedAnswer && !isCorrect) return '#C62828';
+    if (option === question.correctAnswer) return colors.successText;
+    if (option === selectedAnswer && !isCorrect) return colors.errorText;
     return colors.textMuted;
   };
 
@@ -243,205 +244,223 @@ export default function QuizScreen() {
   const formLabel = KEIGO_FORM_LABELS[question.form];
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: colors.bg }]} contentContainerStyle={styles.content}>
-      {/* Level chips */}
-      <FlatList
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        data={[{ key: 'all', label: 'All' }, ...ALL_LEVELS.map(l => ({ key: l, label: LEVEL_LABELS[l] }))]}
-        keyExtractor={(item) => 'level-' + item.key}
-        contentContainerStyle={styles.chipBar}
-        renderItem={({ item }) => {
-          const isAll = item.key === 'all';
-          const active = isAll ? allLevelsSelected : activeLevels.includes(item.key as BusinessLevel);
-          return (
-            <TouchableOpacity
-              style={[
-                styles.chip,
-                active
-                  ? { backgroundColor: colors.accent, borderColor: colors.accent }
-                  : { backgroundColor: 'transparent', borderColor: colors.border, borderStyle: 'dashed' as const },
-              ]}
-              onPress={() => isAll ? toggleAllLevels() : toggleLevel(item.key as BusinessLevel)}
-            >
-              <Text style={[styles.chipText, { color: active ? '#fff' : colors.textMuted }]}>
-                {item.label}
+    <View style={[styles.container, { backgroundColor: colors.bg }]}>
+      <View style={styles.content}>
+        {/* Session score bar */}
+        <View style={[styles.scoreCard, { backgroundColor: colors.card }]}>
+          <View style={styles.scoreRow}>
+            <View style={styles.scoreItem}>
+              <Text style={[styles.scoreValue, { color: colors.primary }]}>{sessionTotal}</Text>
+              <Text style={[styles.scoreLabel, { color: colors.textMuted }]}>Reviewed</Text>
+            </View>
+            <View style={styles.scoreItem}>
+              <Text style={[styles.scoreValue, { color: colors.successText }]}>{sessionScore}</Text>
+              <Text style={[styles.scoreLabel, { color: colors.textMuted }]}>Got It</Text>
+            </View>
+            <View style={styles.scoreItem}>
+              <Text style={[styles.scoreValue, { color: colors.errorText }]}>{sessionTotal - sessionScore}</Text>
+              <Text style={[styles.scoreLabel, { color: colors.textMuted }]}>Missed</Text>
+            </View>
+            <View style={styles.scoreItem}>
+              <Text style={[styles.scoreValue, { color: colors.textSecondary }]}>
+                {sessionTotal > 0 ? Math.round((sessionScore / sessionTotal) * 100) : 0}%
               </Text>
-            </TouchableOpacity>
-          );
-        }}
-      />
-
-      {/* Form filter chips */}
-      <FlatList
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        data={[{ key: 'all' as KeigoForm, label: 'All' }, ...quizzableForms]}
-        keyExtractor={(item) => item.key}
-        contentContainerStyle={styles.chipBar}
-        renderItem={({ item }) => {
-          const isAll = item.key === 'all';
-          const active = isAll ? allFormsSelected : activeForms.includes(item.key);
-          return (
-            <TouchableOpacity
-              style={[
-                styles.chip,
-                active
-                  ? { backgroundColor: colors.primary, borderColor: colors.primary }
-                  : { backgroundColor: 'transparent', borderColor: colors.border, borderStyle: 'dashed' as const },
-              ]}
-              onPress={() => isAll ? toggleAllForms() : toggleForm(item.key)}
-            >
-              <Text style={[styles.chipText, { color: active ? '#fff' : colors.textMuted }]}>
-                {item.label}
-              </Text>
-            </TouchableOpacity>
-          );
-        }}
-      />
-
-      {/* Session score bar */}
-      <View style={[styles.scoreBar, { backgroundColor: colors.card }]}>
-        <View style={styles.scoreItem}>
-          <Text style={[styles.scoreValue, { color: colors.primary }]}>{sessionScore}/{sessionTotal}</Text>
-          <Text style={[styles.scoreLabel, { color: colors.textMuted }]}>Session</Text>
-        </View>
-        <View style={styles.scoreItem}>
-          <Text style={[styles.scoreValue, { color: colors.accent }]}>{streak}</Text>
-          <Text style={[styles.scoreLabel, { color: colors.textMuted }]}>Streak</Text>
-        </View>
-        <View style={styles.scoreItem}>
-          <Text style={[styles.scoreValue, { color: colors.textSecondary }]}>
-            {sessionTotal > 0 ? Math.round((sessionScore / sessionTotal) * 100) : 0}%
-          </Text>
-          <Text style={[styles.scoreLabel, { color: colors.textMuted }]}>Accuracy</Text>
-        </View>
-      </View>
-
-      {/* All-time stats */}
-      {totalQuestions > 0 && (
-        <View style={[styles.allTimeBar, { borderColor: colors.divider }]}>
-          <Text style={[styles.allTimeText, { color: colors.textMuted }]}>
-            All-time: {totalCorrect}/{totalQuestions} ({Math.round((totalCorrect / totalQuestions) * 100)}%) · Best streak: {bestStreak}
-          </Text>
-        </View>
-      )}
-
-      {/* Question */}
-      <View style={styles.questionContainer}>
-        <Text style={[styles.questionLabel, { color: colors.textMuted }]}>
-          {formLabel.ja} — {formLabel.en}
-        </Text>
-        <Text style={[styles.questionVerb, { color: colors.primary }]}>
-          {question.verb}
-        </Text>
-        <Text style={[styles.questionReading, { color: colors.textSecondary }]}>
-          {question.reading}
-        </Text>
-        <Text style={[styles.questionTranslation, { color: colors.textSecondary }]}>
-          {question.translation}
-        </Text>
-      </View>
-
-      {/* Options */}
-      <View style={styles.optionsContainer}>
-        {question.options.map((option, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[styles.optionButton, getOptionStyle(option)]}
-            onPress={() => handleAnswer(option)}
-            activeOpacity={answered ? 1 : 0.7}
-            disabled={answered}
-          >
-            <Text style={[styles.optionText, { color: getOptionTextColor(option) }]}>
-              {option}
+              <Text style={[styles.scoreLabel, { color: colors.textMuted }]}>Accuracy</Text>
+            </View>
+          </View>
+          {totalQuestions > 0 && (
+            <Text style={[styles.allTimeText, { color: colors.textMuted }]}>
+              All-time: {totalCorrect}/{totalQuestions} ({Math.round((totalCorrect / totalQuestions) * 100)}%) · Best streak: {bestStreak}
             </Text>
-            {answered && option === question.correctAnswer && (
-              <Ionicons name="checkmark-circle" size={22} color="#4CAF50" />
-            )}
-            {answered && option === selectedAnswer && !isCorrect && option !== question.correctAnswer && (
-              <Ionicons name="close-circle" size={22} color="#E53935" />
-            )}
-          </TouchableOpacity>
-        ))}
-      </View>
+          )}
+        </View>
 
-      {/* Next button */}
-      {answered && (
-        <TouchableOpacity
-          style={[styles.nextButton, { backgroundColor: colors.primary }]}
-          onPress={handleNext}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.nextButtonText}>Next</Text>
-          <Ionicons name="arrow-forward" size={18} color="#fff" />
-        </TouchableOpacity>
-      )}
-    </ScrollView>
+        {/* Question — fills remaining space */}
+        <View style={styles.questionContainer}>
+          <Text style={[styles.questionLabel, { color: colors.textMuted }]}>
+            {formLabel.ja} — {formLabel.en}
+          </Text>
+          <Text
+            style={[styles.questionVerb, { color: colors.primary }]}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+          >
+            {question.verb}
+          </Text>
+          <Text style={[styles.questionReading, { color: colors.textSecondary }]}>
+            {question.reading}
+          </Text>
+          <Text style={[styles.questionTranslation, { color: colors.textSecondary }]}>
+            {question.translation}
+          </Text>
+        </View>
+
+        {/* Options */}
+        <View style={styles.optionsContainer}>
+          {question.options.map((option, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[styles.optionButton, getOptionStyle(option)]}
+              onPress={() => handleAnswer(option)}
+              activeOpacity={answered ? 1 : 0.7}
+              disabled={answered}
+              accessibilityRole="button"
+              accessibilityLabel={`Answer: ${option}`}
+              accessibilityState={{ disabled: answered, selected: selectedAnswer === option }}
+            >
+              <Text
+                style={[styles.optionText, { color: getOptionTextColor(option) }]}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                minimumFontScale={0.7}
+              >
+                {option}
+              </Text>
+              {answered && option === question.correctAnswer && (
+                <Ionicons name="checkmark-circle" size={22} color={colors.successText} style={{ marginLeft: 8 }} />
+              )}
+              {answered && option === selectedAnswer && !isCorrect && option !== question.correctAnswer && (
+                <Ionicons name="close-circle" size={22} color={colors.errorText} style={{ marginLeft: 8 }} />
+              )}
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Answer reading reveal */}
+        {answered && (
+          <View style={[styles.revealCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Text style={[styles.revealText, { color: colors.textSecondary }]}>
+              {question.correctAnswer}
+              {question.correctReading && question.correctReading !== question.correctAnswer
+                ? ` · ${question.correctReading}`
+                : ''}
+            </Text>
+          </View>
+        )}
+
+        {/* Next */}
+        <View style={[styles.bottomRow, { opacity: answered ? 1 : 0 }]} pointerEvents={answered ? 'auto' : 'none'}>
+          <TouchableOpacity
+            style={[styles.bottomButton, { backgroundColor: colors.primary }]}
+            onPress={handleNext}
+            activeOpacity={0.8}
+            accessibilityRole="button"
+            accessibilityLabel="Next question"
+            accessibilityState={{ disabled: !answered }}
+          >
+            <Text style={styles.bottomButtonText}>Next</Text>
+            <Ionicons name="arrow-forward" size={16} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  content: { padding: spacing.lg, paddingBottom: 40 },
-  chipBar: { gap: spacing.xs, paddingBottom: spacing.md },
-  chip: {
-    paddingHorizontal: 14,
-    paddingVertical: 7,
-    borderRadius: radius.full,
-    borderWidth: 1,
+  content: {
+    flex: 1,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.md,
+    justifyContent: 'space-between',
   },
-  chipText: { fontSize: fonts.sizes.xs, fontWeight: fonts.weights.semibold },
-  scoreBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  scoreCard: {
     padding: spacing.md,
     borderRadius: radius.md,
-    marginBottom: spacing.sm,
   },
-  scoreItem: { alignItems: 'center' },
-  allTimeBar: {
-    borderTopWidth: 1,
-    marginHorizontal: spacing.md,
+  scoreRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  scoreItem: {
+    alignItems: 'center',
+  },
+  allTimeText: {
+    fontSize: fonts.sizes.xs,
+    textAlign: 'center',
+    marginTop: spacing.sm,
     paddingTop: spacing.sm,
-    marginBottom: spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: 'rgba(0,0,0,0.08)',
   },
-  allTimeText: { fontSize: fonts.sizes.xs, textAlign: 'center' },
-  scoreValue: { fontSize: fonts.sizes.xl, fontWeight: fonts.weights.bold },
+  scoreValue: {
+    fontSize: fonts.sizes.xl,
+    fontWeight: fonts.weights.bold,
+  },
   scoreLabel: {
     fontSize: fonts.sizes.xs,
     marginTop: 2,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
-  questionContainer: { alignItems: 'center', marginBottom: spacing.xl },
+  questionContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   questionLabel: {
     fontSize: fonts.sizes.sm,
     fontWeight: fonts.weights.semibold,
     letterSpacing: 1,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.xs,
   },
-  questionVerb: { fontSize: 36, fontWeight: fonts.weights.bold, marginBottom: spacing.xs },
-  questionReading: { fontSize: fonts.sizes.lg, marginBottom: spacing.xs },
-  questionTranslation: { fontSize: fonts.sizes.md, fontStyle: 'italic' },
-  optionsContainer: { gap: spacing.sm },
+  questionVerb: {
+    fontSize: 32,
+    fontWeight: fonts.weights.bold,
+    marginBottom: 2,
+    textAlign: 'center',
+    alignSelf: 'stretch',
+  },
+  questionReading: {
+    fontSize: fonts.sizes.lg,
+    marginBottom: 2,
+  },
+  questionTranslation: {
+    fontSize: fonts.sizes.sm,
+    fontStyle: 'italic',
+  },
+  optionsContainer: {
+    gap: spacing.xs,
+  },
+  revealCard: {
+    borderWidth: 1,
+    borderRadius: radius.md,
+    padding: spacing.sm,
+    alignItems: 'center',
+  },
+  revealText: {
+    fontSize: fonts.sizes.md,
+    fontWeight: fonts.weights.semibold,
+  },
   optionButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: spacing.md,
+    justifyContent: 'center',
+    padding: spacing.sm + 2,
     borderRadius: radius.md,
     borderWidth: 1.5,
   },
-  optionText: { fontSize: fonts.sizes.lg, fontWeight: fonts.weights.semibold, flex: 1 },
-  nextButton: {
+  optionText: {
+    fontSize: fonts.sizes.lg,
+    fontWeight: fonts.weights.semibold,
+  },
+  bottomRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  bottomButton: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-    marginTop: spacing.xl,
-    padding: spacing.md,
+    gap: 6,
+    paddingVertical: spacing.sm + 2,
     borderRadius: radius.md,
   },
-  nextButtonText: { color: '#fff', fontSize: fonts.sizes.md, fontWeight: fonts.weights.bold },
+  bottomButtonText: {
+    color: '#fff',
+    fontSize: fonts.sizes.md,
+    fontWeight: fonts.weights.bold,
+  },
 });

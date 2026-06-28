@@ -13,14 +13,18 @@ import {
   Switch,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useColors, fonts, spacing, radius } from '../utils/theme';
 import { useThemeStore } from '../store/themeStore';
+import type { MoreStackParamList } from '../types/navigation';
 
 const APP_VERSION = '1.0.0';
 
 export default function FeedbackScreen() {
   const colors = useColors();
-  const { isDark, toggleTheme } = useThemeStore();
+  const navigation = useNavigation<NativeStackNavigationProp<MoreStackParamList, 'MoreMain'>>();
+  const { isDark, toggleTheme, autoTTS, toggleAutoTTS } = useThemeStore();
 
   const handleRateApp = () => {
     const url = Platform.select({
@@ -64,7 +68,45 @@ export default function FeedbackScreen() {
               thumbColor="#fff"
             />
           </View>
+          <View style={[styles.settingRow, { borderBottomWidth: 0 }]}>
+            <Ionicons name="volume-medium" size={20} color={colors.textSecondary} />
+            <Text style={[styles.settingLabel, { color: colors.textPrimary }]}>Auto-Play Audio</Text>
+            <Switch
+              value={autoTTS}
+              onValueChange={toggleAutoTTS}
+              trackColor={{ false: colors.border, true: colors.primary }}
+              thumbColor="#fff"
+              accessibilityLabel="Auto-Play Audio"
+            />
+          </View>
         </View>
+
+        {/* Statistics section */}
+        <Text style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: spacing.lg }]}>Statistics</Text>
+        <TouchableOpacity
+          style={[styles.rowCard, { backgroundColor: colors.card }]}
+          onPress={() => navigation.navigate('Stats')}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.rowEmoji}>📊</Text>
+          <View style={styles.rowInfo}>
+            <Text style={[styles.rowTitle, { color: colors.textPrimary }]}>Quiz Stats</Text>
+            <Text style={[styles.rowSubtitle, { color: colors.textSecondary }]}>Streak, accuracy, activity calendar</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.rowCard, { backgroundColor: colors.card }]}
+          onPress={() => navigation.navigate('FlashcardStats')}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.rowEmoji}>🗂️</Text>
+          <View style={styles.rowInfo}>
+            <Text style={[styles.rowTitle, { color: colors.textPrimary }]}>Flashcard Stats</Text>
+            <Text style={[styles.rowSubtitle, { color: colors.textSecondary }]}>Cards reviewed, accuracy, weak verbs</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
+        </TouchableOpacity>
 
         {/* Support section */}
         <Text style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: spacing.lg }]}>Support</Text>
