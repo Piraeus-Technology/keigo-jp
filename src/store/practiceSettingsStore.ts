@@ -88,7 +88,12 @@ export const usePracticeSettingsStore = create<PracticeSettingsStore>((set, get)
     }
     return queue.enqueue(async () => {
       const next = safeForms(forms);
-      const ok = await persist({ ...get(), activeForms: next });
+      const state = get();
+      const ok = await persist({
+        activeForms: next,
+        activeLevels: state.activeLevels,
+        includeExpressions: state.includeExpressions,
+      });
       if (!ok) {
         console.warn('Practice settings not persisted');
         return;
@@ -105,7 +110,12 @@ export const usePracticeSettingsStore = create<PracticeSettingsStore>((set, get)
     }
     return queue.enqueue(async () => {
       const next = safeLevels(levels);
-      const ok = await persist({ ...get(), activeLevels: next });
+      const state = get();
+      const ok = await persist({
+        activeForms: state.activeForms,
+        activeLevels: next,
+        includeExpressions: state.includeExpressions,
+      });
       if (!ok) {
         console.warn('Practice settings not persisted');
         return;
@@ -129,7 +139,12 @@ export const usePracticeSettingsStore = create<PracticeSettingsStore>((set, get)
       } else {
         updated = [...current, form];
       }
-      const ok = await persist({ ...get(), activeForms: updated });
+      const state = get();
+      const ok = await persist({
+        activeForms: updated,
+        activeLevels: state.activeLevels,
+        includeExpressions: state.includeExpressions,
+      });
       if (!ok) {
         console.warn('Practice settings not persisted');
         return;
@@ -153,7 +168,12 @@ export const usePracticeSettingsStore = create<PracticeSettingsStore>((set, get)
       } else {
         updated = [...current, level];
       }
-      const ok = await persist({ ...get(), activeLevels: updated });
+      const state = get();
+      const ok = await persist({
+        activeForms: state.activeForms,
+        activeLevels: updated,
+        includeExpressions: state.includeExpressions,
+      });
       if (!ok) {
         console.warn('Practice settings not persisted');
         return;
@@ -170,7 +190,12 @@ export const usePracticeSettingsStore = create<PracticeSettingsStore>((set, get)
     }
     return queue.enqueue(async () => {
       const next = !get().includeExpressions;
-      const ok = await persist({ ...get(), includeExpressions: next });
+      const state = get();
+      const ok = await persist({
+        activeForms: state.activeForms,
+        activeLevels: state.activeLevels,
+        includeExpressions: next,
+      });
       if (!ok) {
         console.warn('Practice settings not persisted');
         return;

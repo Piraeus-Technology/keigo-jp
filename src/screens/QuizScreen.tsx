@@ -120,6 +120,7 @@ export default function QuizScreen() {
   const [newTotal, setNewTotal] = useState(0);
   const [streak, setStreak] = useState(0);
   const [bestSessionStreak, setBestSessionStreak] = useState(0);
+  const hasRecordedAnswer = React.useRef(false);
 
   useEffect(() => {
     loadStats();
@@ -156,6 +157,7 @@ export default function QuizScreen() {
     if (weightsLoaded && settingsLoaded && activeForms.length > 0 && filteredEntries.length > 0) {
       setQuestion(generateQuestion(activeForms, getWeight, filteredEntries));
       setSelectedAnswer(null);
+      hasRecordedAnswer.current = false;
     }
   }, [weightsLoaded, settingsLoaded, activeForms, activeLevels]);
 
@@ -163,7 +165,8 @@ export default function QuizScreen() {
   const answered = selectedAnswer !== null;
 
   const handleAnswer = (answer: string) => {
-    if (answered || !question) return;
+    if (hasRecordedAnswer.current || !question) return;
+    hasRecordedAnswer.current = true;
     setSelectedAnswer(answer);
     setNewTotal(t => t + 1);
 
@@ -192,6 +195,7 @@ export default function QuizScreen() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setQuestion(generateQuestion(activeForms, getWeight, filteredEntries));
     setSelectedAnswer(null);
+    hasRecordedAnswer.current = false;
   };
 
   // Auto-save new answers on blur / background / unmount (delta-based).

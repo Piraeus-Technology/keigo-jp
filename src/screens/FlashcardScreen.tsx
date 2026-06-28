@@ -112,6 +112,7 @@ export default function FlashcardScreen() {
   const [newCorrect, setNewCorrect] = useState(0);
   const flipAnim = useRef(new Animated.Value(0)).current;
   const isAnimating = useRef(false);
+  const hasGradedCard = useRef(false);
   const speechGate = useRef({
     focused: true,
     appState: AppState.currentState as AppStateStatus,
@@ -162,6 +163,7 @@ export default function FlashcardScreen() {
     flipAnim.stopAnimation(() => {
       flipAnim.setValue(0);
       isAnimating.current = false;
+      hasGradedCard.current = false;
       setFlipped(false);
       setCard(generateCard(filteredVerbs, filteredExpressions, includeExpressions, activeForms));
     });
@@ -176,11 +178,13 @@ export default function FlashcardScreen() {
     }).start(({ finished }) => {
       if (!finished) {
         isAnimating.current = false;
+        hasGradedCard.current = false;
         return;
       }
       setCard(generateCard(filteredVerbs, filteredExpressions, includeExpressions, activeForms));
       setFlipped(false);
       isAnimating.current = false;
+      hasGradedCard.current = false;
     });
   };
 
@@ -207,7 +211,8 @@ export default function FlashcardScreen() {
   };
 
   const handleGotIt = () => {
-    if (!card || !flipped) return;
+    if (!card || !flipped || hasGradedCard.current) return;
+    hasGradedCard.current = true;
     setFlipped(false);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setNewReviewed(r => r + 1);
@@ -217,7 +222,8 @@ export default function FlashcardScreen() {
   };
 
   const handleMissed = () => {
-    if (!card || !flipped) return;
+    if (!card || !flipped || hasGradedCard.current) return;
+    hasGradedCard.current = true;
     setFlipped(false);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     setNewReviewed(r => r + 1);

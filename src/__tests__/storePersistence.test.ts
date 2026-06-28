@@ -96,6 +96,18 @@ describe('store persistence hardening', () => {
     expect(mockStorage.get('practiceSettings')).toBeUndefined();
   });
 
+  test('practice settings persists only user-facing settings', async () => {
+    await usePracticeSettingsStore.getState().loadPracticeSettings();
+
+    await usePracticeSettingsStore.getState().setActiveForms(['sonkeigo']);
+
+    expect(JSON.parse(mockStorage.get('practiceSettings')!)).toEqual({
+      activeForms: ['sonkeigo'],
+      activeLevels: allLevels,
+      includeExpressions: true,
+    });
+  });
+
   test('theme load failure falls back to defaults and still marks loaded', async () => {
     mockStorage.set('theme_mode', 'dark');
     mockStorage.set('auto_tts', 'true');
