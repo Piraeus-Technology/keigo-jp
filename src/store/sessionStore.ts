@@ -17,7 +17,7 @@ interface SessionStore {
   loaded: boolean;
   loadError: boolean;
   loadSessions: () => Promise<void>;
-  saveSession: (session: Omit<Session, 'day'>) => Promise<boolean>;
+  saveSession: (session: Omit<Session, 'day'>, day?: string) => Promise<boolean>;
   clearSessions: () => Promise<void>;
 }
 
@@ -72,7 +72,7 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
     });
   },
 
-  saveSession: async (session): Promise<boolean> => {
+  saveSession: async (session, day): Promise<boolean> => {
     if (!get().loaded) {
       await get().loadSessions();
     }
@@ -82,7 +82,7 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
     }
     let ok = false;
     await queue.enqueue(async () => {
-      const today = getTodayKey();
+      const today = day ?? getTodayKey();
       const current = get().sessions;
       const existingIndex = current.findIndex(s => s.day === today);
 

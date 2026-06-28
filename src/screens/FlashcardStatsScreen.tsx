@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFlashcardSessionStore } from '../store/flashcardSessionStore';
+import { useFlashcardStatsStore } from '../store/flashcardStatsStore';
 import { useSpacedRepStore } from '../store/spacedRepStore';
 import PracticeStatsView, { DayCounts } from '../components/PracticeStatsView';
 
@@ -11,6 +12,11 @@ export default function FlashcardStatsScreen() {
     loadSessions,
   } = useFlashcardSessionStore();
   const {
+    totalReviewed,
+    totalCorrect,
+    loadStats,
+  } = useFlashcardStatsStore();
+  const {
     weights,
     loaded: weightsLoaded,
     loadError: weightsLoadError,
@@ -19,8 +25,9 @@ export default function FlashcardStatsScreen() {
 
   React.useEffect(() => {
     loadSessions();
+    loadStats();
     loadWeights();
-  }, [loadSessions, loadWeights]);
+  }, [loadSessions, loadStats, loadWeights]);
 
   const dayCounts: DayCounts[] = React.useMemo(
     () => sessions.map(s => ({ day: s.day, count: s.reviewed, correct: s.correct })),
@@ -35,8 +42,14 @@ export default function FlashcardStatsScreen() {
       weights={weights}
       weightsLoaded={weightsLoaded}
       weightsLoadError={weightsLoadError}
+      allTimeOverride={{
+        count: totalReviewed,
+        correct: totalCorrect,
+        thirdStat: { value: sessions.length, label: 'Days' },
+      }}
       onRetry={() => {
         loadSessions();
+        loadStats();
         loadWeights();
       }}
       labels={{

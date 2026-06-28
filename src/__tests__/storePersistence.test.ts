@@ -6,6 +6,7 @@ import {
   usePracticeSettingsStore,
 } from '../store/practiceSettingsStore';
 import { __resetQuizStoreForTests, useQuizStore } from '../store/quizStore';
+import { __resetFlashcardStatsStoreForTests, useFlashcardStatsStore } from '../store/flashcardStatsStore';
 import { __resetSpacedRepStoreForTests, useSpacedRepStore } from '../store/spacedRepStore';
 import { __resetThemeStoreForTests, useThemeStore } from '../store/themeStore';
 
@@ -32,6 +33,7 @@ describe('store persistence hardening', () => {
     jest.clearAllMocks();
     __resetPracticeSettingsStoreForTests();
     __resetQuizStoreForTests();
+    __resetFlashcardStatsStoreForTests();
     __resetSpacedRepStoreForTests();
     __resetThemeStoreForTests();
   });
@@ -108,6 +110,27 @@ describe('store persistence hardening', () => {
     });
   });
 
+  test('flashcard lifetime stats accumulate reviewed/correct', async () => {
+    await useFlashcardStatsStore.getState().loadStats();
+    await useFlashcardStatsStore.getState().recordReview(true);
+    await useFlashcardStatsStore.getState().recordReview(false);
+
+    expect(useFlashcardStatsStore.getState()).toMatchObject({ totalReviewed: 2, totalCorrect: 1 });
+    expect(JSON.parse(mockStorage.get('flashcard_stats')!)).toEqual({ totalReviewed: 2, totalCorrect: 1 });
+  });
+
+  test('flashcard stat after failed load refuses to clobber lifetime totals', async () => {
+    mockStorage.set('flashcard_stats', JSON.stringify({ totalReviewed: 10, totalCorrect: 7 }));
+    jest.mocked(AsyncStorage.getItem).mockRejectedValueOnce(new Error('disk locked'));
+
+    await useFlashcardStatsStore.getState().recordReview(true);
+
+    expect(JSON.parse(mockStorage.get('flashcard_stats')!)).toEqual({ totalReviewed: 10, totalCorrect: 7 });
+    expect(useFlashcardStatsStore.getState()).toMatchObject({ loaded: false, loadError: true });
+  });
+
+  // Keep last: this uses a persistent mockRejectedValue that clearAllMocks does
+  // not reset, so tests added after it would inherit a rejecting getItem.
   test('theme load failure falls back to defaults and still marks loaded', async () => {
     mockStorage.set('theme_mode', 'dark');
     mockStorage.set('auto_tts', 'true');

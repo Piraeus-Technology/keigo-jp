@@ -203,8 +203,8 @@ export default function QuizScreen() {
     count: newTotal,
     correct: newCorrect,
     bestStreak: bestSessionStreak,
-    save: async ({ count, correct, bestStreak }) => {
-      if (!(await saveSession({ total: count, correct, streak: bestStreak }))) {
+    save: async ({ count, correct, bestStreak, day }) => {
+      if (!(await saveSession({ total: count, correct, streak: bestStreak }, day))) {
         throw new Error('quiz session save failed');
       }
     },

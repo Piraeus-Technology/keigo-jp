@@ -145,4 +145,26 @@ describe('session store day keys and persistence', () => {
     expect(useFlashcardSessionStore.getState().sessions).toEqual(stored);
     expect(JSON.parse(mockStorage.get('flashcardSessions')!)).toEqual(stored);
   });
+
+  test('quiz save attributes to an explicit day, not today', async () => {
+    const today = getTodayKey();
+    mockStorage.set('sessions', JSON.stringify([{ day: today, total: 1, correct: 1, streak: 1 }]));
+    await useSessionStore.getState().loadSessions();
+
+    const ok = await useSessionStore.getState().saveSession({ total: 2, correct: 1, streak: 2 }, '2026-06-26');
+
+    expect(ok).toBe(true);
+    expect(useSessionStore.getState().sessions).toContainEqual({ day: '2026-06-26', total: 2, correct: 1, streak: 2 });
+    // The pre-existing "today" row is untouched.
+    expect(useSessionStore.getState().sessions).toContainEqual({ day: today, total: 1, correct: 1, streak: 1 });
+  });
+
+  test('flashcard save attributes to an explicit day, not today', async () => {
+    await useFlashcardSessionStore.getState().loadSessions();
+
+    const ok = await useFlashcardSessionStore.getState().saveSession({ reviewed: 3, correct: 2 }, '2026-06-26');
+
+    expect(ok).toBe(true);
+    expect(useFlashcardSessionStore.getState().sessions).toEqual([{ day: '2026-06-26', reviewed: 3, correct: 2 }]);
+  });
 });
