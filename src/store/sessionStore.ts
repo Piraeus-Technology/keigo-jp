@@ -96,8 +96,10 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
           streak: Math.max(updated[existingIndex].streak, session.streak),
         };
       } else {
-        updated = [{ ...session, day: today }, ...current].slice(0, MAX_DAILY_SESSIONS);
+        updated = [{ ...session, day: today }, ...current];
       }
+      updated.sort((a, b) => b.day.localeCompare(a.day));
+      updated = updated.slice(0, MAX_DAILY_SESSIONS);
 
       const persisted = await safeSetItem('sessions', JSON.stringify(updated));
       if (!persisted) {

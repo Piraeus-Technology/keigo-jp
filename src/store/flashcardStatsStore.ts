@@ -18,6 +18,33 @@ interface FlashcardStats {
 
 const queue = createStoreQueue();
 
+function toFiniteNumber(value: unknown): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : 0;
+}
+
+async function seedStatsFromSessions(): Promise<{ totalReviewed: number; totalCorrect: number }> {
+  const seed = { totalReviewed: 0, totalCorrect: 0 };
+  try {
+    const stored = await AsyncStorage.getItem('flashcardSessions');
+    if (!stored) return seed;
+
+    const sessions = JSON.parse(stored);
+    if (!Array.isArray(sessions)) return seed;
+
+    return sessions.reduce((totals, session) => {
+      if (!session || typeof session !== 'object') return totals;
+      const s = session as { reviewed?: unknown; correct?: unknown };
+      return {
+        totalReviewed: totals.totalReviewed + toFiniteNumber(s.reviewed),
+        totalCorrect: totals.totalCorrect + toFiniteNumber(s.correct),
+      };
+    }, seed);
+  } catch (e) {
+    console.warn('Failed to seed flashcard stats from sessions:', e);
+    return seed;
+  }
+}
+
 export const useFlashcardStatsStore = create<FlashcardStats>((set, get) => ({
   totalReviewed: 0,
   totalCorrect: 0,
@@ -35,7 +62,12 @@ export const useFlashcardStatsStore = create<FlashcardStats>((set, get) => ({
           const data = JSON.parse(stored);
           set({ ...data, loaded: true, loadError: false });
         } else {
-          set({ loaded: true, loadError: false });
+          const seeded = await seedStatsFromSessions();
+          const persisted = await safeSetItem('flashcard_stats', JSON.stringify(seeded));
+          if (!persisted) {
+            console.warn('Failed to persist seeded flashcard stats');
+          }
+          set({ ...seeded, loaded: true, loadError: false });
         }
       } catch (e) {
         console.warn('Failed to load flashcard stats:', e);

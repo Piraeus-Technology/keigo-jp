@@ -74,7 +74,9 @@ export function useSessionAutosave({
         lastSavedBestStreakRef.current = unsavedBestStreak;
         // Answers that arrived during this save form the next batch; let it
         // pick up its own first-answer day.
-        attributionDayRef.current = null;
+        if (countRef.current === snapshotCount) {
+          attributionDayRef.current = null;
+        }
       } catch (e) {
         console.warn('Failed to save session:', e);
       }

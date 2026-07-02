@@ -14,6 +14,8 @@ export default function FlashcardStatsScreen() {
   const {
     totalReviewed,
     totalCorrect,
+    loaded: statsLoaded,
+    loadError: statsLoadError,
     loadStats,
   } = useFlashcardStatsStore();
   const {
@@ -33,6 +35,13 @@ export default function FlashcardStatsScreen() {
     () => sessions.map(s => ({ day: s.day, count: s.reviewed, correct: s.correct })),
     [sessions],
   );
+  const allTimeOverride = statsLoaded && !statsLoadError
+    ? {
+      count: totalReviewed,
+      correct: totalCorrect,
+      thirdStat: { value: sessions.length, label: 'Days' },
+    }
+    : undefined;
 
   return (
     <PracticeStatsView
@@ -42,11 +51,7 @@ export default function FlashcardStatsScreen() {
       weights={weights}
       weightsLoaded={weightsLoaded}
       weightsLoadError={weightsLoadError}
-      allTimeOverride={{
-        count: totalReviewed,
-        correct: totalCorrect,
-        thirdStat: { value: sessions.length, label: 'Days' },
-      }}
+      allTimeOverride={allTimeOverride}
       onRetry={() => {
         loadSessions();
         loadStats();

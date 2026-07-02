@@ -93,8 +93,10 @@ export const useFlashcardSessionStore = create<FlashcardSessionStore>((set, get)
           correct: updated[existingIndex].correct + session.correct,
         };
       } else {
-        updated = [{ ...session, day: today }, ...current].slice(0, MAX_DAILY_SESSIONS);
+        updated = [{ ...session, day: today }, ...current];
       }
+      updated.sort((a, b) => b.day.localeCompare(a.day));
+      updated = updated.slice(0, MAX_DAILY_SESSIONS);
 
       const persisted = await safeSetItem('flashcardSessions', JSON.stringify(updated));
       if (!persisted) {
