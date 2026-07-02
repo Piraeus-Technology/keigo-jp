@@ -16,7 +16,7 @@ interface FlashcardSessionStore {
   loaded: boolean;
   loadError: boolean;
   loadSessions: () => Promise<void>;
-  saveSession: (session: Omit<FlashcardSession, 'day'>) => Promise<boolean>;
+  saveSession: (session: Omit<FlashcardSession, 'day'>, day?: string) => Promise<boolean>;
   clearSessions: () => Promise<void>;
 }
 
@@ -70,7 +70,7 @@ export const useFlashcardSessionStore = create<FlashcardSessionStore>((set, get)
     });
   },
 
-  saveSession: async (session): Promise<boolean> => {
+  saveSession: async (session, day): Promise<boolean> => {
     if (!get().loaded) {
       await get().loadSessions();
     }
@@ -80,7 +80,7 @@ export const useFlashcardSessionStore = create<FlashcardSessionStore>((set, get)
     }
     let ok = false;
     await queue.enqueue(async () => {
-      const today = getTodayKey();
+      const today = day ?? getTodayKey();
       const current = get().sessions;
       const existingIndex = current.findIndex(s => s.day === today);
 
@@ -93,8 +93,10 @@ export const useFlashcardSessionStore = create<FlashcardSessionStore>((set, get)
           correct: updated[existingIndex].correct + session.correct,
         };
       } else {
-        updated = [{ ...session, day: today }, ...current].slice(0, MAX_DAILY_SESSIONS);
+        updated = [{ ...session, day: today }, ...current];
       }
+      updated.sort((a, b) => b.day.localeCompare(a.day));
+      updated = updated.slice(0, MAX_DAILY_SESSIONS);
 
       const persisted = await safeSetItem('flashcardSessions', JSON.stringify(updated));
       if (!persisted) {
