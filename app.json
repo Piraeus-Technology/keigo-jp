@@ -31,9 +31,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "react-native-iap"
-    ],
     "extra": {
       "eas": {
         "projectId": ""
