@@ -17,7 +17,6 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useColors, fonts, spacing, radius } from '../utils/theme';
 import { useThemeStore } from '../store/themeStore';
-import { useTipJar } from '../utils/tipJar';
 import type { MoreStackParamList } from '../types/navigation';
 
 const APP_VERSION = '1.0.0';
@@ -26,13 +25,6 @@ export default function FeedbackScreen() {
   const colors = useColors();
   const navigation = useNavigation<NativeStackNavigationProp<MoreStackParamList, 'MoreMain'>>();
   const { isDark, toggleTheme, autoTTS, toggleAutoTTS } = useThemeStore();
-  const {
-    products,
-    loading: tipLoading,
-    unavailable: tipUnavailable,
-    unsupported: tipUnsupported,
-    tip,
-  } = useTipJar();
 
   const handleRateApp = () => {
     const url = Platform.select({
@@ -115,42 +107,6 @@ export default function FeedbackScreen() {
           </View>
           <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
         </TouchableOpacity>
-
-        {/* Tip Jar */}
-        {(products.length > 0 || tipUnavailable) && (
-          <>
-            <Text style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: spacing.lg }]}>Tip Jar</Text>
-            {products.length > 0 ? (
-              <>
-                <Text style={[styles.tipDescription, { color: colors.textSecondary }]}>
-                  KeiGo JP is free with no ads. If you find it helpful, consider leaving a tip!
-                </Text>
-                <View style={styles.tipRow}>
-                  {products.map((product) => (
-                    <TouchableOpacity
-                      key={product.id}
-                      style={[styles.tipButton, { backgroundColor: colors.card, borderColor: colors.primary }]}
-                      onPress={() => tip(product.id)}
-                      disabled={tipLoading}
-                      activeOpacity={0.7}
-                      accessibilityRole="button"
-                      accessibilityLabel={`Leave a ${product.displayPrice} tip`}
-                      accessibilityState={{ disabled: tipLoading }}
-                    >
-                      <Text style={[styles.tipPrice, { color: colors.primary }]}>{product.displayPrice}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </>
-            ) : (
-              <Text style={[styles.tipDescription, { color: colors.textMuted }]}>
-                {tipUnsupported
-                  ? 'Tip Jar is not available in this environment. Please use the installed app.'
-                  : 'Tip Jar is temporarily unavailable on this device right now.'}
-              </Text>
-            )}
-          </>
-        )}
 
         {/* Support section */}
         <Text style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: spacing.lg }]}>Support</Text>
@@ -249,32 +205,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: fonts.sizes.md,
     fontWeight: fonts.weights.medium,
-  },
-  tipDescription: {
-    fontSize: fonts.sizes.sm,
-    marginBottom: spacing.md,
-    lineHeight: 20,
-  },
-  tipRow: {
-    flexDirection: 'row',
-    gap: spacing.md,
-  },
-  tipButton: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: spacing.md,
-    borderRadius: radius.md,
-    borderWidth: 1.5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  tipPrice: {
-    fontSize: fonts.sizes.lg,
-    fontWeight: fonts.weights.bold,
   },
   rowCard: {
     flexDirection: 'row',
