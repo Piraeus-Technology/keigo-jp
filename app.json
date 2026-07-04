@@ -33,8 +33,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": ""
+        "projectId": "741d626b-0c42-48d4-915a-64e1b89fa3f9"
       }
-    }
+    },
+    "owner": "piraeustechnology"
   }
 }
