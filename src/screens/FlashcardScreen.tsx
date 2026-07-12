@@ -16,6 +16,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import verbs from '../data/verbs.json';
 import expressions from '../data/expressions.json';
 import { speak, stopSpeech } from '../utils/speech';
+import SpeakButton from '../components/SpeakButton';
 import {
   VerbData,
   ExpressionData,
@@ -387,17 +388,14 @@ export default function FlashcardScreen() {
             <Text style={[styles.answerTranslation, { color: colors.textMuted }]}>
               {card.translation}
             </Text>
-            <TouchableOpacity
-              style={[styles.speakButton, { backgroundColor: colors.primary }]}
-              onPress={(e) => {
-                e.stopPropagation?.();
-                speak(card.answerReading || card.answer);
-              }}
-              accessibilityRole="button"
+            <SpeakButton
+              text={card.answerReading || card.answer}
+              size={20}
+              color="#fff"
+              backgroundColor={colors.primary}
+              style={styles.speakButton}
               accessibilityLabel={`Play pronunciation of ${card.answer}`}
-            >
-              <Ionicons name="volume-medium" size={20} color="#fff" />
-            </TouchableOpacity>
+            />
           </Animated.View>
         </TouchableOpacity>
 

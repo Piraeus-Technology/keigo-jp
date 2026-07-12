@@ -8,6 +8,7 @@ import expressions from '../data/expressions.json';
 import { useColors, fonts, spacing, radius } from '../utils/theme';
 import { useFavoritesStore } from '../store/favoritesStore';
 import { speak } from '../utils/speech';
+import SpeakButton from '../components/SpeakButton';
 import {
   VerbData,
   ExpressionData,
@@ -45,9 +46,7 @@ export default function DetailScreen() {
           <View style={styles.headerTop}>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm, flexWrap: 'wrap' }}>
               <Text style={[styles.verb, { color: colors.primary, fontSize: fonts.sizes.xxl }]}>{key}</Text>
-              <TouchableOpacity onPress={() => speak(key)}>
-                <Ionicons name="volume-medium" size={22} color={colors.primary} />
-              </TouchableOpacity>
+              <SpeakButton text={key} size={22} color={colors.primary} />
             </View>
             <TouchableOpacity onPress={() => toggleFavorite(key)}>
               <Ionicons
@@ -92,6 +91,8 @@ export default function DetailScreen() {
                   style={[styles.exampleRow, { borderBottomColor: colors.divider }]}
                   onPress={() => speak(ex.ja)}
                   activeOpacity={0.7}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Play pronunciation of ${ex.ja}`}
                 >
                   <View style={styles.exampleText}>
                     <Text style={[styles.exampleJa, { color: colors.textPrimary }]}>{ex.ja}</Text>
@@ -132,9 +133,7 @@ export default function DetailScreen() {
         <View style={styles.headerTop}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
             <Text style={[styles.verb, { color: colors.primary }]}>{key}</Text>
-            <TouchableOpacity onPress={() => speak(key)}>
-              <Ionicons name="volume-medium" size={22} color={colors.primary} />
-            </TouchableOpacity>
+            <SpeakButton text={key} size={22} color={colors.primary} />
           </View>
           <TouchableOpacity onPress={() => toggleFavorite(key)}>
             <Ionicons
@@ -170,6 +169,8 @@ export default function DetailScreen() {
                 style={[styles.formRow, { borderBottomColor: colors.divider }]}
                 onPress={() => speak(formData.reading)}
                 activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel={`Play pronunciation of ${formData.reading}`}
               >
                 <View style={styles.formLabel}>
                   <View style={[styles.formTag, { backgroundColor: tagColor.bg }]}>
@@ -205,6 +206,8 @@ export default function DetailScreen() {
                   style={[styles.exampleRow, { borderBottomColor: colors.divider }]}
                   onPress={() => speak(ex.ja)}
                   activeOpacity={0.7}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Play pronunciation of ${ex.ja}`}
                 >
                   <View style={styles.exampleText}>
                     <View style={[styles.exampleTag, { backgroundColor: exTagColor.bg }]}>

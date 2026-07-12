@@ -23,6 +23,8 @@ const lightColors = {
   pillActiveBg: '#DB4E05',
   pillText: '#5A5046',
   pillActiveText: '#FFFFFF',
+  speechIndicatorBg: '#A83C04',
+  speechIndicatorText: '#FFFFFF',
 
   sonkeigoTag: '#E8F5E9',
   sonkeigoTagText: '#2E7D32',
@@ -77,6 +79,8 @@ const darkColors = {
   pillActiveBg: '#FF8A4D',
   pillText: '#A89F98',
   pillActiveText: '#2A1607',
+  speechIndicatorBg: '#FF8A4D',
+  speechIndicatorText: '#2A1607',
 
   sonkeigoTag: '#1B3A1B',
   sonkeigoTagText: '#66BB6A',
