@@ -17,6 +17,7 @@ import QuizScreen from './src/screens/QuizScreen';
 import StatsScreen from './src/screens/StatsScreen';
 import FlashcardStatsScreen from './src/screens/FlashcardStatsScreen';
 import PracticeSettingsScreen from './src/screens/PracticeSettingsScreen';
+import SpeechIndicator from './src/components/SpeechIndicator';
 import { useThemeStore } from './src/store/themeStore';
 import { useColors, fonts } from './src/utils/theme';
 import type {
@@ -218,6 +219,7 @@ export default function App() {
           />
         </Tab.Navigator>
       </NavigationContainer>
+      <SpeechIndicator />
     </GestureHandlerRootView>
   );
 }
