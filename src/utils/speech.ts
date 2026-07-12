@@ -70,7 +70,7 @@ export function speak(text: string) {
     })
     .catch((error) => {
       console.warn('Speech playback failed:', error);
-      emitEnd();
+      if (token === speechToken) emitEnd();
     });
 }
 

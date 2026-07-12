@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
+import { Animated, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { speak } from '../utils/speech';
@@ -65,7 +65,7 @@ export default function SpeakButton({
       hitSlop={{ top: hitSlop, bottom: hitSlop, left: hitSlop, right: hitSlop }}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? `Play pronunciation of ${text}`}
-      style={[backgroundColor ? { backgroundColor } : null, style]}
+      style={[styles.touchTarget, backgroundColor ? { backgroundColor } : null, style]}
     >
       <Animated.View style={{ transform: [{ scale }] }}>
         <Ionicons
@@ -77,3 +77,12 @@ export default function SpeakButton({
     </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  touchTarget: {
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

@@ -1,13 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useColors } from '../utils/theme';
 import { onSpeechEnd, onSpeechStart } from '../utils/speech';
 
 // Longest a pronunciation should visibly linger if the TTS callbacks never fire
 // (e.g. no Japanese voice installed, where Android's TTS is a silent no-op).
 const MAX_VISIBLE_MS = 2500;
+const MIN_VISIBLE_MS = 1200;
 const LINGER_AFTER_END_MS = 400;
+const HEADER_HEIGHT = 56;
+const HEADER_GAP = 8;
 
 /**
  * Global, app-level feedback shown whenever speech is triggered. A speak
@@ -17,10 +21,11 @@ const LINGER_AFTER_END_MS = 400;
  */
 export default function SpeechIndicator() {
   const colors = useColors();
+  const insets = useSafeAreaInsets();
   const [text, setText] = useState('');
-  const [mounted, setMounted] = useState(false);
   const opacity = useRef(new Animated.Value(0)).current;
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const visibleSince = useRef<number | null>(null);
 
   useEffect(() => {
     const clearTimer = () => {
@@ -30,9 +35,10 @@ export default function SpeechIndicator() {
       }
     };
     const hide = () => {
+      hideTimer.current = null;
       Animated.timing(opacity, { toValue: 0, duration: 200, useNativeDriver: true }).start(
         ({ finished }) => {
-          if (finished) setMounted(false);
+          if (finished) visibleSince.current = null;
         },
       );
     };
@@ -43,26 +49,35 @@ export default function SpeechIndicator() {
 
     const unsubStart = onSpeechStart((t) => {
       setText(t);
-      setMounted(true);
+      visibleSince.current = Date.now();
       Animated.timing(opacity, { toValue: 1, duration: 140, useNativeDriver: true }).start();
       scheduleHide(MAX_VISIBLE_MS);
     });
-    const unsubEnd = onSpeechEnd(() => scheduleHide(LINGER_AFTER_END_MS));
+    const unsubEnd = onSpeechEnd(() => {
+      if (visibleSince.current === null) return;
+      const elapsed = Date.now() - visibleSince.current;
+      scheduleHide(Math.max(MIN_VISIBLE_MS - elapsed, LINGER_AFTER_END_MS));
+    });
 
     return () => {
       unsubStart();
       unsubEnd();
       clearTimer();
+      opacity.stopAnimation();
     };
   }, [opacity]);
 
-  if (!mounted) return null;
-
   return (
-    <Animated.View pointerEvents="none" style={[styles.container, { opacity }]}>
-      <View style={[styles.pill, { backgroundColor: colors.primary }]}>
-        <Ionicons name="volume-high" size={16} color="#fff" />
-        <Text numberOfLines={1} style={styles.text}>
+    <Animated.View
+      pointerEvents="none"
+      accessible={false}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+      style={[styles.container, { opacity, top: insets.top + HEADER_HEIGHT + HEADER_GAP }]}
+    >
+      <View style={[styles.pill, { backgroundColor: colors.speechIndicatorBg }]}>
+        <Ionicons name="volume-high" size={16} color={colors.speechIndicatorText} />
+        <Text numberOfLines={1} style={[styles.text, { color: colors.speechIndicatorText }]}>
           {text}
         </Text>
       </View>
@@ -75,8 +90,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 96,
     alignItems: 'center',
+    zIndex: 1000,
   },
   pill: {
     flexDirection: 'row',
@@ -92,7 +107,6 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   text: {
-    color: '#fff',
     fontSize: 14,
     fontWeight: '600',
     marginLeft: 8,

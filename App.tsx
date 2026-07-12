@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -134,92 +135,94 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <StatusBar
-        barStyle={isDark ? 'light-content' : 'dark-content'}
-        backgroundColor={colors.bg}
-      />
-      <NavigationContainer theme={navTheme}>
-        <Tab.Navigator
-          id="MainTabs"
-          screenOptions={{
-            tabBarActiveTintColor: colors.primary,
-            tabBarInactiveTintColor: colors.textMuted,
-            tabBarStyle: {
-              backgroundColor: colors.bg,
-              borderTopColor: colors.divider,
-            },
-            tabBarLabelStyle: {
-              fontSize: 11,
-              fontWeight: fonts.weights.medium,
-            },
-            headerStyle: { backgroundColor: colors.bg },
-            headerTintColor: colors.primary,
-            headerTitleStyle: {
-              fontWeight: fonts.weights.semibold,
-              color: colors.textPrimary,
-            },
-            headerTitleAlign: 'center' as const,
-            headerShadowVisible: false,
-          }}
-        >
-          <Tab.Screen
-            name="Search"
-            component={SearchStackScreen}
-            options={{
-              headerShown: false,
-              tabBarLabel: 'Search',
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="search" size={size} color={color} />
-              ),
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <StatusBar
+          barStyle={isDark ? 'light-content' : 'dark-content'}
+          backgroundColor={colors.bg}
+        />
+        <NavigationContainer theme={navTheme}>
+          <Tab.Navigator
+            id="MainTabs"
+            screenOptions={{
+              tabBarActiveTintColor: colors.primary,
+              tabBarInactiveTintColor: colors.textMuted,
+              tabBarStyle: {
+                backgroundColor: colors.bg,
+                borderTopColor: colors.divider,
+              },
+              tabBarLabelStyle: {
+                fontSize: 11,
+                fontWeight: fonts.weights.medium,
+              },
+              headerStyle: { backgroundColor: colors.bg },
+              headerTintColor: colors.primary,
+              headerTitleStyle: {
+                fontWeight: fonts.weights.semibold,
+                color: colors.textPrimary,
+              },
+              headerTitleAlign: 'center' as const,
+              headerShadowVisible: false,
             }}
-          />
-          <Tab.Screen
-            name="Quiz"
-            component={QuizStackScreen}
-            options={{
-              headerShown: false,
-              tabBarLabel: 'Quiz',
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="school" size={size} color={color} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Flashcards"
-            component={FlashcardStackScreen}
-            options={{
-              headerShown: false,
-              tabBarLabel: 'Cards',
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="layers" size={size} color={color} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Guide"
-            component={PatternGuideScreen}
-            options={{
-              title: 'Pattern Guide',
-              tabBarLabel: 'Guide',
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="book" size={size} color={color} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="More"
-            component={MoreStackScreen}
-            options={{
-              headerShown: false,
-              tabBarLabel: 'More',
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="ellipsis-horizontal" size={size} color={color} />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-      <SpeechIndicator />
+          >
+            <Tab.Screen
+              name="Search"
+              component={SearchStackScreen}
+              options={{
+                headerShown: false,
+                tabBarLabel: 'Search',
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="search" size={size} color={color} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Quiz"
+              component={QuizStackScreen}
+              options={{
+                headerShown: false,
+                tabBarLabel: 'Quiz',
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="school" size={size} color={color} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Flashcards"
+              component={FlashcardStackScreen}
+              options={{
+                headerShown: false,
+                tabBarLabel: 'Cards',
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="layers" size={size} color={color} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Guide"
+              component={PatternGuideScreen}
+              options={{
+                title: 'Pattern Guide',
+                tabBarLabel: 'Guide',
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="book" size={size} color={color} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="More"
+              component={MoreStackScreen}
+              options={{
+                headerShown: false,
+                tabBarLabel: 'More',
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="ellipsis-horizontal" size={size} color={color} />
+                ),
+              }}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+        <SpeechIndicator />
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }

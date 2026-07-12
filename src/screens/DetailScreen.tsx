@@ -91,6 +91,8 @@ export default function DetailScreen() {
                   style={[styles.exampleRow, { borderBottomColor: colors.divider }]}
                   onPress={() => speak(ex.ja)}
                   activeOpacity={0.7}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Play pronunciation of ${ex.ja}`}
                 >
                   <View style={styles.exampleText}>
                     <Text style={[styles.exampleJa, { color: colors.textPrimary }]}>{ex.ja}</Text>
@@ -167,6 +169,8 @@ export default function DetailScreen() {
                 style={[styles.formRow, { borderBottomColor: colors.divider }]}
                 onPress={() => speak(formData.reading)}
                 activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel={`Play pronunciation of ${formData.reading}`}
               >
                 <View style={styles.formLabel}>
                   <View style={[styles.formTag, { backgroundColor: tagColor.bg }]}>
@@ -202,6 +206,8 @@ export default function DetailScreen() {
                   style={[styles.exampleRow, { borderBottomColor: colors.divider }]}
                   onPress={() => speak(ex.ja)}
                   activeOpacity={0.7}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Play pronunciation of ${ex.ja}`}
                 >
                   <View style={styles.exampleText}>
                     <View style={[styles.exampleTag, { backgroundColor: exTagColor.bg }]}>

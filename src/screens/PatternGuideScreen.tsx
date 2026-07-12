@@ -188,6 +188,8 @@ function ExampleRow({ example, colors }: { example: Example; colors: any }) {
       style={[sty.exampleRow, { borderBottomColor: colors.divider }]}
       onPress={() => speak(example.ja)}
       activeOpacity={0.7}
+      accessibilityRole="button"
+      accessibilityLabel={`Play pronunciation of ${example.ja}`}
     >
       <View style={sty.exampleText}>
         <Text style={[sty.exampleJa, { color: colors.textPrimary }]}>{example.ja}</Text>
@@ -244,6 +246,8 @@ function SpecialVerbTable({
           style={[sty.tableRow, { borderBottomColor: colors.divider }]}
           onPress={() => speak(v.keigo)}
           activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel={`Play pronunciation of ${v.keigo}`}
         >
           <Text style={[sty.tableCell, { color: colors.textSecondary, flex: 1.2 }]}>{v.plain}</Text>
           <View style={{ flex: 1.3, flexDirection: 'row', alignItems: 'center' }}>
@@ -408,6 +412,8 @@ export default function PatternGuideScreen() {
               style={[sty.tableRow, { borderBottomColor: colors.divider }]}
               onPress={() => speak(u.polite)}
               activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel={`Play pronunciation of ${u.polite}`}
             >
               <Text style={[sty.tableCell, { color: colors.textSecondary, flex: 1 }]}>{u.casual}</Text>
               <View style={{ flex: 1.5, flexDirection: 'row', alignItems: 'center' }}>
