@@ -24,6 +24,11 @@ import {
   BusinessLevel,
   KEIGO_FORM_LABELS,
 } from '../utils/keigoTypes';
+import {
+  getGradableForms,
+  getVerbFormData,
+} from '../utils/gradableVerbs';
+import { isLongExpression } from '../utils/expressionDisplay';
 import { useColors, fonts, spacing, radius } from '../utils/theme';
 import { usePracticeSettingsStore } from '../store/practiceSettingsStore';
 import { useFlashcardSessionStore } from '../store/flashcardSessionStore';
@@ -48,6 +53,31 @@ export interface Card {
   answer: string;
   answerReading: string;
   cardType: CardType;
+}
+
+export function FlashcardAnswerText({
+  card,
+  color,
+}: {
+  card: Card;
+  color: string;
+}) {
+  const usesLongExpressionLayout =
+    card.cardType === 'expression' && isLongExpression(card.answer);
+
+  return (
+    <Text
+      style={[
+        styles.answerText,
+        usesLongExpressionLayout && styles.longExpressionAnswerText,
+        { color },
+      ]}
+      numberOfLines={usesLongExpressionLayout ? undefined : 2}
+      adjustsFontSizeToFit={!usesLongExpressionLayout}
+    >
+      {card.answer}
+    </Text>
+  );
 }
 
 const MIN_SELECTION_WEIGHT = 0.2;
@@ -129,11 +159,15 @@ export function generateCard(
   }
 
   if (filteredVerbs.length === 0 || activeForms.length === 0) return null;
-  const selected = selectWeightedEntry(filteredVerbs, getWeight, recentKeys, random);
+  const eligibleVerbs = filteredVerbs.filter(([verb, data]) =>
+    getGradableForms(verb, data, activeForms).length > 0
+  );
+  const selected = selectWeightedEntry(eligibleVerbs, getWeight, recentKeys, random);
   if (!selected) return null;
   const [verb, data] = selected;
-  const form = activeForms[Math.floor(random() * activeForms.length)];
-  const formData = data[form];
+  const eligibleForms = getGradableForms(verb, data, activeForms);
+  const form = eligibleForms[Math.floor(random() * eligibleForms.length)];
+  const formData = getVerbFormData(data, form);
   return {
     srKey: verb,
     front: verb,
@@ -355,6 +389,8 @@ export default function FlashcardScreen() {
   );
 
   const formLabel = card.form ? KEIGO_FORM_LABELS[card.form] : null;
+  const usesLongExpressionLayout =
+    card.cardType === 'expression' && isLongExpression(card.answer);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.bg }]}>
@@ -455,6 +491,7 @@ export default function FlashcardScreen() {
             style={[
               styles.card,
               styles.cardBack,
+              usesLongExpressionLayout && styles.longExpressionCardBack,
               {
                 backgroundColor: colors.primary + '10',
                 borderColor: colors.divider,
@@ -467,15 +504,15 @@ export default function FlashcardScreen() {
                 {formLabel.ja} — {formLabel.en}
               </Text>
             )}
-            <Text
-              style={[styles.answerText, { color: colors.primary }]}
-              numberOfLines={2}
-              adjustsFontSizeToFit
-            >
-              {card.answer}
-            </Text>
+            <FlashcardAnswerText card={card} color={colors.primary} />
             {card.answerReading && card.answerReading !== card.answer && (
-              <Text style={[styles.readingText, { color: colors.textSecondary }]}>
+              <Text
+                style={[
+                  styles.readingText,
+                  usesLongExpressionLayout && styles.longExpressionReadingText,
+                  { color: colors.textSecondary },
+                ]}
+              >
                 {card.answerReading}
               </Text>
             )}
@@ -484,7 +521,13 @@ export default function FlashcardScreen() {
                 {card.front} · {card.reading}
               </Text>
             )}
-            <Text style={[styles.answerTranslation, { color: colors.textMuted }]}>
+            <Text
+              style={[
+                styles.answerTranslation,
+                usesLongExpressionLayout && styles.longExpressionTranslation,
+                { color: colors.textMuted },
+              ]}
+            >
               {card.translation}
             </Text>
             <SpeakButton
@@ -492,7 +535,10 @@ export default function FlashcardScreen() {
               size={20}
               color={colors.pillActiveText}
               backgroundColor={colors.primary}
-              style={styles.speakButton}
+              style={[
+                styles.speakButton,
+                usesLongExpressionLayout && styles.longExpressionSpeakButton,
+              ]}
               accessibilityLabel={`Play pronunciation of ${card.answer}`}
             />
           </Animated.View>
@@ -584,6 +630,10 @@ const styles = StyleSheet.create({
   cardBack: {
     borderWidth: 2,
   },
+  longExpressionCardBack: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+  },
   formLabel: {
     fontSize: fonts.sizes.sm,
     fontWeight: fonts.weights.semibold,
@@ -621,11 +671,23 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'stretch',
   },
+  longExpressionAnswerText: {
+    fontSize: fonts.sizes.xl,
+    lineHeight: 32,
+  },
   answerTranslation: {
     fontSize: fonts.sizes.md,
     fontStyle: 'italic',
     marginBottom: spacing.md,
     textAlign: 'center',
+  },
+  longExpressionReadingText: {
+    fontSize: fonts.sizes.md,
+    lineHeight: 22,
+  },
+  longExpressionTranslation: {
+    fontSize: fonts.sizes.sm,
+    marginBottom: spacing.sm,
   },
   contextText: {
     fontSize: fonts.sizes.sm,
@@ -639,6 +701,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.md,
+  },
+  longExpressionSpeakButton: {
+    marginBottom: 0,
   },
   tapHint: {
     fontSize: fonts.sizes.xs,

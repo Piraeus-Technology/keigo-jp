@@ -1,13 +1,15 @@
 import React from 'react';
-import { Animated } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import verbs from '../data/verbs.json';
 import expressions from '../data/expressions.json';
 import FlashcardScreen, {
+  FlashcardAnswerText,
   filterEntriesByLevels,
   generateCard,
   selectWeightedEntry,
 } from '../screens/FlashcardScreen';
+import { isGradableVerbForm } from '../utils/gradableVerbs';
 import type { ExpressionData, VerbData } from '../utils/keigoTypes';
 
 const mockRecordReview = jest.fn(() => Promise.resolve());
@@ -245,5 +247,73 @@ describe('FlashcardScreen weighted card selection', () => {
     }
 
     expect(expressionCards).toBe(30);
+  });
+
+  test('never generates a verb card whose answer is its prompt', () => {
+    const forms: ('sonkeigo' | 'kenjougo' | 'teineigo')[] = [
+      'sonkeigo',
+      'kenjougo',
+      'teineigo',
+    ];
+
+    for (const entry of verbEntries) {
+      for (const form of forms) {
+        const card = generateCard(
+          [entry],
+          [],
+          false,
+          [form],
+          () => 1,
+          [],
+          () => 0,
+        );
+        if (!isGradableVerbForm(entry[0], entry[1], form)) {
+          expect(card).toBeNull();
+        } else {
+          expect(card?.answer).not.toBe(card?.front);
+        }
+      }
+    }
+  });
+});
+
+describe('FlashcardScreen expression answer layout', () => {
+  const longestExpression =
+    '失礼ですが、もう一度お名前をお伺いしてもよろしいでしょうか';
+  const baseCard = {
+    srKey: longestExpression,
+    front: 'Excuse me, but may I ask your name again?',
+    reading: '',
+    translation: 'Excuse me, but may I ask your name again?',
+    answer: longestExpression,
+    answerReading: 'しつれいですが、もういちどおなまえをおうかがいしてもよろしいでしょうか',
+    cardType: 'expression' as const,
+  };
+
+  test('lets the longest expression wrap at a readable fixed size', () => {
+    const view = render(<FlashcardAnswerText card={baseCard} color="#000" />);
+    const answer = view.getByText(longestExpression);
+    const flattenedStyle = StyleSheet.flatten(answer.props.style);
+
+    expect(answer.props.numberOfLines).toBeUndefined();
+    expect(answer.props.adjustsFontSizeToFit).toBe(false);
+    expect(flattenedStyle.fontSize).toBe(24);
+    expect(flattenedStyle.lineHeight).toBe(32);
+  });
+
+  test('keeps the existing two-line auto-fit treatment for short expressions', () => {
+    const shortCard = {
+      ...baseCard,
+      srKey: '恐れ入ります',
+      answer: '恐れ入ります',
+      answerReading: 'おそれいります',
+    };
+    const view = render(<FlashcardAnswerText card={shortCard} color="#000" />);
+    const answer = view.getByText(shortCard.answer);
+    const flattenedStyle = StyleSheet.flatten(answer.props.style);
+
+    expect(answer.props.numberOfLines).toBe(2);
+    expect(answer.props.adjustsFontSizeToFit).toBe(true);
+    expect(flattenedStyle.fontSize).toBe(40);
   });
 });

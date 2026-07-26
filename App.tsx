@@ -21,6 +21,7 @@ import PracticeSettingsScreen from './src/screens/PracticeSettingsScreen';
 import SpeechIndicator from './src/components/SpeechIndicator';
 import { useThemeStore } from './src/store/themeStore';
 import { useColors, fonts } from './src/utils/theme';
+import { getDetailHeaderTitle } from './src/utils/expressionDisplay';
 import type {
   SearchStackParamList,
   QuizStackParamList,
@@ -60,7 +61,7 @@ function SearchStackScreen() {
         name="Detail"
         component={DetailScreen}
         options={({ route }: { route: RouteProp<SearchStackParamList, 'Detail'> }) => ({
-          title: route.params.key,
+          title: getDetailHeaderTitle(route.params),
         })}
       />
     </SearchStack.Navigator>

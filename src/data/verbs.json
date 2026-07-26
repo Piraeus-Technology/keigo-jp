@@ -159,11 +159,11 @@
     "reading": "あげる",
     "translation": "to give",
     "level": "basic",
-    "sonkeigo": { "form": "くださる", "reading": "くださる", "pattern": "special" },
+    "sonkeigo": { "form": "お与えになる", "reading": "おあたえになる", "pattern": "o_ni_naru" },
     "kenjougo": { "form": "差し上げる", "reading": "さしあげる", "pattern": "special" },
     "teineigo": { "form": "あげます", "reading": "あげます" },
     "examples": [
-      { "context": "Thanking for giving something", "ja": "お時間をくださいまして、ありがとうございます。", "en": "Thank you for giving us your time.", "type": "sonkeigo" },
+      { "context": "Describing a superior giving an opportunity", "ja": "会長は若手社員に発表の機会をお与えになりました。", "en": "The chair gave a young employee an opportunity to present.", "type": "sonkeigo" },
       { "context": "Offering to give something", "ja": "資料を差し上げます。", "en": "I will give you the documents.", "type": "kenjougo" }
     ]
   },
@@ -520,11 +520,10 @@
     "translation": "to pass away",
     "level": "advanced",
     "sonkeigo": { "form": "お亡くなりになる", "reading": "おなくなりになる", "pattern": "special" },
-    "kenjougo": { "form": "亡くなる", "reading": "なくなる", "pattern": "special" },
+    "kenjougo": { "form": "", "reading": "", "pattern": "special", "note": "There is no canonical humble form for dying." },
     "teineigo": { "form": "亡くなります", "reading": "なくなります" },
     "examples": [
-      { "context": "Speaking about someone who passed", "ja": "会長がお亡くなりになりました。", "en": "The chairman has passed away.", "type": "sonkeigo" },
-      { "context": "Condolence", "ja": "心よりお悔やみ申し上げます。", "en": "I offer my sincere condolences.", "type": "kenjougo" }
+      { "context": "Speaking about someone who passed", "ja": "会長がお亡くなりになりました。", "en": "The chairman has passed away.", "type": "sonkeigo" }
     ]
   },
   "くれる": {
@@ -1119,11 +1118,11 @@
     "reading": "うけたまわる",
     "translation": "to humbly receive / to hear",
     "level": "advanced",
-    "sonkeigo": { "form": "おっしゃる", "reading": "おっしゃる", "pattern": "special" },
+    "sonkeigo": { "form": "お聞きになる", "reading": "おききになる", "pattern": "o_ni_naru" },
     "kenjougo": { "form": "承る", "reading": "うけたまわる", "pattern": "special" },
     "teineigo": { "form": "聞きます", "reading": "ききます" },
     "examples": [
-      { "context": "When a superior gives instructions", "ja": "何でもおっしゃってください。", "en": "Please tell me anything.", "type": "sonkeigo" },
+      { "context": "When a superior hears a customer's request", "ja": "部長はお客様のご要望をお聞きになりました。", "en": "The manager listened to the customer's request.", "type": "sonkeigo" },
       { "context": "Receiving an order or reservation", "ja": "ご予約を承りました。", "en": "I have received your reservation.", "type": "kenjougo" }
     ]
   },
