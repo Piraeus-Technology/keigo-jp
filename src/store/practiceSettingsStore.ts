@@ -60,22 +60,51 @@ export const usePracticeSettingsStore = create<PracticeSettingsStore>((set, get)
     set({ loadError: false });
     return queue.runLoad(async () => {
       if (get().loaded) return;
+      let stored: string | null;
       try {
-        const stored = await AsyncStorage.getItem('practiceSettings');
-        const parsed = stored ? JSON.parse(stored) : {};
+        stored = await AsyncStorage.getItem('practiceSettings');
+      } catch (e) {
+        console.warn('Failed to load practice settings:', e);
+        set({ loadError: true });
+        return;
+      }
+
+      if (!stored) {
+        set({
+          activeForms: [...allForms],
+          activeLevels: [...allLevels],
+          includeExpressions: true,
+          loaded: true,
+          loadError: false,
+        });
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(stored);
         const forms = parseStoredSubset(parsed?.activeForms, allForms);
         const levels = parseStoredSubset(parsed?.activeLevels, allLevels);
-        set({
+        const next = {
           activeForms: forms.length > 0 ? forms : [...allForms],
           activeLevels: levels.length > 0 ? levels : [...allLevels],
           includeExpressions:
             typeof parsed?.includeExpressions === 'boolean' ? parsed.includeExpressions : true,
+        };
+        const recovered = JSON.stringify(next) === stored || await persist(next);
+        set({
+          ...next,
           loaded: true,
-          loadError: false,
+          loadError: !recovered,
         });
       } catch (e) {
-        console.warn('Failed to load practice settings:', e);
-        set({ loadError: true });
+        console.warn('Resetting malformed practice settings:', e);
+        const next = {
+          activeForms: [...allForms],
+          activeLevels: [...allLevels],
+          includeExpressions: true,
+        };
+        const recovered = await persist(next);
+        set({ ...next, loaded: true, loadError: !recovered });
       }
     });
   },

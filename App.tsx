@@ -112,7 +112,7 @@ export default function App() {
 
   useEffect(() => {
     loadTheme();
-  }, []);
+  }, [loadTheme]);
 
   const onLayoutRootView = useCallback(async () => {
     if (loaded) {

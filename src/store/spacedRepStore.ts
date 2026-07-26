@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { safeRemoveItem, safeSetItem } from '../utils/safeStorage';
 import { createStoreQueue } from '../utils/storeQueue';
+import { isRecord } from '../utils/persistedData';
 
 interface VerbWeight {
   [key: string]: number;
@@ -23,6 +24,23 @@ const MAX_WEIGHT = 5;
 
 const queue = createStoreQueue();
 
+function sanitizeWeights(value: unknown): { weights: VerbWeight; changed: boolean } {
+  if (!isRecord(value)) return { weights: {}, changed: true };
+
+  const weights: VerbWeight = {};
+  let changed = false;
+  Object.entries(value).forEach(([key, weight]) => {
+    if (!key || typeof weight !== 'number' || !Number.isFinite(weight) || weight < 0) {
+      changed = true;
+      return;
+    }
+    const clamped = Math.min(MAX_WEIGHT, Math.max(MIN_WEIGHT, weight));
+    weights[key] = clamped;
+    if (clamped !== weight) changed = true;
+  });
+  return { weights, changed };
+}
+
 export const useSpacedRepStore = create<SpacedRepStore>((set, get) => ({
   weights: {},
   loaded: false,
@@ -33,16 +51,31 @@ export const useSpacedRepStore = create<SpacedRepStore>((set, get) => ({
     set({ loadError: false });
     return queue.runLoad(async () => {
       if (get().loaded) return;
+      let stored: string | null;
       try {
-        const stored = await AsyncStorage.getItem('spaced_rep_weights');
-        if (stored) {
-          set({ weights: JSON.parse(stored), loaded: true, loadError: false });
-        } else {
-          set({ loaded: true, loadError: false });
-        }
+        stored = await AsyncStorage.getItem('spaced_rep_weights');
       } catch (e) {
         console.warn('Failed to load spaced rep weights:', e);
         set({ loadError: true });
+        return;
+      }
+
+      if (!stored) {
+        set({ loaded: true, loadError: false });
+        return;
+      }
+
+      try {
+        const { weights, changed } = sanitizeWeights(JSON.parse(stored));
+        let recovered = true;
+        if (changed) {
+          recovered = await safeSetItem('spaced_rep_weights', JSON.stringify(weights));
+        }
+        set({ weights, loaded: true, loadError: !recovered });
+      } catch (e) {
+        console.warn('Resetting malformed spaced rep weights:', e);
+        const removed = await safeRemoveItem('spaced_rep_weights');
+        set({ weights: {}, loaded: true, loadError: !removed });
       }
     });
   },

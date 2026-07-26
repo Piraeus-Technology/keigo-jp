@@ -6,9 +6,6 @@ const VALID_PATTERNS = ['special', 'o_ni_naru', 'o_suru', 'go_ni_naru', 'go_suru
 const VALID_EXAMPLE_TYPES = ['sonkeigo', 'kenjougo', 'teineigo'];
 const VALID_CATEGORIES = ['greeting', 'opening', 'closing', 'apology', 'response', 'request', 'farewell', 'gift'];
 
-// Hiragana Unicode range: \u3040-\u309F
-const HIRAGANA_REGEX = /^[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF\u3000-\u303Fー、。・「」a-zA-Z\s\d.,!?()（）]+$/;
-
 type VerbEntry = {
   reading: string;
   translation: string;

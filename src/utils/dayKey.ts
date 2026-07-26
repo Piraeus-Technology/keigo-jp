@@ -18,7 +18,21 @@ export function timestampToDayKey(timestamp: number): string {
   return dateToDayKey(new Date(timestamp));
 }
 
+export function isValidDayKey(day: unknown): day is string {
+  if (typeof day !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(day)) return false;
+
+  const [year, month, date] = day.split('-').map(Number);
+  if (year < 1970 || year > 9999) return false;
+  const parsed = new Date(year, month - 1, date);
+  return parsed.getFullYear() === year
+    && parsed.getMonth() === month - 1
+    && parsed.getDate() === date;
+}
+
 export function normalizeStoredDayKey(day: string): string {
+  if (isValidDayKey(day)) return day;
+  // A value that claims to use the persisted schema but is not a real
+  // calendar date is corrupt, not a legacy format to normalize.
   if (/^\d{4}-\d{2}-\d{2}$/.test(day)) return day;
 
   const parsed = new Date(day);

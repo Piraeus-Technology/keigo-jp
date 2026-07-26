@@ -27,7 +27,7 @@ export default function DetailScreen() {
 
   React.useEffect(() => {
     loadFavorites();
-  }, []);
+  }, [loadFavorites]);
 
   if (type === 'expression') {
     const data = (expressions as Record<string, ExpressionData>)[key];
@@ -48,7 +48,13 @@ export default function DetailScreen() {
               <Text style={[styles.verb, { color: colors.primary, fontSize: fonts.sizes.xxl }]}>{key}</Text>
               <SpeakButton text={key} size={22} color={colors.primary} />
             </View>
-            <TouchableOpacity onPress={() => toggleFavorite(key)}>
+            <TouchableOpacity
+              style={styles.favoriteButton}
+              onPress={() => toggleFavorite(key)}
+              accessibilityRole="button"
+              accessibilityLabel={isFavorite(key) ? 'Remove from favorites' : 'Add to favorites'}
+              accessibilityState={{ selected: isFavorite(key) }}
+            >
               <Ionicons
                 name={isFavorite(key) ? 'heart' : 'heart-outline'}
                 size={28}
@@ -135,7 +141,13 @@ export default function DetailScreen() {
             <Text style={[styles.verb, { color: colors.primary }]}>{key}</Text>
             <SpeakButton text={key} size={22} color={colors.primary} />
           </View>
-          <TouchableOpacity onPress={() => toggleFavorite(key)}>
+          <TouchableOpacity
+            style={styles.favoriteButton}
+            onPress={() => toggleFavorite(key)}
+            accessibilityRole="button"
+            accessibilityLabel={isFavorite(key) ? 'Remove from favorites' : 'Add to favorites'}
+            accessibilityState={{ selected: isFavorite(key) }}
+          >
             <Ionicons
               name={isFavorite(key) ? 'heart' : 'heart-outline'}
               size={28}
@@ -245,13 +257,18 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+  favoriteButton: {
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   verb: { fontSize: fonts.sizes.hero, fontWeight: fonts.weights.bold },
   reading: { fontSize: fonts.sizes.lg, marginTop: spacing.xs },
   translation: { fontSize: fonts.sizes.lg, marginTop: spacing.md },
   metaRow: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.md, gap: spacing.sm },
   tag: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: radius.full },
   tagText: { fontSize: fonts.sizes.xs, fontWeight: fonts.weights.medium },
-  speakButton: { marginLeft: 'auto' },
   groupSection: { marginTop: spacing.md, paddingHorizontal: spacing.md },
   groupTitle: {
     fontSize: fonts.sizes.sm,

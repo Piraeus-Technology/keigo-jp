@@ -3,11 +3,17 @@ import { Animated, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useColors } from '../utils/theme';
-import { onSpeechEnd, onSpeechStart } from '../utils/speech';
+import {
+  isSpeechPlaying,
+  onSpeechEnd,
+  onSpeechPlaybackStart,
+  onSpeechStart,
+} from '../utils/speech';
 
 // Longest a pronunciation should visibly linger if the TTS callbacks never fire
 // (e.g. no Japanese voice installed, where Android's TTS is a silent no-op).
-const MAX_VISIBLE_MS = 2500;
+const START_TIMEOUT_MS = 2500;
+const SPEAKING_POLL_MS = 1000;
 const MIN_VISIBLE_MS = 1200;
 const LINGER_AFTER_END_MS = 400;
 const HEADER_HEIGHT = 56;
@@ -28,6 +34,8 @@ export default function SpeechIndicator() {
   const visibleSince = useRef<number | null>(null);
 
   useEffect(() => {
+    let active = true;
+    let lifecycle = 0;
     const clearTimer = () => {
       if (hideTimer.current) {
         clearTimeout(hideTimer.current);
@@ -46,21 +54,47 @@ export default function SpeechIndicator() {
       clearTimer();
       hideTimer.current = setTimeout(hide, ms);
     };
+    const schedulePlaybackCheck = (ms: number, expectedLifecycle: number) => {
+      clearTimer();
+      hideTimer.current = setTimeout(async () => {
+        hideTimer.current = null;
+        const speaking = await isSpeechPlaying();
+        if (!active || lifecycle !== expectedLifecycle) return;
+        if (speaking) {
+          schedulePlaybackCheck(SPEAKING_POLL_MS, expectedLifecycle);
+        } else {
+          hide();
+        }
+      }, ms);
+    };
 
     const unsubStart = onSpeechStart((t) => {
+      lifecycle += 1;
       setText(t);
       visibleSince.current = Date.now();
       Animated.timing(opacity, { toValue: 1, duration: 140, useNativeDriver: true }).start();
-      scheduleHide(MAX_VISIBLE_MS);
+      // Covers engines that never invoke onStart (for example, when a
+      // Japanese voice is unavailable) without cutting off longer speech.
+      schedulePlaybackCheck(START_TIMEOUT_MS, lifecycle);
+    });
+    const unsubPlaybackStart = onSpeechPlaybackStart(() => {
+      lifecycle += 1;
+      if (visibleSince.current === null) visibleSince.current = Date.now();
+      Animated.timing(opacity, { toValue: 1, duration: 140, useNativeDriver: true }).start();
+      schedulePlaybackCheck(START_TIMEOUT_MS, lifecycle);
     });
     const unsubEnd = onSpeechEnd(() => {
       if (visibleSince.current === null) return;
+      lifecycle += 1;
       const elapsed = Date.now() - visibleSince.current;
       scheduleHide(Math.max(MIN_VISIBLE_MS - elapsed, LINGER_AFTER_END_MS));
     });
 
     return () => {
+      active = false;
+      lifecycle += 1;
       unsubStart();
+      unsubPlaybackStart();
       unsubEnd();
       clearTimer();
       opacity.stopAnimation();

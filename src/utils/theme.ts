@@ -1,7 +1,7 @@
 import { useThemeStore } from '../store/themeStore';
 
 const lightColors = {
-  primary: '#DB4E05',
+  primary: '#C74400',
   primaryLight: '#FE7A1A',
   primaryDark: '#A83C04',
 
@@ -14,7 +14,7 @@ const lightColors = {
 
   textPrimary: '#1A1A1A',
   textSecondary: '#6B6B6B',
-  textMuted: '#9E9E9E',
+  textMuted: '#6F6862',
 
   border: '#EDE6DF',
   divider: '#F4EEE8',
@@ -31,14 +31,14 @@ const lightColors = {
   kenjougoTag: '#E3F2FD',
   kenjougoTagText: '#1565C0',
   teineigoTag: '#FFF3E0',
-  teineigoTagText: '#E65100',
+  teineigoTagText: '#9A3A00',
   expressionTag: '#F3E5F5',
   expressionTagText: '#7B1FA2',
 
   basicTag: '#E8F5E9',
   basicTagText: '#2E7D32',
   intermediateTag: '#FFF8E1',
-  intermediateTagText: '#F57F17',
+  intermediateTagText: '#8A4B00',
   advancedTag: '#FFEBEE',
   advancedTagText: '#C62828',
 
@@ -52,7 +52,7 @@ const lightColors = {
   calLowText: '#B4480A',
   calMid: '#FDB87A',
   calMidText: '#7A3206',
-  calHigh: '#EF6C00',
+  calHigh: '#B44F00',
   calHighText: '#FFFFFF',
 };
 
@@ -70,7 +70,7 @@ const darkColors = {
 
   textPrimary: '#F2EDE9',
   textSecondary: '#A89F98',
-  textMuted: '#6B635C',
+  textMuted: '#9A918A',
 
   border: '#37312B',
   divider: '#2C2722',
@@ -101,27 +101,23 @@ const darkColors = {
   successBg: '#1B3A1B',
   successText: '#66BB6A',
   errorBg: '#3E1A1A',
-  errorText: '#EF5350',
+  errorText: '#FF7773',
 
   // Activity heatmap — orange intensity ramp on dark surfaces
   calLow: '#2E1C10',
   calLowText: '#FFB98C',
   calMid: '#5A3310',
   calMidText: '#FFCBA0',
-  calHigh: '#C2510A',
+  calHigh: '#A54105',
   calHighText: '#FFE9D6',
 };
 
 export type ThemeColors = typeof lightColors;
 
-export const themes = { light: lightColors, dark: darkColors };
-
 export function useColors(): ThemeColors {
   const isDark = useThemeStore((s) => s.isDark);
   return isDark ? darkColors : lightColors;
 }
-
-export const colors = lightColors;
 
 export const fonts = {
   sizes: {

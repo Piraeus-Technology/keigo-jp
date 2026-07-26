@@ -8,6 +8,7 @@ let speechToken = 0;
 // which makes a speak control read as "unresponsive".
 type StartListener = (text: string) => void;
 const startListeners = new Set<StartListener>();
+const playbackStartListeners = new Set<() => void>();
 const endListeners = new Set<() => void>();
 
 export function onSpeechStart(listener: StartListener): () => void {
@@ -21,6 +22,13 @@ export function onSpeechEnd(listener: () => void): () => void {
   endListeners.add(listener);
   return () => {
     endListeners.delete(listener);
+  };
+}
+
+export function onSpeechPlaybackStart(listener: () => void): () => void {
+  playbackStartListeners.add(listener);
+  return () => {
+    playbackStartListeners.delete(listener);
   };
 }
 
@@ -44,6 +52,24 @@ function emitEnd() {
   });
 }
 
+function emitPlaybackStart() {
+  playbackStartListeners.forEach((listener) => {
+    try {
+      listener();
+    } catch {
+      /* ignore listener errors */
+    }
+  });
+}
+
+export async function isSpeechPlaying(): Promise<boolean> {
+  try {
+    return await Speech.isSpeakingAsync();
+  } catch {
+    return false;
+  }
+}
+
 export function speak(text: string) {
   const token = ++speechToken;
   // Notify synchronously so UI feedback appears the instant the control is
@@ -56,6 +82,9 @@ export function speak(text: string) {
       Speech.speak(text, {
         language: 'ja-JP',
         rate: 0.85,
+        onStart: () => {
+          if (token === speechToken) emitPlaybackStart();
+        },
         onDone: () => {
           if (token === speechToken) emitEnd();
         },
