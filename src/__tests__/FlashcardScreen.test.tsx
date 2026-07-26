@@ -1,10 +1,18 @@
 import React from 'react';
 import { Animated } from 'react-native';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
-import FlashcardScreen from '../screens/FlashcardScreen';
+import verbs from '../data/verbs.json';
+import expressions from '../data/expressions.json';
+import FlashcardScreen, {
+  filterEntriesByLevels,
+  generateCard,
+  selectWeightedEntry,
+} from '../screens/FlashcardScreen';
+import type { ExpressionData, VerbData } from '../utils/keigoTypes';
 
 const mockRecordReview = jest.fn(() => Promise.resolve());
 const mockRecordResult = jest.fn(() => Promise.resolve());
+const mockLoadWeights = jest.fn();
 const mockLoadPracticeSettings = jest.fn();
 const mockLoadSessions = jest.fn();
 const mockSaveSession = jest.fn(() => Promise.resolve(true));
@@ -26,7 +34,10 @@ const mockFlashcardStatsState = {
   recordReview: mockRecordReview,
 };
 const mockSpacedRepState = {
+  loaded: false,
+  loadWeights: mockLoadWeights,
   recordResult: mockRecordResult,
+  getWeight: () => 1,
 };
 
 jest.mock('@react-navigation/native', () => ({
@@ -101,6 +112,7 @@ describe('FlashcardScreen flip and grade guards', () => {
   test('hides the answer until reveal and records only one grade', () => {
     render(<FlashcardScreen />);
 
+    expect(mockLoadWeights).toHaveBeenCalledTimes(1);
     const prompt = screen.getByLabelText(/Flashcard prompt:/);
     const animatedViews = screen.UNSAFE_getAllByType(Animated.View);
     expect(animatedViews.some((view) =>
@@ -120,5 +132,118 @@ describe('FlashcardScreen flip and grade guards', () => {
 
     expect(mockRecordReview).toHaveBeenCalledTimes(1);
     expect(mockRecordResult).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('FlashcardScreen weighted card selection', () => {
+  const verbEntries = Object.entries(verbs as Record<string, VerbData>);
+  const expressionEntries = Object.entries(expressions as Record<string, ExpressionData>);
+
+  test('selects a high-weight card more often across deterministic draws', () => {
+    const entries: [string, null][] = [['high', null], ['low', null]];
+    const counts = { high: 0, low: 0 };
+
+    for (let i = 0; i < 1000; i++) {
+      const selected = selectWeightedEntry(
+        entries,
+        (key) => key === 'high' ? 5 : 0.2,
+        [],
+        () => (i + 0.5) / 1000,
+      );
+      counts[selected![0] as keyof typeof counts] += 1;
+    }
+
+    expect(counts.high).toBeGreaterThan(counts.low);
+    expect(counts.high).toBe(833);
+    expect(counts.low).toBe(167);
+  });
+
+  test('keeps every eligible card reachable and discourages immediate repeats', () => {
+    const entries: [string, null][] = [
+      ['strong', null],
+      ['new', null],
+      ['weak', null],
+    ];
+    const weights: Record<string, number> = { strong: 0.2, new: 1, weak: 5 };
+    const reached = new Set<string>();
+
+    for (let i = 0; i < 1000; i++) {
+      const selected = selectWeightedEntry(
+        entries,
+        (key) => weights[key],
+        [],
+        () => (i + 0.5) / 1000,
+      );
+      reached.add(selected![0]);
+    }
+
+    expect(reached).toEqual(new Set(['strong', 'new', 'weak']));
+    expect(selectWeightedEntry(entries, () => 1, [], () => 0.2)?.[0]).toBe('strong');
+    expect(selectWeightedEntry(entries, () => 1, ['strong'], () => 0.2)?.[0]).toBe('new');
+  });
+
+  test('keeps the level and expression settings as hard pool gates', () => {
+    const basicVerbs = filterEntriesByLevels(verbEntries, ['basic']);
+    const verbWeightKeys: string[] = [];
+    expect(basicVerbs.length).toBeGreaterThan(0);
+    expect(basicVerbs.length).toBeLessThan(verbEntries.length);
+    expect(basicVerbs.every(([, data]) => data.level === 'basic')).toBe(true);
+
+    const verbOnly = generateCard(
+      basicVerbs,
+      expressionEntries,
+      false,
+      ['sonkeigo'],
+      (key) => {
+        verbWeightKeys.push(key);
+        return 1;
+      },
+      [],
+      () => 0,
+    );
+    expect(verbOnly?.cardType).toBe('verb');
+    expect(basicVerbs.some(([key]) => key === verbOnly?.srKey)).toBe(true);
+    expect(verbWeightKeys).toEqual(basicVerbs.map(([key]) => key));
+
+    const expressionWeightKeys: string[] = [];
+    const expression = generateCard(
+      basicVerbs,
+      expressionEntries,
+      true,
+      ['sonkeigo'],
+      (key) => {
+        expressionWeightKeys.push(key);
+        return 1;
+      },
+      [],
+      () => 0,
+    );
+    expect(expression?.cardType).toBe('expression');
+    expect(expressionEntries.some(([key]) => key === expression?.srKey)).toBe(true);
+    expect(expression?.answer).toBe(expression?.srKey);
+    expect(expressionWeightKeys).toEqual(expressionEntries.map(([key]) => key));
+  });
+
+  test('preserves the thirty-percent expression mix', () => {
+    let expressionCards = 0;
+
+    for (let i = 0; i < 100; i++) {
+      let randomCall = 0;
+      const card = generateCard(
+        verbEntries,
+        expressionEntries,
+        true,
+        ['sonkeigo'],
+        () => 1,
+        [],
+        () => {
+          randomCall += 1;
+          return randomCall === 1 ? (i + 0.5) / 100 : 0.5;
+        },
+      );
+      if (card?.cardType === 'expression') expressionCards += 1;
+    }
+
+    expect(expressionCards).toBe(30);
   });
 });

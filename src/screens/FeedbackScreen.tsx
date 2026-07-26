@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useColors, fonts, spacing, radius } from '../utils/theme';
 import { useThemeStore } from '../store/themeStore';
+import { resetLearningData } from '../utils/resetLearningData';
 import type { MoreStackParamList } from '../types/navigation';
 
 export const APP_STORE_URL =
@@ -30,6 +31,7 @@ export default function FeedbackScreen() {
   const colors = useColors();
   const navigation = useNavigation<NativeStackNavigationProp<MoreStackParamList, 'MoreMain'>>();
   const { isDark, toggleTheme, autoTTS, toggleAutoTTS } = useThemeStore();
+  const [isResetting, setIsResetting] = useState(false);
 
   const storeName = Platform.OS === 'android' ? 'Google Play' : 'App Store';
   const shareUrl = Platform.OS === 'android' ? PLAY_STORE_URL : APP_STORE_URL;
@@ -66,6 +68,46 @@ export default function FeedbackScreen() {
         'You can send feedback directly to contact@piraeus.app'
       );
     });
+  };
+
+  const performLearningDataReset = async () => {
+    setIsResetting(true);
+    try {
+      const cleared = await resetLearningData();
+      if (cleared) {
+        Alert.alert('Learning Data Reset', 'Your learning data has been permanently deleted.');
+      } else {
+        Alert.alert(
+          'Reset Incomplete',
+          'Some learning data could not be deleted. Please try again. Your preferences were not changed.',
+        );
+      }
+    } catch {
+      Alert.alert(
+        'Reset Incomplete',
+        'Some learning data could not be deleted. Please try again. Your preferences were not changed.',
+      );
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
+  const handleLearningDataReset = () => {
+    if (isResetting) return;
+    Alert.alert(
+      'Reset Learning Data?',
+      'This permanently deletes your favorites, recent history, quiz and flashcard statistics, practice sessions, and spaced-repetition progress.\n\nYour practice settings, dark mode, and auto-play audio preference will remain. This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Reset Learning Data',
+          style: 'destructive',
+          onPress: () => {
+            void performLearningDataReset();
+          },
+        },
+      ],
+    );
   };
 
   return (
@@ -126,6 +168,28 @@ export default function FeedbackScreen() {
             <Text style={[styles.rowSubtitle, { color: colors.textSecondary }]}>Cards reviewed, accuracy, weak verbs</Text>
           </View>
           <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
+        </TouchableOpacity>
+
+        {/* Learning data */}
+        <Text style={[styles.sectionTitle, { color: colors.textSecondary, marginTop: spacing.lg }]}>Learning Data</Text>
+        <TouchableOpacity
+          style={[styles.rowCard, { backgroundColor: colors.card, borderColor: colors.errorText }]}
+          onPress={handleLearningDataReset}
+          activeOpacity={0.7}
+          disabled={isResetting}
+          accessibilityRole="button"
+          accessibilityLabel="Reset Learning Data"
+          accessibilityState={{ disabled: isResetting }}
+        >
+          <Ionicons name="trash-outline" size={22} color={colors.errorText} style={{ marginRight: spacing.md }} />
+          <View style={styles.rowInfo}>
+            <Text style={[styles.rowTitle, { color: colors.errorText }]}>
+              {isResetting ? 'Resetting Learning Data…' : 'Reset Learning Data'}
+            </Text>
+            <Text style={[styles.rowSubtitle, { color: colors.textSecondary }]}>
+              Deletes progress, favorites, and history; keeps settings
+            </Text>
+          </View>
         </TouchableOpacity>
 
         {/* Support section */}
@@ -248,6 +312,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 2,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'transparent',
   },
   rowEmoji: { fontSize: 32, marginRight: spacing.md },
   rowInfo: { flex: 1 },
