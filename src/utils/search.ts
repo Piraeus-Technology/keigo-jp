@@ -3,7 +3,13 @@ import type { FuseResultMatch } from 'fuse.js';
 import verbs from '../data/verbs.json';
 import expressions from '../data/expressions.json';
 import { MAX_SEARCH_RESULTS } from './constants';
-import type { BusinessLevel, ExpressionData, VerbData } from './keigoTypes';
+import type {
+  BusinessLevel,
+  ExpressionData,
+  KeigoForm,
+  VerbData,
+} from './keigoTypes';
+import { getVerbFormData } from './gradableVerbs';
 
 interface SearchDocument {
   key: string;
@@ -31,20 +37,38 @@ export interface SearchResult {
 const verbEntries = Object.entries(verbs as Record<string, VerbData>);
 const expressionEntries = Object.entries(expressions as Record<string, ExpressionData>);
 
-const allSearchData: SearchDocument[] = [
-  ...verbEntries.map(([key, data]) => ({
+function getSearchableForm(data: VerbData, form: KeigoForm) {
+  const formData = getVerbFormData(data, form);
+  if (formData.availability === 'absent') {
+    return { form: '', reading: '' };
+  }
+  return { form: formData.form, reading: formData.reading };
+}
+
+export function buildVerbSearchDocument(
+  key: string,
+  data: VerbData,
+): SearchDocument {
+  const sonkeigo = getSearchableForm(data, 'sonkeigo');
+  const kenjougo = getSearchableForm(data, 'kenjougo');
+  const teineigo = getSearchableForm(data, 'teineigo');
+  return {
     key,
     reading: data.reading,
     translation: data.translation,
     level: data.level,
-    type: 'verb' as const,
-    sonkeigo: data.sonkeigo.form,
-    sonkeigoReading: data.sonkeigo.reading,
-    kenjougo: data.kenjougo.form,
-    kenjougoReading: data.kenjougo.reading,
-    teineigo: data.teineigo.form,
-    teineigoReading: data.teineigo.reading,
-  })),
+    type: 'verb',
+    sonkeigo: sonkeigo.form,
+    sonkeigoReading: sonkeigo.reading,
+    kenjougo: kenjougo.form,
+    kenjougoReading: kenjougo.reading,
+    teineigo: teineigo.form,
+    teineigoReading: teineigo.reading,
+  };
+}
+
+const allSearchData: SearchDocument[] = [
+  ...verbEntries.map(([key, data]) => buildVerbSearchDocument(key, data)),
   ...expressionEntries.map(([key, data]) => ({
     key,
     reading: data.reading,

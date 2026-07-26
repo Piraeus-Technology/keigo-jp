@@ -168,6 +168,7 @@ export function generateCard(
   const eligibleForms = getGradableForms(verb, data, activeForms);
   const form = eligibleForms[Math.floor(random() * eligibleForms.length)];
   const formData = getVerbFormData(data, form);
+  if (formData.availability === 'absent') return null;
   return {
     srKey: verb,
     front: verb,

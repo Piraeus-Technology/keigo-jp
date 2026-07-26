@@ -1,9 +1,15 @@
-import type { KeigoForm, KeigoFormData, VerbData } from './keigoTypes';
+import type {
+  KeigoForm,
+  KeigoFormData,
+  PresentKeigoFormData,
+  VerbData,
+} from './keigoTypes';
 
 export interface GradableVerbPair {
   verb: string;
   data: VerbData;
   form: KeigoForm;
+  formData: PresentKeigoFormData;
 }
 
 export function getVerbFormData(
@@ -17,7 +23,7 @@ export function hasCanonicalVerbForm(
   data: VerbData,
   form: KeigoForm,
 ): boolean {
-  return getVerbFormData(data, form).form.trim().length > 0;
+  return getVerbFormData(data, form).availability === 'present';
 }
 
 export function isGradableVerbForm(
@@ -25,8 +31,10 @@ export function isGradableVerbForm(
   data: VerbData,
   form: KeigoForm,
 ): boolean {
-  const answer = getVerbFormData(data, form).form.trim();
-  return hasCanonicalVerbForm(data, form) && answer !== verb.trim();
+  if (!hasCanonicalVerbForm(data, form)) return false;
+  const formData = getVerbFormData(data, form);
+  return formData.availability === 'present'
+    && formData.form.trim() !== verb.trim();
 }
 
 export function getGradableForms(
@@ -42,10 +50,15 @@ export function getGradableVerbPairs(
   activeForms: KeigoForm[],
 ): GradableVerbPair[] {
   return entries.flatMap(([verb, data]) =>
-    getGradableForms(verb, data, activeForms).map((form) => ({
-      verb,
-      data,
-      form,
-    })),
+    getGradableForms(verb, data, activeForms).flatMap((form) => {
+      const formData = getVerbFormData(data, form);
+      if (formData.availability === 'absent') return [];
+      return [{
+        verb,
+        data,
+        form,
+        formData,
+      }];
+    }),
   );
 }

@@ -19,7 +19,6 @@ import {
 } from '../utils/keigoTypes';
 import {
   getVerbFormData,
-  hasCanonicalVerbForm,
 } from '../utils/gradableVerbs';
 
 export default function DetailScreen() {
@@ -174,7 +173,6 @@ export default function DetailScreen() {
         <View style={[styles.groupCard, { backgroundColor: colors.card }]}>
           {(['sonkeigo', 'kenjougo', 'teineigo'] as KeigoForm[]).map((form) => {
             const formData = getVerbFormData(verbData, form);
-            const hasCanonicalForm = hasCanonicalVerbForm(verbData, form);
             const label = KEIGO_FORM_LABELS[form];
             const tagColor = formTagColors[form];
 
@@ -187,7 +185,7 @@ export default function DetailScreen() {
                   <Text style={[styles.formLabelEn, { color: colors.textMuted }]}>{label.en}</Text>
                 </View>
                 <View style={styles.formValue}>
-                  {hasCanonicalForm ? (
+                  {formData.availability === 'present' ? (
                     <>
                       <View style={styles.formTextRow}>
                         <Text style={[styles.formText, { color: colors.textPrimary }]}>{formData.form}</Text>
@@ -211,7 +209,7 @@ export default function DetailScreen() {
               </>
             );
 
-            if (!hasCanonicalForm) {
+            if (formData.availability === 'absent') {
               return (
                 <View
                   key={form}

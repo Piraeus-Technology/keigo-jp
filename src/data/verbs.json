@@ -3,9 +3,9 @@
     "reading": "いう",
     "translation": "to say",
     "level": "basic",
-    "sonkeigo": { "form": "おっしゃる", "reading": "おっしゃる", "pattern": "special" },
-    "kenjougo": { "form": "申す", "reading": "もうす", "pattern": "special" },
-    "teineigo": { "form": "言います", "reading": "いいます" },
+    "sonkeigo": { "form": "おっしゃる", "reading": "おっしゃる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "申す", "reading": "もうす", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "言います", "reading": "いいます", "availability": "present" },
     "examples": [
       { "context": "Asking a superior what they said", "ja": "部長は何とおっしゃいましたか。", "en": "What did the department head say?", "type": "sonkeigo" },
       { "context": "Introducing yourself to a client", "ja": "田中と申します。", "en": "My name is Tanaka.", "type": "kenjougo" }
@@ -15,9 +15,9 @@
     "reading": "いく",
     "translation": "to go",
     "level": "basic",
-    "sonkeigo": { "form": "いらっしゃる", "reading": "いらっしゃる", "pattern": "special" },
-    "kenjougo": { "form": "参る", "reading": "まいる", "pattern": "special" },
-    "teineigo": { "form": "行きます", "reading": "いきます" },
+    "sonkeigo": { "form": "いらっしゃる", "reading": "いらっしゃる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "参る", "reading": "まいる", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "行きます", "reading": "いきます", "availability": "present" },
     "examples": [
       { "context": "Asking where a client is going", "ja": "どちらにいらっしゃいますか。", "en": "Where are you going?", "type": "sonkeigo" },
       { "context": "Telling a client you will go", "ja": "すぐに参ります。", "en": "I will come right away.", "type": "kenjougo" }
@@ -27,9 +27,9 @@
     "reading": "くる",
     "translation": "to come",
     "level": "basic",
-    "sonkeigo": { "form": "いらっしゃる", "reading": "いらっしゃる", "pattern": "special" },
-    "kenjougo": { "form": "参る", "reading": "まいる", "pattern": "special" },
-    "teineigo": { "form": "来ます", "reading": "きます" },
+    "sonkeigo": { "form": "いらっしゃる", "reading": "いらっしゃる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "参る", "reading": "まいる", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "来ます", "reading": "きます", "availability": "present" },
     "examples": [
       { "context": "Welcoming a client", "ja": "よくいらっしゃいました。", "en": "Welcome. (Thank you for coming.)", "type": "sonkeigo" },
       { "context": "Telling someone you came from Tokyo", "ja": "東京から参りました。", "en": "I came from Tokyo.", "type": "kenjougo" }
@@ -39,9 +39,9 @@
     "reading": "いる",
     "translation": "to be (animate)",
     "level": "basic",
-    "sonkeigo": { "form": "いらっしゃる", "reading": "いらっしゃる", "pattern": "special" },
-    "kenjougo": { "form": "おる", "reading": "おる", "pattern": "special" },
-    "teineigo": { "form": "います", "reading": "います" },
+    "sonkeigo": { "form": "いらっしゃる", "reading": "いらっしゃる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "おる", "reading": "おる", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "います", "reading": "います", "availability": "present" },
     "examples": [
       { "context": "Asking if the manager is in", "ja": "田中部長はいらっしゃいますか。", "en": "Is Manager Tanaka in?", "type": "sonkeigo" },
       { "context": "Saying you are from a company", "ja": "山田商事の佐藤でございますが、田中様はいらっしゃいますか。", "en": "This is Sato from Yamada Trading. Is Mr. Tanaka available?", "type": "kenjougo" }
@@ -51,9 +51,9 @@
     "reading": "する",
     "translation": "to do",
     "level": "basic",
-    "sonkeigo": { "form": "なさる", "reading": "なさる", "pattern": "special" },
-    "kenjougo": { "form": "いたす", "reading": "いたす", "pattern": "special" },
-    "teineigo": { "form": "します", "reading": "します" },
+    "sonkeigo": { "form": "なさる", "reading": "なさる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "いたす", "reading": "いたす", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "します", "reading": "します", "availability": "present" },
     "examples": [
       { "context": "Asking what a superior will do", "ja": "社長は何をなさいますか。", "en": "What will the president do?", "type": "sonkeigo" },
       { "context": "Offering to do something", "ja": "私がいたします。", "en": "I will do it.", "type": "kenjougo" }
@@ -63,9 +63,9 @@
     "reading": "たべる",
     "translation": "to eat",
     "level": "basic",
-    "sonkeigo": { "form": "召し上がる", "reading": "めしあがる", "pattern": "special" },
-    "kenjougo": { "form": "いただく", "reading": "いただく", "pattern": "special" },
-    "teineigo": { "form": "食べます", "reading": "たべます" },
+    "sonkeigo": { "form": "召し上がる", "reading": "めしあがる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "いただく", "reading": "いただく", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "食べます", "reading": "たべます", "availability": "present" },
     "examples": [
       { "context": "Offering food to a client", "ja": "どうぞ召し上がってください。", "en": "Please help yourself.", "type": "sonkeigo" },
       { "context": "Before eating at a business dinner", "ja": "いただきます。", "en": "Thank you for the meal. (Before eating)", "type": "kenjougo" }
@@ -75,9 +75,9 @@
     "reading": "のむ",
     "translation": "to drink",
     "level": "basic",
-    "sonkeigo": { "form": "召し上がる", "reading": "めしあがる", "pattern": "special" },
-    "kenjougo": { "form": "いただく", "reading": "いただく", "pattern": "special" },
-    "teineigo": { "form": "飲みます", "reading": "のみます" },
+    "sonkeigo": { "form": "召し上がる", "reading": "めしあがる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "いただく", "reading": "いただく", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "飲みます", "reading": "のみます", "availability": "present" },
     "examples": [
       { "context": "Offering a drink to a guest", "ja": "お茶を召し上がりますか。", "en": "Would you like some tea?", "type": "sonkeigo" },
       { "context": "Accepting a drink", "ja": "コーヒーをいただきます。", "en": "I'll have coffee, please.", "type": "kenjougo" }
@@ -87,9 +87,9 @@
     "reading": "みる",
     "translation": "to see / to look",
     "level": "basic",
-    "sonkeigo": { "form": "ご覧になる", "reading": "ごらんになる", "pattern": "special" },
-    "kenjougo": { "form": "拝見する", "reading": "はいけんする", "pattern": "special" },
-    "teineigo": { "form": "見ます", "reading": "みます" },
+    "sonkeigo": { "form": "ご覧になる", "reading": "ごらんになる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "拝見する", "reading": "はいけんする", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "見ます", "reading": "みます", "availability": "present" },
     "examples": [
       { "context": "Asking if someone saw a document", "ja": "こちらの資料はご覧になりましたか。", "en": "Have you looked at this document?", "type": "sonkeigo" },
       { "context": "Asking to see something", "ja": "お名刺を拝見してもよろしいですか。", "en": "May I see your business card?", "type": "kenjougo" }
@@ -99,9 +99,9 @@
     "reading": "きく",
     "translation": "to listen / to ask",
     "level": "basic",
-    "sonkeigo": { "form": "お聞きになる", "reading": "おききになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "伺う", "reading": "うかがう", "pattern": "special" },
-    "teineigo": { "form": "聞きます", "reading": "ききます" },
+    "sonkeigo": { "form": "お聞きになる", "reading": "おききになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "伺う", "reading": "うかがう", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "聞きます", "reading": "ききます", "availability": "present" },
     "examples": [
       { "context": "Checking if a superior heard news", "ja": "この件についてお聞きになりましたか。", "en": "Have you heard about this matter?", "type": "sonkeigo" },
       { "context": "Asking a client a question", "ja": "一つ伺ってもよろしいですか。", "en": "May I ask you something?", "type": "kenjougo" }
@@ -111,9 +111,9 @@
     "reading": "しる",
     "translation": "to know",
     "level": "basic",
-    "sonkeigo": { "form": "ご存じだ", "reading": "ごぞんじだ", "pattern": "special" },
-    "kenjougo": { "form": "存じる", "reading": "ぞんじる", "pattern": "special" },
-    "teineigo": { "form": "知っています", "reading": "しっています" },
+    "sonkeigo": { "form": "ご存じだ", "reading": "ごぞんじだ", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "存じる", "reading": "ぞんじる", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "知っています", "reading": "しっています", "availability": "present" },
     "examples": [
       { "context": "Asking if someone knows", "ja": "この件はご存じですか。", "en": "Do you know about this matter?", "type": "sonkeigo" },
       { "context": "Saying you don't know", "ja": "申し訳ございませんが、存じません。", "en": "I'm sorry, but I don't know.", "type": "kenjougo" }
@@ -123,9 +123,9 @@
     "reading": "おもう",
     "translation": "to think",
     "level": "intermediate",
-    "sonkeigo": { "form": "お思いになる", "reading": "おおもいになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "存じる", "reading": "ぞんじる", "pattern": "special" },
-    "teineigo": { "form": "思います", "reading": "おもいます" },
+    "sonkeigo": { "form": "お思いになる", "reading": "おおもいになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "存じる", "reading": "ぞんじる", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "思います", "reading": "おもいます", "availability": "present" },
     "examples": [
       { "context": "Asking a superior's opinion", "ja": "この件についてどうお思いになりますか。", "en": "What do you think about this matter?", "type": "sonkeigo" },
       { "context": "Expressing your own opinion humbly", "ja": "私もそのように存じます。", "en": "I think so as well.", "type": "kenjougo" }
@@ -135,9 +135,9 @@
     "reading": "あう",
     "translation": "to meet",
     "level": "basic",
-    "sonkeigo": { "form": "お会いになる", "reading": "おあいになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お目にかかる", "reading": "おめにかかる", "pattern": "special" },
-    "teineigo": { "form": "会います", "reading": "あいます" },
+    "sonkeigo": { "form": "お会いになる", "reading": "おあいになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お目にかかる", "reading": "おめにかかる", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "会います", "reading": "あいます", "availability": "present" },
     "examples": [
       { "context": "Asking if someone met the client", "ja": "お客様にはお会いになりましたか。", "en": "Did you meet the client?", "type": "sonkeigo" },
       { "context": "Meeting someone for the first time", "ja": "お目にかかれて光栄です。", "en": "It's an honor to meet you.", "type": "kenjougo" }
@@ -147,9 +147,9 @@
     "reading": "もらう",
     "translation": "to receive",
     "level": "basic",
-    "sonkeigo": { "form": "お受け取りになる", "reading": "おうけとりになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "いただく", "reading": "いただく", "pattern": "special" },
-    "teineigo": { "form": "もらいます", "reading": "もらいます" },
+    "sonkeigo": { "form": "お受け取りになる", "reading": "おうけとりになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "いただく", "reading": "いただく", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "もらいます", "reading": "もらいます", "availability": "present" },
     "examples": [
       { "context": "Checking if a gift was received", "ja": "お受け取りになりましたか。", "en": "Did you receive it?", "type": "sonkeigo" },
       { "context": "Thanking for receiving something", "ja": "素敵なお土産をいただきました。", "en": "I received a wonderful souvenir.", "type": "kenjougo" }
@@ -159,9 +159,9 @@
     "reading": "あげる",
     "translation": "to give",
     "level": "basic",
-    "sonkeigo": { "form": "お与えになる", "reading": "おあたえになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "差し上げる", "reading": "さしあげる", "pattern": "special" },
-    "teineigo": { "form": "あげます", "reading": "あげます" },
+    "sonkeigo": { "form": "お与えになる", "reading": "おあたえになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "差し上げる", "reading": "さしあげる", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "あげます", "reading": "あげます", "availability": "present" },
     "examples": [
       { "context": "Describing a superior giving an opportunity", "ja": "会長は若手社員に発表の機会をお与えになりました。", "en": "The chair gave a young employee an opportunity to present.", "type": "sonkeigo" },
       { "context": "Offering to give something", "ja": "資料を差し上げます。", "en": "I will give you the documents.", "type": "kenjougo" }
@@ -171,9 +171,9 @@
     "reading": "よむ",
     "translation": "to read",
     "level": "intermediate",
-    "sonkeigo": { "form": "お読みになる", "reading": "およみになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "拝読する", "reading": "はいどくする", "pattern": "special" },
-    "teineigo": { "form": "読みます", "reading": "よみます" },
+    "sonkeigo": { "form": "お読みになる", "reading": "およみになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "拝読する", "reading": "はいどくする", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "読みます", "reading": "よみます", "availability": "present" },
     "examples": [
       { "context": "Asking if someone read a report", "ja": "報告書はお読みになりましたか。", "en": "Have you read the report?", "type": "sonkeigo" },
       { "context": "Saying you read someone's email", "ja": "メールを拝読いたしました。", "en": "I have read your email.", "type": "kenjougo" }
@@ -183,9 +183,9 @@
     "reading": "かく",
     "translation": "to write",
     "level": "intermediate",
-    "sonkeigo": { "form": "お書きになる", "reading": "おかきになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お書きする", "reading": "おかきする", "pattern": "o_suru" },
-    "teineigo": { "form": "書きます", "reading": "かきます" },
+    "sonkeigo": { "form": "お書きになる", "reading": "おかきになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お書きする", "reading": "おかきする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "書きます", "reading": "かきます", "availability": "present" },
     "examples": [
       { "context": "Asking if someone wrote something", "ja": "こちらにお名前をお書きになってください。", "en": "Please write your name here.", "type": "sonkeigo" },
       { "context": "Offering to write", "ja": "私がお書きしましょうか。", "en": "Shall I write it for you?", "type": "kenjougo" }
@@ -195,9 +195,9 @@
     "reading": "まつ",
     "translation": "to wait",
     "level": "basic",
-    "sonkeigo": { "form": "お待ちになる", "reading": "おまちになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お待ちする", "reading": "おまちする", "pattern": "o_suru" },
-    "teineigo": { "form": "待ちます", "reading": "まちます" },
+    "sonkeigo": { "form": "お待ちになる", "reading": "おまちになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お待ちする", "reading": "おまちする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "待ちます", "reading": "まちます", "availability": "present" },
     "examples": [
       { "context": "Asking a client to wait", "ja": "少々お待ちになってください。", "en": "Please wait a moment.", "type": "sonkeigo" },
       { "context": "Saying you will wait", "ja": "こちらでお待ちしております。", "en": "I will be waiting here.", "type": "kenjougo" }
@@ -207,9 +207,9 @@
     "reading": "かえる",
     "translation": "to return / to go home",
     "level": "intermediate",
-    "sonkeigo": { "form": "お帰りになる", "reading": "おかえりになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "失礼する", "reading": "しつれいする", "pattern": "special" },
-    "teineigo": { "form": "帰ります", "reading": "かえります" },
+    "sonkeigo": { "form": "お帰りになる", "reading": "おかえりになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "失礼する", "reading": "しつれいする", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "帰ります", "reading": "かえります", "availability": "present" },
     "examples": [
       { "context": "Noting that a superior left", "ja": "社長はもうお帰りになりました。", "en": "The president has already left.", "type": "sonkeigo" },
       { "context": "Excusing yourself to leave", "ja": "お先に失礼いたします。", "en": "Excuse me for leaving before you.", "type": "kenjougo" }
@@ -219,9 +219,9 @@
     "reading": "すわる",
     "translation": "to sit",
     "level": "basic",
-    "sonkeigo": { "form": "おかけになる", "reading": "おかけになる", "pattern": "special" },
-    "kenjougo": { "form": "おかけする", "reading": "おかけする", "pattern": "o_suru" },
-    "teineigo": { "form": "座ります", "reading": "すわります" },
+    "sonkeigo": { "form": "おかけになる", "reading": "おかけになる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "おかけする", "reading": "おかけする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "座ります", "reading": "すわります", "availability": "present" },
     "examples": [
       { "context": "Offering a seat to a guest", "ja": "どうぞおかけになってください。", "en": "Please have a seat.", "type": "sonkeigo" },
       { "context": "Asking permission to sit", "ja": "こちらにおかけしてもよろしいですか。", "en": "May I sit here?", "type": "kenjougo" }
@@ -231,9 +231,9 @@
     "reading": "ねる",
     "translation": "to sleep",
     "level": "intermediate",
-    "sonkeigo": { "form": "お休みになる", "reading": "おやすみになる", "pattern": "special" },
-    "kenjougo": { "form": "休ませていただく", "reading": "やすませていただく", "pattern": "special" },
-    "teineigo": { "form": "寝ます", "reading": "ねます" },
+    "sonkeigo": { "form": "お休みになる", "reading": "おやすみになる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "休ませていただく", "reading": "やすませていただく", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "寝ます", "reading": "ねます", "availability": "present" },
     "examples": [
       { "context": "Checking if a superior slept well", "ja": "昨日はよくお休みになれましたか。", "en": "Did you sleep well last night?", "type": "sonkeigo" },
       { "context": "Excusing yourself to rest", "ja": "少し休ませていただきます。", "en": "I'd like to rest for a bit, if you don't mind.", "type": "kenjougo" }
@@ -243,9 +243,9 @@
     "reading": "きる",
     "translation": "to wear",
     "level": "advanced",
-    "sonkeigo": { "form": "お召しになる", "reading": "おめしになる", "pattern": "special" },
-    "kenjougo": { "form": "着させていただく", "reading": "きさせていただく", "pattern": "special" },
-    "teineigo": { "form": "着ます", "reading": "きます" },
+    "sonkeigo": { "form": "お召しになる", "reading": "おめしになる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "着させていただく", "reading": "きさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "着ます", "reading": "きます", "availability": "present" },
     "examples": [
       { "context": "Complimenting a superior's outfit", "ja": "素敵なお着物をお召しになっていますね。", "en": "You're wearing a lovely kimono.", "type": "sonkeigo" },
       { "context": "Asking permission to wear casual clothes", "ja": "カジュアルな服を着させていただいてもよろしいですか。", "en": "May I wear casual clothes?", "type": "kenjougo" }
@@ -255,9 +255,9 @@
     "reading": "わかる",
     "translation": "to understand",
     "level": "basic",
-    "sonkeigo": { "form": "おわかりになる", "reading": "おわかりになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "承知する", "reading": "しょうちする", "pattern": "special" },
-    "teineigo": { "form": "わかります", "reading": "わかります" },
+    "sonkeigo": { "form": "おわかりになる", "reading": "おわかりになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "承知する", "reading": "しょうちする", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "わかります", "reading": "わかります", "availability": "present" },
     "examples": [
       { "context": "Checking if someone understands", "ja": "こちらの説明でおわかりになりますか。", "en": "Do you understand this explanation?", "type": "sonkeigo" },
       { "context": "Confirming understanding", "ja": "承知いたしました。", "en": "Understood. (Very formal)", "type": "kenjougo" }
@@ -267,9 +267,9 @@
     "reading": "たずねる",
     "translation": "to visit",
     "level": "intermediate",
-    "sonkeigo": { "form": "お訪ねになる", "reading": "おたずねになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "伺う", "reading": "うかがう", "pattern": "special" },
-    "teineigo": { "form": "訪ねます", "reading": "たずねます" },
+    "sonkeigo": { "form": "お訪ねになる", "reading": "おたずねになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "伺う", "reading": "うかがう", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "訪ねます", "reading": "たずねます", "availability": "present" },
     "examples": [
       { "context": "Asking about a visit", "ja": "お客様がお訪ねになりました。", "en": "The client has come to visit.", "type": "sonkeigo" },
       { "context": "Announcing your visit", "ja": "明日の午後、伺ってもよろしいですか。", "en": "May I visit tomorrow afternoon?", "type": "kenjougo" }
@@ -279,9 +279,9 @@
     "reading": "かりる",
     "translation": "to borrow",
     "level": "intermediate",
-    "sonkeigo": { "form": "お借りになる", "reading": "おかりになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "拝借する", "reading": "はいしゃくする", "pattern": "special" },
-    "teineigo": { "form": "借ります", "reading": "かります" },
+    "sonkeigo": { "form": "お借りになる", "reading": "おかりになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "拝借する", "reading": "はいしゃくする", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "借ります", "reading": "かります", "availability": "present" },
     "examples": [
       { "context": "Asking about borrowing", "ja": "こちらの本をお借りになりますか。", "en": "Would you like to borrow this book?", "type": "sonkeigo" },
       { "context": "Asking to borrow a pen", "ja": "ペンを拝借してもよろしいですか。", "en": "May I borrow your pen?", "type": "kenjougo" }
@@ -291,9 +291,9 @@
     "reading": "たずねる",
     "translation": "to inquire",
     "level": "intermediate",
-    "sonkeigo": { "form": "お尋ねになる", "reading": "おたずねになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "伺う", "reading": "うかがう", "pattern": "special" },
-    "teineigo": { "form": "尋ねます", "reading": "たずねます" },
+    "sonkeigo": { "form": "お尋ねになる", "reading": "おたずねになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "伺う", "reading": "うかがう", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "尋ねます", "reading": "たずねます", "availability": "present" },
     "examples": [
       { "context": "When a client asks something", "ja": "お客様がお尋ねになっています。", "en": "The client is asking about it.", "type": "sonkeigo" },
       { "context": "Asking a question politely", "ja": "一点伺いたいのですが。", "en": "I'd like to ask one thing.", "type": "kenjougo" }
@@ -303,9 +303,9 @@
     "reading": "つかう",
     "translation": "to use",
     "level": "intermediate",
-    "sonkeigo": { "form": "お使いになる", "reading": "おつかいになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "使わせていただく", "reading": "つかわせていただく", "pattern": "special" },
-    "teineigo": { "form": "使います", "reading": "つかいます" },
+    "sonkeigo": { "form": "お使いになる", "reading": "おつかいになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "使わせていただく", "reading": "つかわせていただく", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "使います", "reading": "つかいます", "availability": "present" },
     "examples": [
       { "context": "Asking a client if they use something", "ja": "こちらのサービスをお使いになっていますか。", "en": "Are you using this service?", "type": "sonkeigo" },
       { "context": "Asking permission to use", "ja": "会議室を使わせていただきたいのですが。", "en": "I'd like to use the meeting room, if I may.", "type": "kenjougo" }
@@ -315,9 +315,9 @@
     "reading": "はなす",
     "translation": "to speak / to talk",
     "level": "intermediate",
-    "sonkeigo": { "form": "お話しになる", "reading": "おはなしになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お話しする", "reading": "おはなしする", "pattern": "o_suru" },
-    "teineigo": { "form": "話します", "reading": "はなします" },
+    "sonkeigo": { "form": "お話しになる", "reading": "おはなしになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お話しする", "reading": "おはなしする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "話します", "reading": "はなします", "availability": "present" },
     "examples": [
       { "context": "Asking if someone spoke about it", "ja": "この件についてお話しになりましたか。", "en": "Did you talk about this matter?", "type": "sonkeigo" },
       { "context": "Asking to speak with someone", "ja": "少しお話ししてもよろしいですか。", "en": "May I speak with you for a moment?", "type": "kenjougo" }
@@ -327,9 +327,9 @@
     "reading": "おくる",
     "translation": "to send",
     "level": "intermediate",
-    "sonkeigo": { "form": "お送りになる", "reading": "おおくりになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お送りする", "reading": "おおくりする", "pattern": "o_suru" },
-    "teineigo": { "form": "送ります", "reading": "おくります" },
+    "sonkeigo": { "form": "お送りになる", "reading": "おおくりになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お送りする", "reading": "おおくりする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "送ります", "reading": "おくります", "availability": "present" },
     "examples": [
       { "context": "Asking if an email was sent", "ja": "メールはお送りになりましたか。", "en": "Did you send the email?", "type": "sonkeigo" },
       { "context": "Telling a client you will send something", "ja": "本日中にお送りいたします。", "en": "I will send it to you by today.", "type": "kenjougo" }
@@ -339,9 +339,9 @@
     "reading": "もつ",
     "translation": "to hold / to carry",
     "level": "intermediate",
-    "sonkeigo": { "form": "お持ちになる", "reading": "おもちになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お持ちする", "reading": "おもちする", "pattern": "o_suru" },
-    "teineigo": { "form": "持ちます", "reading": "もちます" },
+    "sonkeigo": { "form": "お持ちになる", "reading": "おもちになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お持ちする", "reading": "おもちする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "持ちます", "reading": "もちます", "availability": "present" },
     "examples": [
       { "context": "Asking if someone has something", "ja": "名刺はお持ちになっていますか。", "en": "Do you have a business card?", "type": "sonkeigo" },
       { "context": "Offering to carry something", "ja": "お荷物をお持ちしましょうか。", "en": "Shall I carry your bags?", "type": "kenjougo" }
@@ -351,9 +351,9 @@
     "reading": "おしえる",
     "translation": "to teach / to tell",
     "level": "intermediate",
-    "sonkeigo": { "form": "お教えになる", "reading": "おおしえになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お教えする", "reading": "おおしえする", "pattern": "o_suru" },
-    "teineigo": { "form": "教えます", "reading": "おしえます" },
+    "sonkeigo": { "form": "お教えになる", "reading": "おおしえになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お教えする", "reading": "おおしえする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "教えます", "reading": "おしえます", "availability": "present" },
     "examples": [
       { "context": "Asking to be taught", "ja": "お電話番号をお教えいただけますか。", "en": "Could you tell me your phone number?", "type": "sonkeigo" },
       { "context": "Offering to teach", "ja": "使い方をお教えしましょうか。", "en": "Shall I show you how to use it?", "type": "kenjougo" }
@@ -363,9 +363,9 @@
     "reading": "よぶ",
     "translation": "to call",
     "level": "intermediate",
-    "sonkeigo": { "form": "お呼びになる", "reading": "およびになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お呼びする", "reading": "およびする", "pattern": "o_suru" },
-    "teineigo": { "form": "呼びます", "reading": "よびます" },
+    "sonkeigo": { "form": "お呼びになる", "reading": "およびになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お呼びする", "reading": "およびする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "呼びます", "reading": "よびます", "availability": "present" },
     "examples": [
       { "context": "Being called by a superior", "ja": "部長がお呼びになっています。", "en": "The manager is calling for you.", "type": "sonkeigo" },
       { "context": "Offering to call a taxi", "ja": "タクシーをお呼びしましょうか。", "en": "Shall I call a taxi for you?", "type": "kenjougo" }
@@ -375,9 +375,9 @@
     "reading": "かんがえる",
     "translation": "to think / to consider",
     "level": "intermediate",
-    "sonkeigo": { "form": "お考えになる", "reading": "おかんがえになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "考えさせていただく", "reading": "かんがえさせていただく", "pattern": "special" },
-    "teineigo": { "form": "考えます", "reading": "かんがえます" },
+    "sonkeigo": { "form": "お考えになる", "reading": "おかんがえになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "考えさせていただく", "reading": "かんがえさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "考えます", "reading": "かんがえます", "availability": "present" },
     "examples": [
       { "context": "Asking a superior's thoughts", "ja": "こちらのプランはどうお考えになりますか。", "en": "What do you think of this plan?", "type": "sonkeigo" },
       { "context": "Asking for time to think", "ja": "少し考えさせていただけますか。", "en": "May I have some time to think about it?", "type": "kenjougo" }
@@ -387,9 +387,9 @@
     "reading": "うける",
     "translation": "to receive / to undergo",
     "level": "advanced",
-    "sonkeigo": { "form": "お受けになる", "reading": "おうけになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お受けする", "reading": "おうけする", "pattern": "o_suru" },
-    "teineigo": { "form": "受けます", "reading": "うけます" },
+    "sonkeigo": { "form": "お受けになる", "reading": "おうけになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お受けする", "reading": "おうけする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "受けます", "reading": "うけます", "availability": "present" },
     "examples": [
       { "context": "Asking if someone received training", "ja": "研修をお受けになりましたか。", "en": "Did you attend the training?", "type": "sonkeigo" },
       { "context": "Accepting a request", "ja": "喜んでお受けいたします。", "en": "I would be happy to accept.", "type": "kenjougo" }
@@ -399,9 +399,9 @@
     "reading": "とどける",
     "translation": "to deliver",
     "level": "advanced",
-    "sonkeigo": { "form": "お届けになる", "reading": "おとどけになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お届けする", "reading": "おとどけする", "pattern": "o_suru" },
-    "teineigo": { "form": "届けます", "reading": "とどけます" },
+    "sonkeigo": { "form": "お届けになる", "reading": "おとどけになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お届けする", "reading": "おとどけする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "届けます", "reading": "とどけます", "availability": "present" },
     "examples": [
       { "context": "Confirming delivery", "ja": "ご注文の品をお届けになりましたか。", "en": "Has the ordered item been delivered?", "type": "sonkeigo" },
       { "context": "Promising to deliver", "ja": "明日までにお届けいたします。", "en": "I will deliver it by tomorrow.", "type": "kenjougo" }
@@ -411,9 +411,9 @@
     "reading": "かくにんする",
     "translation": "to confirm / to check",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご確認になる", "reading": "ごかくにんになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "確認させていただく", "reading": "かくにんさせていただく", "pattern": "special" },
-    "teineigo": { "form": "確認します", "reading": "かくにんします" },
+    "sonkeigo": { "form": "ご確認になる", "reading": "ごかくにんになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "確認させていただく", "reading": "かくにんさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "確認します", "reading": "かくにんします", "availability": "present" },
     "examples": [
       { "context": "Asking someone to check", "ja": "こちらの内容をご確認いただけますか。", "en": "Could you please check this content?", "type": "sonkeigo" },
       { "context": "Saying you will check", "ja": "すぐに確認させていただきます。", "en": "I will check on it right away.", "type": "kenjougo" }
@@ -423,9 +423,9 @@
     "reading": "れんらくする",
     "translation": "to contact",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご連絡になる", "reading": "ごれんらくになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "ご連絡する", "reading": "ごれんらくする", "pattern": "go_suru" },
-    "teineigo": { "form": "連絡します", "reading": "れんらくします" },
+    "sonkeigo": { "form": "ご連絡になる", "reading": "ごれんらくになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "ご連絡する", "reading": "ごれんらくする", "pattern": "go_suru", "availability": "present" },
+    "teineigo": { "form": "連絡します", "reading": "れんらくします", "availability": "present" },
     "examples": [
       { "context": "Asking about a contact", "ja": "ご連絡いただきありがとうございます。", "en": "Thank you for contacting us.", "type": "sonkeigo" },
       { "context": "Promising to follow up", "ja": "改めてご連絡いたします。", "en": "I will contact you again.", "type": "kenjougo" }
@@ -435,9 +435,9 @@
     "reading": "せつめいする",
     "translation": "to explain",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご説明になる", "reading": "ごせつめいになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "ご説明する", "reading": "ごせつめいする", "pattern": "go_suru" },
-    "teineigo": { "form": "説明します", "reading": "せつめいします" },
+    "sonkeigo": { "form": "ご説明になる", "reading": "ごせつめいになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "ご説明する", "reading": "ごせつめいする", "pattern": "go_suru", "availability": "present" },
+    "teineigo": { "form": "説明します", "reading": "せつめいします", "availability": "present" },
     "examples": [
       { "context": "Asking for an explanation", "ja": "詳しくご説明いただけますか。", "en": "Could you explain in detail?", "type": "sonkeigo" },
       { "context": "Offering to explain", "ja": "ご説明させていただきます。", "en": "Allow me to explain.", "type": "kenjougo" }
@@ -447,9 +447,9 @@
     "reading": "あんないする",
     "translation": "to guide / to show around",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご案内になる", "reading": "ごあんないになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "ご案内する", "reading": "ごあんないする", "pattern": "go_suru" },
-    "teineigo": { "form": "案内します", "reading": "あんないします" },
+    "sonkeigo": { "form": "ご案内になる", "reading": "ごあんないになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "ご案内する", "reading": "ごあんないする", "pattern": "go_suru", "availability": "present" },
+    "teineigo": { "form": "案内します", "reading": "あんないします", "availability": "present" },
     "examples": [
       { "context": "A receptionist guiding a guest", "ja": "会議室までご案内いたします。", "en": "I will show you to the meeting room.", "type": "kenjougo" },
       { "context": "Being guided", "ja": "受付の方がご案内になります。", "en": "The receptionist will guide you.", "type": "sonkeigo" }
@@ -459,9 +459,9 @@
     "reading": "りようする",
     "translation": "to use / to utilize",
     "level": "advanced",
-    "sonkeigo": { "form": "ご利用になる", "reading": "ごりようになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "利用させていただく", "reading": "りようさせていただく", "pattern": "special" },
-    "teineigo": { "form": "利用します", "reading": "りようします" },
+    "sonkeigo": { "form": "ご利用になる", "reading": "ごりようになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "利用させていただく", "reading": "りようさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "利用します", "reading": "りようします", "availability": "present" },
     "examples": [
       { "context": "Thanking for using a service", "ja": "ご利用いただきありがとうございます。", "en": "Thank you for using our service.", "type": "sonkeigo" },
       { "context": "Asking to use a facility", "ja": "こちらの施設を利用させていただきたいのですが。", "en": "I would like to use this facility.", "type": "kenjougo" }
@@ -471,9 +471,9 @@
     "reading": "しゅっせきする",
     "translation": "to attend",
     "level": "advanced",
-    "sonkeigo": { "form": "ご出席になる", "reading": "ごしゅっせきになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "出席させていただく", "reading": "しゅっせきさせていただく", "pattern": "special" },
-    "teineigo": { "form": "出席します", "reading": "しゅっせきします" },
+    "sonkeigo": { "form": "ご出席になる", "reading": "ごしゅっせきになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "出席させていただく", "reading": "しゅっせきさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "出席します", "reading": "しゅっせきします", "availability": "present" },
     "examples": [
       { "context": "Asking about attendance", "ja": "明日の会議にご出席になりますか。", "en": "Will you attend tomorrow's meeting?", "type": "sonkeigo" },
       { "context": "Confirming your attendance", "ja": "喜んで出席させていただきます。", "en": "I would be delighted to attend.", "type": "kenjougo" }
@@ -483,9 +483,9 @@
     "reading": "けんとうする",
     "translation": "to consider / to examine",
     "level": "advanced",
-    "sonkeigo": { "form": "ご検討になる", "reading": "ごけんとうになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "検討させていただく", "reading": "けんとうさせていただく", "pattern": "special" },
-    "teineigo": { "form": "検討します", "reading": "けんとうします" },
+    "sonkeigo": { "form": "ご検討になる", "reading": "ごけんとうになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "検討させていただく", "reading": "けんとうさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "検討します", "reading": "けんとうします", "availability": "present" },
     "examples": [
       { "context": "Asking someone to consider a proposal", "ja": "ぜひご検討いただければ幸いです。", "en": "I would appreciate it if you could consider this.", "type": "sonkeigo" },
       { "context": "Saying you will consider", "ja": "社内で検討させていただきます。", "en": "We will consider it internally.", "type": "kenjougo" }
@@ -495,9 +495,9 @@
     "reading": "そうだんする",
     "translation": "to consult / to discuss",
     "level": "advanced",
-    "sonkeigo": { "form": "ご相談になる", "reading": "ごそうだんになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "ご相談する", "reading": "ごそうだんする", "pattern": "go_suru" },
-    "teineigo": { "form": "相談します", "reading": "そうだんします" },
+    "sonkeigo": { "form": "ご相談になる", "reading": "ごそうだんになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "ご相談する", "reading": "ごそうだんする", "pattern": "go_suru", "availability": "present" },
+    "teineigo": { "form": "相談します", "reading": "そうだんします", "availability": "present" },
     "examples": [
       { "context": "When a client wants to discuss", "ja": "何かご相談がございましたら、お気軽にどうぞ。", "en": "If you'd like to discuss anything, please don't hesitate.", "type": "sonkeigo" },
       { "context": "Asking to consult", "ja": "一つご相談したいことがあるのですが。", "en": "There's something I'd like to discuss with you.", "type": "kenjougo" }
@@ -507,9 +507,9 @@
     "reading": "しょうかいする",
     "translation": "to introduce",
     "level": "advanced",
-    "sonkeigo": { "form": "ご紹介になる", "reading": "ごしょうかいになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "ご紹介する", "reading": "ごしょうかいする", "pattern": "go_suru" },
-    "teineigo": { "form": "紹介します", "reading": "しょうかいします" },
+    "sonkeigo": { "form": "ご紹介になる", "reading": "ごしょうかいになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "ご紹介する", "reading": "ごしょうかいする", "pattern": "go_suru", "availability": "present" },
+    "teineigo": { "form": "紹介します", "reading": "しょうかいします", "availability": "present" },
     "examples": [
       { "context": "Being introduced by a superior", "ja": "部長がご紹介になった方です。", "en": "This is the person the manager introduced.", "type": "sonkeigo" },
       { "context": "Introducing someone", "ja": "弊社の田中をご紹介いたします。", "en": "Allow me to introduce our Tanaka.", "type": "kenjougo" }
@@ -519,9 +519,9 @@
     "reading": "しぬ",
     "translation": "to pass away",
     "level": "advanced",
-    "sonkeigo": { "form": "お亡くなりになる", "reading": "おなくなりになる", "pattern": "special" },
-    "kenjougo": { "form": "", "reading": "", "pattern": "special", "note": "There is no canonical humble form for dying." },
-    "teineigo": { "form": "亡くなります", "reading": "なくなります" },
+    "sonkeigo": { "form": "お亡くなりになる", "reading": "おなくなりになる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "note": "There is no canonical humble form for dying.", "availability": "absent" },
+    "teineigo": { "form": "亡くなります", "reading": "なくなります", "availability": "present", "review": { "status": "needs_review" } },
     "examples": [
       { "context": "Speaking about someone who passed", "ja": "会長がお亡くなりになりました。", "en": "The chairman has passed away.", "type": "sonkeigo" }
     ]
@@ -530,9 +530,9 @@
     "reading": "くれる",
     "translation": "to give (to me)",
     "level": "basic",
-    "sonkeigo": { "form": "くださる", "reading": "くださる", "pattern": "special" },
-    "kenjougo": { "form": "いただく", "reading": "いただく", "pattern": "special" },
-    "teineigo": { "form": "くれます", "reading": "くれます" },
+    "sonkeigo": { "form": "くださる", "reading": "くださる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "いただく", "reading": "いただく", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "くれます", "reading": "くれます", "availability": "present" },
     "examples": [
       { "context": "Thanking for giving", "ja": "ご意見をくださいまして、ありがとうございます。", "en": "Thank you for giving us your opinion.", "type": "sonkeigo" },
       { "context": "Thanking for receiving", "ja": "貴重なご意見をいただきました。", "en": "I received your valuable opinion.", "type": "kenjougo" }
@@ -542,9 +542,9 @@
     "reading": "みせる",
     "translation": "to show",
     "level": "intermediate",
-    "sonkeigo": { "form": "お見せになる", "reading": "おみせになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お見せする", "reading": "おみせする", "pattern": "o_suru" },
-    "teineigo": { "form": "見せます", "reading": "みせます" },
+    "sonkeigo": { "form": "お見せになる", "reading": "おみせになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お見せする", "reading": "おみせする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "見せます", "reading": "みせます", "availability": "present" },
     "examples": [
       { "context": "Asking to be shown", "ja": "新しいカタログをお見せいただけますか。", "en": "Could you show me the new catalog?", "type": "sonkeigo" },
       { "context": "Offering to show", "ja": "サンプルをお見せしましょうか。", "en": "Shall I show you the sample?", "type": "kenjougo" }
@@ -554,9 +554,9 @@
     "reading": "つたえる",
     "translation": "to convey / to pass on",
     "level": "intermediate",
-    "sonkeigo": { "form": "お伝えになる", "reading": "おつたえになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お伝えする", "reading": "おつたえする", "pattern": "o_suru" },
-    "teineigo": { "form": "伝えます", "reading": "つたえます" },
+    "sonkeigo": { "form": "お伝えになる", "reading": "おつたえになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お伝えする", "reading": "おつたえする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "伝えます", "reading": "つたえます", "availability": "present" },
     "examples": [
       { "context": "Asking to relay a message", "ja": "部長にお伝えいただけますか。", "en": "Could you pass this on to the manager?", "type": "sonkeigo" },
       { "context": "Promising to convey a message", "ja": "担当者にお伝えいたします。", "en": "I will convey this to the person in charge.", "type": "kenjougo" }
@@ -566,9 +566,9 @@
     "reading": "えらぶ",
     "translation": "to choose",
     "level": "advanced",
-    "sonkeigo": { "form": "お選びになる", "reading": "おえらびになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お選びする", "reading": "おえらびする", "pattern": "o_suru" },
-    "teineigo": { "form": "選びます", "reading": "えらびます" },
+    "sonkeigo": { "form": "お選びになる", "reading": "おえらびになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お選びする", "reading": "おえらびする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "選びます", "reading": "えらびます", "availability": "present" },
     "examples": [
       { "context": "Asking for a choice", "ja": "どちらをお選びになりますか。", "en": "Which one would you like to choose?", "type": "sonkeigo" },
       { "context": "Helping choose", "ja": "最適なプランをお選びいたします。", "en": "I will choose the best plan for you.", "type": "kenjougo" }
@@ -578,9 +578,9 @@
     "reading": "つくる",
     "translation": "to make / to create",
     "level": "intermediate",
-    "sonkeigo": { "form": "お作りになる", "reading": "おつくりになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お作りする", "reading": "おつくりする", "pattern": "o_suru" },
-    "teineigo": { "form": "作ります", "reading": "つくります" },
+    "sonkeigo": { "form": "お作りになる", "reading": "おつくりになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お作りする", "reading": "おつくりする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "作ります", "reading": "つくります", "availability": "present" },
     "examples": [
       { "context": "Asking a superior about a document", "ja": "この資料はいつお作りになりましたか。", "en": "When did you create this document?", "type": "sonkeigo" },
       { "context": "Offering to prepare a report", "ja": "報告書をお作りいたしましょうか。", "en": "Shall I prepare the report for you?", "type": "kenjougo" }
@@ -590,9 +590,9 @@
     "reading": "きめる",
     "translation": "to decide",
     "level": "intermediate",
-    "sonkeigo": { "form": "お決めになる", "reading": "おきめになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "決めさせていただく", "reading": "きめさせていただく", "pattern": "special" },
-    "teineigo": { "form": "決めます", "reading": "きめます" },
+    "sonkeigo": { "form": "お決めになる", "reading": "おきめになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "決めさせていただく", "reading": "きめさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "決めます", "reading": "きめます", "availability": "present" },
     "examples": [
       { "context": "Asking a client for a decision", "ja": "日程はお決めになりましたか。", "en": "Have you decided on the schedule?", "type": "sonkeigo" },
       { "context": "Announcing a decision humbly", "ja": "こちらのプランに決めさせていただきます。", "en": "We will go with this plan, if you don't mind.", "type": "kenjougo" }
@@ -602,9 +602,9 @@
     "reading": "ことわる",
     "translation": "to refuse / to decline",
     "level": "advanced",
-    "sonkeigo": { "form": "お断りになる", "reading": "おことわりになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お断りする", "reading": "おことわりする", "pattern": "o_suru" },
-    "teineigo": { "form": "断ります", "reading": "ことわります" },
+    "sonkeigo": { "form": "お断りになる", "reading": "おことわりになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お断りする", "reading": "おことわりする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "断ります", "reading": "ことわります", "availability": "present" },
     "examples": [
       { "context": "Reporting that a client declined", "ja": "先方はお断りになったそうです。", "en": "It seems the other party declined.", "type": "sonkeigo" },
       { "context": "Politely declining an offer", "ja": "誠に恐れ入りますが、お断りさせていただきます。", "en": "I'm terribly sorry, but I must decline.", "type": "kenjougo" }
@@ -614,9 +614,9 @@
     "reading": "あずかる",
     "translation": "to take custody of / to hold",
     "level": "intermediate",
-    "sonkeigo": { "form": "お預かりになる", "reading": "おあずかりになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お預かりする", "reading": "おあずかりする", "pattern": "o_suru" },
-    "teineigo": { "form": "預かります", "reading": "あずかります" },
+    "sonkeigo": { "form": "お預かりになる", "reading": "おあずかりになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お預かりする", "reading": "おあずかりする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "預かります", "reading": "あずかります", "availability": "present" },
     "examples": [
       { "context": "Asking if someone is holding an item", "ja": "こちらの書類をお預かりになっていますか。", "en": "Are you holding these documents?", "type": "sonkeigo" },
       { "context": "Offering to hold a coat at reception", "ja": "コートをお預かりいたしましょうか。", "en": "Shall I take your coat?", "type": "kenjougo" }
@@ -626,9 +626,9 @@
     "reading": "あずける",
     "translation": "to entrust / to deposit",
     "level": "intermediate",
-    "sonkeigo": { "form": "お預けになる", "reading": "おあずけになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お預けする", "reading": "おあずけする", "pattern": "o_suru" },
-    "teineigo": { "form": "預けます", "reading": "あずけます" },
+    "sonkeigo": { "form": "お預けになる", "reading": "おあずけになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お預けする", "reading": "おあずけする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "預けます", "reading": "あずけます", "availability": "present" },
     "examples": [
       { "context": "Asking if a client left something", "ja": "フロントにお荷物をお預けになりましたか。", "en": "Did you leave your luggage at the front desk?", "type": "sonkeigo" },
       { "context": "Handing over documents for safekeeping", "ja": "こちらの資料をお預けいたします。", "en": "I will entrust these documents to you.", "type": "kenjougo" }
@@ -638,9 +638,9 @@
     "reading": "はらう",
     "translation": "to pay",
     "level": "intermediate",
-    "sonkeigo": { "form": "お払いになる", "reading": "おはらいになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お払いする", "reading": "おはらいする", "pattern": "o_suru" },
-    "teineigo": { "form": "払います", "reading": "はらいます" },
+    "sonkeigo": { "form": "お払いになる", "reading": "おはらいになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お払いする", "reading": "おはらいする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "払います", "reading": "はらいます", "availability": "present" },
     "examples": [
       { "context": "Asking about payment method", "ja": "お支払いはどのようにお払いになりますか。", "en": "How would you like to pay?", "type": "sonkeigo" },
       { "context": "Offering to pay for a business meal", "ja": "こちらでお払いいたします。", "en": "We will take care of the payment.", "type": "kenjougo" }
@@ -650,9 +650,9 @@
     "reading": "はじめる",
     "translation": "to begin / to start",
     "level": "intermediate",
-    "sonkeigo": { "form": "お始めになる", "reading": "おはじめになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "始めさせていただく", "reading": "はじめさせていただく", "pattern": "special" },
-    "teineigo": { "form": "始めます", "reading": "はじめます" },
+    "sonkeigo": { "form": "お始めになる", "reading": "おはじめになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "始めさせていただく", "reading": "はじめさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "始めます", "reading": "はじめます", "availability": "present" },
     "examples": [
       { "context": "Asking when a superior started", "ja": "いつお始めになったのですか。", "en": "When did you start?", "type": "sonkeigo" },
       { "context": "Opening a meeting", "ja": "それでは、会議を始めさせていただきます。", "en": "Now then, let us begin the meeting.", "type": "kenjougo" }
@@ -662,9 +662,9 @@
     "reading": "おわる",
     "translation": "to end / to finish",
     "level": "intermediate",
-    "sonkeigo": { "form": "お終わりになる", "reading": "おおわりになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "終わらせていただく", "reading": "おわらせていただく", "pattern": "special" },
-    "teineigo": { "form": "終わります", "reading": "おわります" },
+    "sonkeigo": { "form": "お終わりになる", "reading": "おおわりになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "終わらせていただく", "reading": "おわらせていただく", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "終わります", "reading": "おわります", "availability": "present" },
     "examples": [
       { "context": "Asking if a superior is done", "ja": "お仕事はお終わりになりましたか。", "en": "Have you finished your work?", "type": "sonkeigo" },
       { "context": "Closing a presentation", "ja": "以上で発表を終わらせていただきます。", "en": "I will now conclude my presentation.", "type": "kenjougo" }
@@ -674,9 +674,9 @@
     "reading": "かえる",
     "translation": "to change",
     "level": "intermediate",
-    "sonkeigo": { "form": "お変えになる", "reading": "おかえになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "変えさせていただく", "reading": "かえさせていただく", "pattern": "special" },
-    "teineigo": { "form": "変えます", "reading": "かえます" },
+    "sonkeigo": { "form": "お変えになる", "reading": "おかえになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "変えさせていただく", "reading": "かえさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "変えます", "reading": "かえます", "availability": "present" },
     "examples": [
       { "context": "Asking if a superior changed something", "ja": "予定をお変えになりましたか。", "en": "Did you change the schedule?", "type": "sonkeigo" },
       { "context": "Requesting permission to change a plan", "ja": "日程を変えさせていただきたいのですが。", "en": "I would like to change the schedule, if possible.", "type": "kenjougo" }
@@ -686,9 +686,9 @@
     "reading": "まちがえる",
     "translation": "to make a mistake",
     "level": "advanced",
-    "sonkeigo": { "form": "お間違えになる", "reading": "おまちがえになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "間違えてしまう", "reading": "まちがえてしまう", "pattern": "special" },
-    "teineigo": { "form": "間違えます", "reading": "まちがえます" },
+    "sonkeigo": { "form": "お間違えになる", "reading": "おまちがえになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "間違えてしまう", "reading": "まちがえてしまう", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "間違えます", "reading": "まちがえます", "availability": "present" },
     "examples": [
       { "context": "Politely pointing out an error", "ja": "恐れ入りますが、日付をお間違えになっているようです。", "en": "I'm sorry, but it seems the date may be incorrect.", "type": "sonkeigo" },
       { "context": "Apologizing for your own mistake", "ja": "申し訳ございません、金額を間違えてしまいました。", "en": "I sincerely apologize, I made an error in the amount.", "type": "kenjougo" }
@@ -698,9 +698,9 @@
     "reading": "わすれる",
     "translation": "to forget",
     "level": "intermediate",
-    "sonkeigo": { "form": "お忘れになる", "reading": "おわすれになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "失念する", "reading": "しつねんする", "pattern": "special" },
-    "teineigo": { "form": "忘れます", "reading": "わすれます" },
+    "sonkeigo": { "form": "お忘れになる", "reading": "おわすれになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "失念する", "reading": "しつねんする", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "忘れます", "reading": "わすれます", "availability": "present" },
     "examples": [
       { "context": "Reminding a guest of a forgotten item", "ja": "お忘れ物はございませんか。", "en": "Have you forgotten anything?", "type": "sonkeigo" },
       { "context": "Apologizing for forgetting", "ja": "大変申し訳ございません、失念しておりました。", "en": "I deeply apologize, it slipped my mind.", "type": "kenjougo" }
@@ -710,9 +710,9 @@
     "reading": "さがす",
     "translation": "to look for / to search",
     "level": "intermediate",
-    "sonkeigo": { "form": "お探しになる", "reading": "おさがしになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お探しする", "reading": "おさがしする", "pattern": "o_suru" },
-    "teineigo": { "form": "探します", "reading": "さがします" },
+    "sonkeigo": { "form": "お探しになる", "reading": "おさがしになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お探しする", "reading": "おさがしする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "探します", "reading": "さがします", "availability": "present" },
     "examples": [
       { "context": "Asking what a customer is looking for", "ja": "何をお探しになっていますか。", "en": "What are you looking for?", "type": "sonkeigo" },
       { "context": "Offering to search for something", "ja": "すぐにお探しいたします。", "en": "I will look for it right away.", "type": "kenjougo" }
@@ -722,9 +722,9 @@
     "reading": "しらべる",
     "translation": "to investigate / to look into",
     "level": "intermediate",
-    "sonkeigo": { "form": "お調べになる", "reading": "おしらべになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お調べする", "reading": "おしらべする", "pattern": "o_suru" },
-    "teineigo": { "form": "調べます", "reading": "しらべます" },
+    "sonkeigo": { "form": "お調べになる", "reading": "おしらべになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お調べする", "reading": "おしらべする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "調べます", "reading": "しらべます", "availability": "present" },
     "examples": [
       { "context": "Asking if a superior looked into it", "ja": "その件はお調べになりましたか。", "en": "Have you looked into that matter?", "type": "sonkeigo" },
       { "context": "Offering to investigate", "ja": "すぐにお調べいたします。", "en": "I will look into it right away.", "type": "kenjougo" }
@@ -734,9 +734,9 @@
     "reading": "はこぶ",
     "translation": "to carry / to transport",
     "level": "intermediate",
-    "sonkeigo": { "form": "お運びになる", "reading": "おはこびになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お運びする", "reading": "おはこびする", "pattern": "o_suru" },
-    "teineigo": { "form": "運びます", "reading": "はこびます" },
+    "sonkeigo": { "form": "お運びになる", "reading": "おはこびになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お運びする", "reading": "おはこびする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "運びます", "reading": "はこびます", "availability": "present" },
     "examples": [
       { "context": "Thanking a guest for coming (lit. carrying their feet)", "ja": "本日はお忙しい中お運びいただきありがとうございます。", "en": "Thank you for taking the time to come today despite your busy schedule.", "type": "sonkeigo" },
       { "context": "Offering to carry items", "ja": "お荷物をお運びいたします。", "en": "I will carry your luggage.", "type": "kenjougo" }
@@ -746,9 +746,9 @@
     "reading": "とどく",
     "translation": "to arrive / to reach",
     "level": "intermediate",
-    "sonkeigo": { "form": "お届きになる", "reading": "おとどきになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "届いております", "reading": "とどいております", "pattern": "special" },
-    "teineigo": { "form": "届きます", "reading": "とどきます" },
+    "sonkeigo": { "form": "お届きになる", "reading": "おとどきになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "届いております", "reading": "とどいております", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "届きます", "reading": "とどきます", "availability": "present" },
     "examples": [
       { "context": "Asking if a package arrived", "ja": "書類はお手元に届きましたでしょうか。", "en": "Have the documents reached you?", "type": "sonkeigo" },
       { "context": "Confirming receipt", "ja": "ご注文の品が届いております。", "en": "Your ordered item has arrived.", "type": "kenjougo" }
@@ -758,9 +758,9 @@
     "reading": "あける",
     "translation": "to open",
     "level": "basic",
-    "sonkeigo": { "form": "お開けになる", "reading": "おあけになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "開けさせていただく", "reading": "あけさせていただく", "pattern": "special" },
-    "teineigo": { "form": "開けます", "reading": "あけます" },
+    "sonkeigo": { "form": "お開けになる", "reading": "おあけになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "開けさせていただく", "reading": "あけさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "開けます", "reading": "あけます", "availability": "present" },
     "examples": [
       { "context": "Asking a guest to open something", "ja": "どうぞお開けになってください。", "en": "Please go ahead and open it.", "type": "sonkeigo" },
       { "context": "Asking permission to open a window", "ja": "窓を開けさせていただいてもよろしいですか。", "en": "May I open the window?", "type": "kenjougo" }
@@ -770,9 +770,9 @@
     "reading": "しめる",
     "translation": "to close",
     "level": "basic",
-    "sonkeigo": { "form": "お閉めになる", "reading": "おしめになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "閉めさせていただく", "reading": "しめさせていただく", "pattern": "special" },
-    "teineigo": { "form": "閉めます", "reading": "しめます" },
+    "sonkeigo": { "form": "お閉めになる", "reading": "おしめになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "閉めさせていただく", "reading": "しめさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "閉めます", "reading": "しめます", "availability": "present" },
     "examples": [
       { "context": "Asking permission to close the door", "ja": "ドアをお閉めになりますか。", "en": "Would you like the door closed?", "type": "sonkeigo" },
       { "context": "Closing a shop or office", "ja": "本日の営業を閉めさせていただきます。", "en": "We will be closing for the day.", "type": "kenjougo" }
@@ -782,9 +782,9 @@
     "reading": "はいる",
     "translation": "to enter",
     "level": "basic",
-    "sonkeigo": { "form": "お入りになる", "reading": "おはいりになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "入らせていただく", "reading": "はいらせていただく", "pattern": "special" },
-    "teineigo": { "form": "入ります", "reading": "はいります" },
+    "sonkeigo": { "form": "お入りになる", "reading": "おはいりになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "入らせていただく", "reading": "はいらせていただく", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "入ります", "reading": "はいります", "availability": "present" },
     "examples": [
       { "context": "Inviting a guest to enter", "ja": "どうぞお入りになってください。", "en": "Please come in.", "type": "sonkeigo" },
       { "context": "Asking permission to enter a room", "ja": "失礼いたします。入らせていただきます。", "en": "Excuse me. I will come in.", "type": "kenjougo" }
@@ -794,9 +794,9 @@
     "reading": "でる",
     "translation": "to leave / to go out",
     "level": "basic",
-    "sonkeigo": { "form": "お出になる", "reading": "おでになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "出させていただく", "reading": "ださせていただく", "pattern": "special" },
-    "teineigo": { "form": "出ます", "reading": "でます" },
+    "sonkeigo": { "form": "お出になる", "reading": "おでになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "出させていただく", "reading": "ださせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "出ます", "reading": "でます", "availability": "present" },
     "examples": [
       { "context": "Noting that a superior has left", "ja": "課長はもうお出になりました。", "en": "The section chief has already left.", "type": "sonkeigo" },
       { "context": "Excusing yourself from a meeting", "ja": "少々席を外させていただきます。", "en": "Please excuse me for a moment.", "type": "kenjougo" }
@@ -806,9 +806,9 @@
     "reading": "こたえる",
     "translation": "to answer / to respond",
     "level": "intermediate",
-    "sonkeigo": { "form": "お答えになる", "reading": "おこたえになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お答えする", "reading": "おこたえする", "pattern": "o_suru" },
-    "teineigo": { "form": "答えます", "reading": "こたえます" },
+    "sonkeigo": { "form": "お答えになる", "reading": "おこたえになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お答えする", "reading": "おこたえする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "答えます", "reading": "こたえます", "availability": "present" },
     "examples": [
       { "context": "Asking a superior to respond", "ja": "こちらの質問にお答えいただけますか。", "en": "Could you answer this question?", "type": "sonkeigo" },
       { "context": "Offering an answer", "ja": "ご質問にお答えいたします。", "en": "I will answer your question.", "type": "kenjougo" }
@@ -818,9 +818,9 @@
     "reading": "たのむ",
     "translation": "to request / to ask a favor",
     "level": "intermediate",
-    "sonkeigo": { "form": "お頼みになる", "reading": "おたのみになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お願いする", "reading": "おねがいする", "pattern": "special" },
-    "teineigo": { "form": "頼みます", "reading": "たのみます" },
+    "sonkeigo": { "form": "お頼みになる", "reading": "おたのみになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お願いする", "reading": "おねがいする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "頼みます", "reading": "たのみます", "availability": "present" },
     "examples": [
       { "context": "A superior making a request", "ja": "部長がお頼みになった件です。", "en": "This is the matter the manager requested.", "type": "sonkeigo" },
       { "context": "Making a humble request", "ja": "一つお願いしたいことがございます。", "en": "There is one thing I would like to ask of you.", "type": "kenjougo" }
@@ -830,9 +830,9 @@
     "reading": "てつだう",
     "translation": "to help / to assist",
     "level": "intermediate",
-    "sonkeigo": { "form": "お手伝いになる", "reading": "おてつだいになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お手伝いする", "reading": "おてつだいする", "pattern": "o_suru" },
-    "teineigo": { "form": "手伝います", "reading": "てつだいます" },
+    "sonkeigo": { "form": "お手伝いになる", "reading": "おてつだいになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お手伝いする", "reading": "おてつだいする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "手伝います", "reading": "てつだいます", "availability": "present" },
     "examples": [
       { "context": "Thanking someone who helped", "ja": "お手伝いいただきありがとうございます。", "en": "Thank you for your help.", "type": "sonkeigo" },
       { "context": "Offering to help", "ja": "何かお手伝いいたしましょうか。", "en": "Is there anything I can help with?", "type": "kenjougo" }
@@ -842,9 +842,9 @@
     "reading": "なおす",
     "translation": "to fix / to correct",
     "level": "intermediate",
-    "sonkeigo": { "form": "お直しになる", "reading": "おなおしになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お直しする", "reading": "おなおしする", "pattern": "o_suru" },
-    "teineigo": { "form": "直します", "reading": "なおします" },
+    "sonkeigo": { "form": "お直しになる", "reading": "おなおしになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お直しする", "reading": "おなおしする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "直します", "reading": "なおします", "availability": "present" },
     "examples": [
       { "context": "Asking if a superior corrected something", "ja": "書類はお直しになりましたか。", "en": "Have you corrected the document?", "type": "sonkeigo" },
       { "context": "Offering to fix an error", "ja": "すぐにお直しいたします。", "en": "I will correct it right away.", "type": "kenjougo" }
@@ -854,9 +854,9 @@
     "reading": "じゅんびする",
     "translation": "to prepare",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご準備になる", "reading": "ごじゅんびになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "ご準備する", "reading": "ごじゅんびする", "pattern": "go_suru" },
-    "teineigo": { "form": "準備します", "reading": "じゅんびします" },
+    "sonkeigo": { "form": "ご準備になる", "reading": "ごじゅんびになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "ご準備する", "reading": "ごじゅんびする", "pattern": "go_suru", "availability": "present" },
+    "teineigo": { "form": "準備します", "reading": "じゅんびします", "availability": "present" },
     "examples": [
       { "context": "Asking if preparations are done", "ja": "ご準備はよろしいでしょうか。", "en": "Are you ready? / Is everything prepared?", "type": "sonkeigo" },
       { "context": "Saying you will prepare", "ja": "資料をご準備いたします。", "en": "I will prepare the documents.", "type": "kenjougo" }
@@ -866,9 +866,9 @@
     "reading": "ほうこくする",
     "translation": "to report",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご報告になる", "reading": "ごほうこくになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "ご報告する", "reading": "ごほうこくする", "pattern": "go_suru" },
-    "teineigo": { "form": "報告します", "reading": "ほうこくします" },
+    "sonkeigo": { "form": "ご報告になる", "reading": "ごほうこくになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "ご報告する", "reading": "ごほうこくする", "pattern": "go_suru", "availability": "present" },
+    "teineigo": { "form": "報告します", "reading": "ほうこくします", "availability": "present" },
     "examples": [
       { "context": "Acknowledging a report", "ja": "ご報告いただきありがとうございます。", "en": "Thank you for your report.", "type": "sonkeigo" },
       { "context": "Giving a report", "ja": "進捗状況をご報告いたします。", "en": "I would like to report on the progress.", "type": "kenjougo" }
@@ -878,9 +878,9 @@
     "reading": "ていしゅつする",
     "translation": "to submit",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご提出になる", "reading": "ごていしゅつになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "提出させていただく", "reading": "ていしゅつさせていただく", "pattern": "special" },
-    "teineigo": { "form": "提出します", "reading": "ていしゅつします" },
+    "sonkeigo": { "form": "ご提出になる", "reading": "ごていしゅつになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "提出させていただく", "reading": "ていしゅつさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "提出します", "reading": "ていしゅつします", "availability": "present" },
     "examples": [
       { "context": "Asking for submission", "ja": "金曜日までにご提出いただけますか。", "en": "Could you submit it by Friday?", "type": "sonkeigo" },
       { "context": "Submitting a proposal", "ja": "企画書を提出させていただきます。", "en": "I would like to submit the proposal.", "type": "kenjougo" }
@@ -890,9 +890,9 @@
     "reading": "さんかする",
     "translation": "to participate",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご参加になる", "reading": "ごさんかになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "参加させていただく", "reading": "さんかさせていただく", "pattern": "special" },
-    "teineigo": { "form": "参加します", "reading": "さんかします" },
+    "sonkeigo": { "form": "ご参加になる", "reading": "ごさんかになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "参加させていただく", "reading": "さんかさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "参加します", "reading": "さんかします", "availability": "present" },
     "examples": [
       { "context": "Inviting someone to participate", "ja": "ぜひご参加いただければ幸いです。", "en": "We would be grateful if you could participate.", "type": "sonkeigo" },
       { "context": "Accepting an invitation", "ja": "喜んで参加させていただきます。", "en": "I would be happy to participate.", "type": "kenjougo" }
@@ -902,9 +902,9 @@
     "reading": "しょうたいする",
     "translation": "to invite",
     "level": "advanced",
-    "sonkeigo": { "form": "ご招待になる", "reading": "ごしょうたいになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "ご招待する", "reading": "ごしょうたいする", "pattern": "go_suru" },
-    "teineigo": { "form": "招待します", "reading": "しょうたいします" },
+    "sonkeigo": { "form": "ご招待になる", "reading": "ごしょうたいになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "ご招待する", "reading": "ごしょうたいする", "pattern": "go_suru", "availability": "present" },
+    "teineigo": { "form": "招待します", "reading": "しょうたいします", "availability": "present" },
     "examples": [
       { "context": "Thanking for an invitation", "ja": "ご招待いただきありがとうございます。", "en": "Thank you for inviting us.", "type": "sonkeigo" },
       { "context": "Extending an invitation", "ja": "来月のパーティーにご招待いたします。", "en": "We would like to invite you to next month's party.", "type": "kenjougo" }
@@ -914,9 +914,9 @@
     "reading": "りかいする",
     "translation": "to understand / to comprehend",
     "level": "advanced",
-    "sonkeigo": { "form": "ご理解になる", "reading": "ごりかいになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "理解させていただく", "reading": "りかいさせていただく", "pattern": "special" },
-    "teineigo": { "form": "理解します", "reading": "りかいします" },
+    "sonkeigo": { "form": "ご理解になる", "reading": "ごりかいになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "理解させていただく", "reading": "りかいさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "理解します", "reading": "りかいします", "availability": "present" },
     "examples": [
       { "context": "Asking for understanding", "ja": "ご理解いただけますようお願いいたします。", "en": "We kindly ask for your understanding.", "type": "sonkeigo" },
       { "context": "Confirming comprehension", "ja": "状況は理解させていただきました。", "en": "I have understood the situation.", "type": "kenjougo" }
@@ -926,9 +926,9 @@
     "reading": "さんせいする",
     "translation": "to agree / to approve",
     "level": "advanced",
-    "sonkeigo": { "form": "ご賛成になる", "reading": "ごさんせいになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "賛成させていただく", "reading": "さんせいさせていただく", "pattern": "special" },
-    "teineigo": { "form": "賛成します", "reading": "さんせいします" },
+    "sonkeigo": { "form": "ご賛成になる", "reading": "ごさんせいになる", "pattern": "go_ni_naru", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "賛成させていただく", "reading": "さんせいさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "賛成します", "reading": "さんせいします", "availability": "present" },
     "examples": [
       { "context": "Asking if someone agrees", "ja": "こちらの案にご賛成いただけますか。", "en": "Would you agree with this proposal?", "type": "sonkeigo" },
       { "context": "Expressing agreement", "ja": "その方針に賛成させていただきます。", "en": "I agree with that policy.", "type": "kenjougo" }
@@ -938,9 +938,9 @@
     "reading": "はんたいする",
     "translation": "to oppose / to object",
     "level": "advanced",
-    "sonkeigo": { "form": "ご反対になる", "reading": "ごはんたいになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "反対させていただく", "reading": "はんたいさせていただく", "pattern": "special" },
-    "teineigo": { "form": "反対します", "reading": "はんたいします" },
+    "sonkeigo": { "form": "ご反対になる", "reading": "ごはんたいになる", "pattern": "go_ni_naru", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "反対させていただく", "reading": "はんたいさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "反対します", "reading": "はんたいします", "availability": "present" },
     "examples": [
       { "context": "Noting a superior's objection", "ja": "部長はこの案にご反対のようです。", "en": "The manager seems to oppose this plan.", "type": "sonkeigo" },
       { "context": "Politely expressing disagreement", "ja": "恐れ入りますが、その点については反対させていただきます。", "en": "I'm sorry, but I must respectfully disagree on that point.", "type": "kenjougo" }
@@ -950,9 +950,9 @@
     "reading": "しんぱいする",
     "translation": "to worry",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご心配になる", "reading": "ごしんぱいになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "心配させてしまう", "reading": "しんぱいさせてしまう", "pattern": "special" },
-    "teineigo": { "form": "心配します", "reading": "しんぱいします" },
+    "sonkeigo": { "form": "ご心配になる", "reading": "ごしんぱいになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "心配させてしまう", "reading": "しんぱいさせてしまう", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "心配します", "reading": "しんぱいします", "availability": "present" },
     "examples": [
       { "context": "Telling someone not to worry", "ja": "どうぞご心配なさらないでください。", "en": "Please do not worry.", "type": "sonkeigo" },
       { "context": "Apologizing for causing worry", "ja": "ご心配をおかけして申し訳ございません。", "en": "I'm sorry for causing you worry.", "type": "kenjougo" }
@@ -962,9 +962,9 @@
     "reading": "きにゅうする",
     "translation": "to fill in / to write in",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご記入になる", "reading": "ごきにゅうになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "記入させていただく", "reading": "きにゅうさせていただく", "pattern": "special" },
-    "teineigo": { "form": "記入します", "reading": "きにゅうします" },
+    "sonkeigo": { "form": "ご記入になる", "reading": "ごきにゅうになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "記入させていただく", "reading": "きにゅうさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "記入します", "reading": "きにゅうします", "availability": "present" },
     "examples": [
       { "context": "Asking a guest to fill out a form", "ja": "こちらにご記入いただけますか。", "en": "Could you please fill this in?", "type": "sonkeigo" },
       { "context": "Filling out a form yourself", "ja": "こちらに記入させていただきます。", "en": "I will fill this in.", "type": "kenjougo" }
@@ -974,9 +974,9 @@
     "reading": "よやくする",
     "translation": "to reserve / to book",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご予約になる", "reading": "ごよやくになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "ご予約する", "reading": "ごよやくする", "pattern": "go_suru" },
-    "teineigo": { "form": "予約します", "reading": "よやくします" },
+    "sonkeigo": { "form": "ご予約になる", "reading": "ごよやくになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "ご予約する", "reading": "ごよやくする", "pattern": "go_suru", "availability": "present" },
+    "teineigo": { "form": "予約します", "reading": "よやくします", "availability": "present" },
     "examples": [
       { "context": "Confirming a reservation", "ja": "ご予約はいただいておりますか。", "en": "Do you have a reservation?", "type": "sonkeigo" },
       { "context": "Making a reservation", "ja": "レストランをご予約いたしました。", "en": "I have made a restaurant reservation.", "type": "kenjougo" }
@@ -986,9 +986,9 @@
     "reading": "ちゅうもんする",
     "translation": "to order",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご注文になる", "reading": "ごちゅうもんになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "注文させていただく", "reading": "ちゅうもんさせていただく", "pattern": "special" },
-    "teineigo": { "form": "注文します", "reading": "ちゅうもんします" },
+    "sonkeigo": { "form": "ご注文になる", "reading": "ごちゅうもんになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "注文させていただく", "reading": "ちゅうもんさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "注文します", "reading": "ちゅうもんします", "availability": "present" },
     "examples": [
       { "context": "Taking an order", "ja": "ご注文はお決まりでしょうか。", "en": "Are you ready to order?", "type": "sonkeigo" },
       { "context": "Placing an order", "ja": "こちらを注文させていただきます。", "en": "I would like to order this.", "type": "kenjougo" }
@@ -998,9 +998,9 @@
     "reading": "しつもんする",
     "translation": "to ask a question",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご質問になる", "reading": "ごしつもんになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "質問させていただく", "reading": "しつもんさせていただく", "pattern": "special" },
-    "teineigo": { "form": "質問します", "reading": "しつもんします" },
+    "sonkeigo": { "form": "ご質問になる", "reading": "ごしつもんになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "質問させていただく", "reading": "しつもんさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "質問します", "reading": "しつもんします", "availability": "present" },
     "examples": [
       { "context": "Inviting questions", "ja": "何かご質問がございましたらどうぞ。", "en": "If you have any questions, please go ahead.", "type": "sonkeigo" },
       { "context": "Asking a question in a meeting", "ja": "一点質問させていただいてもよろしいですか。", "en": "May I ask one question?", "type": "kenjougo" }
@@ -1010,9 +1010,9 @@
     "reading": "へんじする",
     "translation": "to reply",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご返事になる", "reading": "ごへんじになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "ご返事する", "reading": "ごへんじする", "pattern": "go_suru" },
-    "teineigo": { "form": "返事します", "reading": "へんじします" },
+    "sonkeigo": { "form": "ご返事になる", "reading": "ごへんじになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "ご返事する", "reading": "ごへんじする", "pattern": "go_suru", "availability": "present" },
+    "teineigo": { "form": "返事します", "reading": "へんじします", "availability": "present" },
     "examples": [
       { "context": "Asking for a reply", "ja": "来週までにご返事いただけますか。", "en": "Could you reply by next week?", "type": "sonkeigo" },
       { "context": "Promising to reply", "ja": "明日までにご返事いたします。", "en": "I will reply by tomorrow.", "type": "kenjougo" }
@@ -1022,9 +1022,9 @@
     "reading": "たいおうする",
     "translation": "to handle / to deal with",
     "level": "advanced",
-    "sonkeigo": { "form": "ご対応になる", "reading": "ごたいおうになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "対応させていただく", "reading": "たいおうさせていただく", "pattern": "special" },
-    "teineigo": { "form": "対応します", "reading": "たいおうします" },
+    "sonkeigo": { "form": "ご対応になる", "reading": "ごたいおうになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "対応させていただく", "reading": "たいおうさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "対応します", "reading": "たいおうします", "availability": "present" },
     "examples": [
       { "context": "Thanking for handling a matter", "ja": "迅速にご対応いただきありがとうございます。", "en": "Thank you for handling this promptly.", "type": "sonkeigo" },
       { "context": "Offering to handle it", "ja": "私が対応させていただきます。", "en": "I will take care of it.", "type": "kenjougo" }
@@ -1034,9 +1034,9 @@
     "reading": "よういする",
     "translation": "to prepare / to arrange",
     "level": "intermediate",
-    "sonkeigo": { "form": "ご用意になる", "reading": "ごよういになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "ご用意する", "reading": "ごよういする", "pattern": "go_suru" },
-    "teineigo": { "form": "用意します", "reading": "よういします" },
+    "sonkeigo": { "form": "ご用意になる", "reading": "ごよういになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "ご用意する", "reading": "ごよういする", "pattern": "go_suru", "availability": "present" },
+    "teineigo": { "form": "用意します", "reading": "よういします", "availability": "present" },
     "examples": [
       { "context": "Asking if preparations are ready", "ja": "ご用意はよろしいでしょうか。", "en": "Is everything ready?", "type": "sonkeigo" },
       { "context": "Saying you prepared something", "ja": "お飲み物をご用意いたしました。", "en": "I have prepared some drinks.", "type": "kenjougo" }
@@ -1046,9 +1046,9 @@
     "reading": "やくそくする",
     "translation": "to promise / to make an appointment",
     "level": "advanced",
-    "sonkeigo": { "form": "お約束になる", "reading": "おやくそくになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お約束する", "reading": "おやくそくする", "pattern": "o_suru" },
-    "teineigo": { "form": "約束します", "reading": "やくそくします" },
+    "sonkeigo": { "form": "お約束になる", "reading": "おやくそくになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お約束する", "reading": "おやくそくする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "約束します", "reading": "やくそくします", "availability": "present" },
     "examples": [
       { "context": "Asking about an appointment", "ja": "お約束はいただいておりますか。", "en": "Do you have an appointment?", "type": "sonkeigo" },
       { "context": "Making a commitment", "ja": "来週までに納品をお約束いたします。", "en": "I promise delivery by next week.", "type": "kenjougo" }
@@ -1058,9 +1058,9 @@
     "reading": "えんりょする",
     "translation": "to refrain / to hold back",
     "level": "advanced",
-    "sonkeigo": { "form": "ご遠慮になる", "reading": "ごえんりょになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "遠慮させていただく", "reading": "えんりょさせていただく", "pattern": "special" },
-    "teineigo": { "form": "遠慮します", "reading": "えんりょします" },
+    "sonkeigo": { "form": "ご遠慮になる", "reading": "ごえんりょになる", "pattern": "go_ni_naru", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "遠慮させていただく", "reading": "えんりょさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "遠慮します", "reading": "えんりょします", "availability": "present" },
     "examples": [
       { "context": "Telling someone not to hold back", "ja": "どうぞご遠慮なくおっしゃってください。", "en": "Please don't hesitate to say so.", "type": "sonkeigo" },
       { "context": "Politely declining", "ja": "今回は遠慮させていただきます。", "en": "I will refrain this time.", "type": "kenjougo" }
@@ -1070,9 +1070,9 @@
     "reading": "りょうかいする",
     "translation": "to acknowledge / to understand",
     "level": "advanced",
-    "sonkeigo": { "form": "ご了解になる", "reading": "ごりょうかいになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "了解いたす", "reading": "りょうかいいたす", "pattern": "special" },
-    "teineigo": { "form": "了解します", "reading": "りょうかいします" },
+    "sonkeigo": { "form": "ご了解になる", "reading": "ごりょうかいになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "了解いたす", "reading": "りょうかいいたす", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "了解します", "reading": "りょうかいします", "availability": "present" },
     "examples": [
       { "context": "Asking for acknowledgment", "ja": "ご了解いただけますでしょうか。", "en": "Could we have your acknowledgment?", "type": "sonkeigo" },
       { "context": "Confirming understanding (note: 承知 is preferred to superiors)", "ja": "了解いたしました。すぐに手配いたします。", "en": "Understood. I will arrange it immediately.", "type": "kenjougo" }
@@ -1082,9 +1082,9 @@
     "reading": "じたいする",
     "translation": "to decline / to withdraw",
     "level": "advanced",
-    "sonkeigo": { "form": "ご辞退になる", "reading": "ごじたいになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "辞退させていただく", "reading": "じたいさせていただく", "pattern": "special" },
-    "teineigo": { "form": "辞退します", "reading": "じたいします" },
+    "sonkeigo": { "form": "ご辞退になる", "reading": "ごじたいになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "辞退させていただく", "reading": "じたいさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "辞退します", "reading": "じたいします", "availability": "present" },
     "examples": [
       { "context": "Reporting that someone declined", "ja": "先方はご辞退になりました。", "en": "The other party has declined.", "type": "sonkeigo" },
       { "context": "Declining an award or position", "ja": "誠に恐縮ですが、辞退させていただきます。", "en": "I'm very sorry, but I must respectfully decline.", "type": "kenjougo" }
@@ -1094,9 +1094,9 @@
     "reading": "はいしゃくする",
     "translation": "to borrow (humble)",
     "level": "advanced",
-    "sonkeigo": { "form": "お貸しになる", "reading": "おかしになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "拝借する", "reading": "はいしゃくする", "pattern": "special" },
-    "teineigo": { "form": "借ります", "reading": "かります" },
+    "sonkeigo": { "form": "お貸しになる", "reading": "おかしになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "拝借する", "reading": "はいしゃくする", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "借ります", "reading": "かります", "availability": "present" },
     "examples": [
       { "context": "Lending something to a colleague", "ja": "どうぞお貸しになってください。", "en": "Please lend it to them.", "type": "sonkeigo" },
       { "context": "Asking to borrow something", "ja": "お電話を拝借してもよろしいですか。", "en": "May I borrow your phone?", "type": "kenjougo" }
@@ -1106,9 +1106,9 @@
     "reading": "ぞんじる",
     "translation": "to know / to think (humble)",
     "level": "advanced",
-    "sonkeigo": { "form": "ご存じだ", "reading": "ごぞんじだ", "pattern": "special" },
-    "kenjougo": { "form": "存じる", "reading": "ぞんじる", "pattern": "special" },
-    "teineigo": { "form": "知っています", "reading": "しっています" },
+    "sonkeigo": { "form": "ご存じだ", "reading": "ごぞんじだ", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "存じる", "reading": "ぞんじる", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "知っています", "reading": "しっています", "availability": "present" },
     "examples": [
       { "context": "Asking if someone knows a person", "ja": "山田様のことはご存じでいらっしゃいますか。", "en": "Are you acquainted with Mr. Yamada?", "type": "sonkeigo" },
       { "context": "Saying you know something", "ja": "その件は存じております。", "en": "I am aware of that matter.", "type": "kenjougo" }
@@ -1118,9 +1118,9 @@
     "reading": "うけたまわる",
     "translation": "to humbly receive / to hear",
     "level": "advanced",
-    "sonkeigo": { "form": "お聞きになる", "reading": "おききになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "承る", "reading": "うけたまわる", "pattern": "special" },
-    "teineigo": { "form": "聞きます", "reading": "ききます" },
+    "sonkeigo": { "form": "お聞きになる", "reading": "おききになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "承る", "reading": "うけたまわる", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "聞きます", "reading": "ききます", "availability": "present" },
     "examples": [
       { "context": "When a superior hears a customer's request", "ja": "部長はお客様のご要望をお聞きになりました。", "en": "The manager listened to the customer's request.", "type": "sonkeigo" },
       { "context": "Receiving an order or reservation", "ja": "ご予約を承りました。", "en": "I have received your reservation.", "type": "kenjougo" }
@@ -1130,9 +1130,9 @@
     "reading": "もうしあげる",
     "translation": "to humbly say / to tell",
     "level": "advanced",
-    "sonkeigo": { "form": "おっしゃる", "reading": "おっしゃる", "pattern": "special" },
-    "kenjougo": { "form": "申し上げる", "reading": "もうしあげる", "pattern": "special" },
-    "teineigo": { "form": "言います", "reading": "いいます" },
+    "sonkeigo": { "form": "おっしゃる", "reading": "おっしゃる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "申し上げる", "reading": "もうしあげる", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "言います", "reading": "いいます", "availability": "present" },
     "examples": [
       { "context": "When a superior says something", "ja": "社長がおっしゃった通りでございます。", "en": "It is just as the president said.", "type": "sonkeigo" },
       { "context": "Making a formal announcement", "ja": "一言お礼を申し上げます。", "en": "I would like to express a word of thanks.", "type": "kenjougo" }
@@ -1142,9 +1142,9 @@
     "reading": "とる",
     "translation": "to take",
     "level": "basic",
-    "sonkeigo": { "form": "お取りになる", "reading": "おとりになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お取りする", "reading": "おとりする", "pattern": "o_suru" },
-    "teineigo": { "form": "取ります", "reading": "とります" },
+    "sonkeigo": { "form": "お取りになる", "reading": "おとりになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お取りする", "reading": "おとりする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "取ります", "reading": "とります", "availability": "present" },
     "examples": [
       { "context": "Asking a guest to take a seat number", "ja": "番号札をお取りになってお待ちください。", "en": "Please take a number and wait.", "type": "sonkeigo" },
       { "context": "Offering to take notes", "ja": "議事録をお取りいたしましょうか。", "en": "Shall I take the minutes?", "type": "kenjougo" }
@@ -1154,9 +1154,9 @@
     "reading": "わたす",
     "translation": "to hand over / to pass",
     "level": "intermediate",
-    "sonkeigo": { "form": "お渡しになる", "reading": "おわたしになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お渡しする", "reading": "おわたしする", "pattern": "o_suru" },
-    "teineigo": { "form": "渡します", "reading": "わたします" },
+    "sonkeigo": { "form": "お渡しになる", "reading": "おわたしになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お渡しする", "reading": "おわたしする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "渡します", "reading": "わたします", "availability": "present" },
     "examples": [
       { "context": "Asking if something was handed over", "ja": "資料はお渡しになりましたか。", "en": "Have you handed over the documents?", "type": "sonkeigo" },
       { "context": "Handing something to a client", "ja": "こちらの書類をお渡しいたします。", "en": "I will hand you these documents.", "type": "kenjougo" }
@@ -1166,9 +1166,9 @@
     "reading": "うけとる",
     "translation": "to receive / to accept",
     "level": "intermediate",
-    "sonkeigo": { "form": "お受け取りになる", "reading": "おうけとりになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お受け取りする", "reading": "おうけとりする", "pattern": "o_suru" },
-    "teineigo": { "form": "受け取ります", "reading": "うけとります" },
+    "sonkeigo": { "form": "お受け取りになる", "reading": "おうけとりになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お受け取りする", "reading": "おうけとりする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "受け取ります", "reading": "うけとります", "availability": "present" },
     "examples": [
       { "context": "Asking if a package was received", "ja": "お荷物はお受け取りになりましたか。", "en": "Have you received the package?", "type": "sonkeigo" },
       { "context": "Confirming receipt", "ja": "確かにお受け取りいたしました。", "en": "I have certainly received it.", "type": "kenjougo" }
@@ -1178,9 +1178,9 @@
     "reading": "もうす",
     "translation": "to be called / to say (humble)",
     "level": "advanced",
-    "sonkeigo": { "form": "おっしゃる", "reading": "おっしゃる", "pattern": "special" },
-    "kenjougo": { "form": "申す", "reading": "もうす", "pattern": "special" },
-    "teineigo": { "form": "言います", "reading": "いいます" },
+    "sonkeigo": { "form": "おっしゃる", "reading": "おっしゃる", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "申す", "reading": "もうす", "pattern": "special", "availability": "present" },
+    "teineigo": { "form": "言います", "reading": "いいます", "availability": "present" },
     "examples": [
       { "context": "When a superior is speaking", "ja": "課長がおっしゃる通りです。", "en": "It is as the section chief says.", "type": "sonkeigo" },
       { "context": "Introducing yourself on the phone", "ja": "ABC商事の鈴木と申します。", "en": "My name is Suzuki from ABC Trading.", "type": "kenjougo" }
@@ -1190,9 +1190,9 @@
     "reading": "ねがう",
     "translation": "to wish / to request",
     "level": "advanced",
-    "sonkeigo": { "form": "お願いになる", "reading": "おねがいになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お願いする", "reading": "おねがいする", "pattern": "o_suru" },
-    "teineigo": { "form": "願います", "reading": "ねがいます" },
+    "sonkeigo": { "form": "お願いになる", "reading": "おねがいになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お願いする", "reading": "おねがいする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "願います", "reading": "ねがいます", "availability": "present" },
     "examples": [
       { "context": "A formal request from above", "ja": "社長がお願いになっている件です。", "en": "This is the matter the president is requesting.", "type": "sonkeigo" },
       { "context": "Making a polite request", "ja": "ご確認のほどお願いいたします。", "en": "I kindly request your confirmation.", "type": "kenjougo" }
@@ -1202,9 +1202,9 @@
     "reading": "めいわくをかける",
     "translation": "to cause trouble",
     "level": "advanced",
-    "sonkeigo": { "form": "ご迷惑をおかけになる", "reading": "ごめいわくをおかけになる", "pattern": "special" },
-    "kenjougo": { "form": "ご迷惑をおかけする", "reading": "ごめいわくをおかけする", "pattern": "special" },
-    "teineigo": { "form": "迷惑をかけます", "reading": "めいわくをかけます" },
+    "sonkeigo": { "form": "ご迷惑をおかけになる", "reading": "ごめいわくをおかけになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "ご迷惑をおかけする", "reading": "ごめいわくをおかけする", "pattern": "go_suru", "availability": "present" },
+    "teineigo": { "form": "迷惑をかけます", "reading": "めいわくをかけます", "availability": "present" },
     "examples": [
       { "context": "Acknowledging inconvenience caused by others", "ja": "大変ご迷惑をおかけしております。", "en": "We are causing you great inconvenience.", "type": "kenjougo" },
       { "context": "Apologizing for a delay", "ja": "ご迷惑をおかけして誠に申し訳ございません。", "en": "I sincerely apologize for the inconvenience.", "type": "kenjougo" }
@@ -1214,9 +1214,9 @@
     "reading": "でんわする",
     "translation": "to call / to phone",
     "level": "basic",
-    "sonkeigo": { "form": "お電話になる", "reading": "おでんわになる", "pattern": "special" },
-    "kenjougo": { "form": "お電話する", "reading": "おでんわする", "pattern": "special" },
-    "teineigo": { "form": "電話します", "reading": "でんわします" },
+    "sonkeigo": { "form": "お電話になる", "reading": "おでんわになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お電話する", "reading": "おでんわする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "電話します", "reading": "でんわします", "availability": "present" },
     "examples": [
       { "context": "Reporting that a client called", "ja": "山田様からお電話がございました。", "en": "You received a call from Mr. Yamada.", "type": "sonkeigo" },
       { "context": "Saying you will call later", "ja": "改めてお電話いたします。", "en": "I will call again later.", "type": "kenjougo" }
@@ -1226,9 +1226,9 @@
     "reading": "ほうもんする",
     "translation": "to visit (formal)",
     "level": "advanced",
-    "sonkeigo": { "form": "ご訪問になる", "reading": "ごほうもんになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "訪問させていただく", "reading": "ほうもんさせていただく", "pattern": "special" },
-    "teineigo": { "form": "訪問します", "reading": "ほうもんします" },
+    "sonkeigo": { "form": "ご訪問になる", "reading": "ごほうもんになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "訪問させていただく", "reading": "ほうもんさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "訪問します", "reading": "ほうもんします", "availability": "present" },
     "examples": [
       { "context": "Confirming a visit from a client", "ja": "来週ご訪問いただけるとのこと、お待ちしております。", "en": "We look forward to your visit next week.", "type": "sonkeigo" },
       { "context": "Requesting to visit", "ja": "来週、御社を訪問させていただきたいのですが。", "en": "I would like to visit your company next week.", "type": "kenjougo" }
@@ -1238,9 +1238,9 @@
     "reading": "たしかめる",
     "translation": "to make sure / to verify",
     "level": "intermediate",
-    "sonkeigo": { "form": "お確かめになる", "reading": "おたしかめになる", "pattern": "o_ni_naru" },
-    "kenjougo": { "form": "お確かめする", "reading": "おたしかめする", "pattern": "o_suru" },
-    "teineigo": { "form": "確かめます", "reading": "たしかめます" },
+    "sonkeigo": { "form": "お確かめになる", "reading": "おたしかめになる", "pattern": "o_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "お確かめする", "reading": "おたしかめする", "pattern": "o_suru", "availability": "present" },
+    "teineigo": { "form": "確かめます", "reading": "たしかめます", "availability": "present" },
     "examples": [
       { "context": "Asking someone to verify", "ja": "内容をお確かめいただけますか。", "en": "Could you please verify the contents?", "type": "sonkeigo" },
       { "context": "Offering to verify", "ja": "もう一度お確かめいたします。", "en": "I will verify it once more.", "type": "kenjougo" }
@@ -1250,9 +1250,9 @@
     "reading": "しょうにんする",
     "translation": "to approve / to authorize",
     "level": "advanced",
-    "sonkeigo": { "form": "ご承認になる", "reading": "ごしょうにんになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "承認させていただく", "reading": "しょうにんさせていただく", "pattern": "special" },
-    "teineigo": { "form": "承認します", "reading": "しょうにんします" },
+    "sonkeigo": { "form": "ご承認になる", "reading": "ごしょうにんになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "承認させていただく", "reading": "しょうにんさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "承認します", "reading": "しょうにんします", "availability": "present" },
     "examples": [
       { "context": "Requesting approval", "ja": "こちらの企画をご承認いただけますでしょうか。", "en": "Could you approve this project plan?", "type": "sonkeigo" },
       { "context": "Granting approval", "ja": "ご提案を承認させていただきます。", "en": "I will approve your proposal.", "type": "kenjougo" }
@@ -1262,9 +1262,9 @@
     "reading": "いらいする",
     "translation": "to request / to commission",
     "level": "advanced",
-    "sonkeigo": { "form": "ご依頼になる", "reading": "ごいらいになる", "pattern": "go_ni_naru" },
-    "kenjougo": { "form": "ご依頼する", "reading": "ごいらいする", "pattern": "go_suru" },
-    "teineigo": { "form": "依頼します", "reading": "いらいします" },
+    "sonkeigo": { "form": "ご依頼になる", "reading": "ごいらいになる", "pattern": "go_ni_naru", "availability": "present" },
+    "kenjougo": { "form": "ご依頼する", "reading": "ごいらいする", "pattern": "go_suru", "availability": "present" },
+    "teineigo": { "form": "依頼します", "reading": "いらいします", "availability": "present" },
     "examples": [
       { "context": "Acknowledging a request", "ja": "ご依頼の件、承りました。", "en": "I have received your request.", "type": "sonkeigo" },
       { "context": "Making a request", "ja": "見積もりの作成をご依頼いたします。", "en": "I would like to request a cost estimate.", "type": "kenjougo" }

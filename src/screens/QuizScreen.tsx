@@ -20,7 +20,6 @@ import {
 } from '../utils/keigoTypes';
 import {
   getGradableVerbPairs,
-  getVerbFormData,
 } from '../utils/gradableVerbs';
 import { useColors, fonts, spacing, radius } from '../utils/theme';
 import { useSessionAutosave } from '../hooks/useSessionAutosave';
@@ -62,8 +61,7 @@ export function generateQuestion(
     return thisWeight > bestWeight ? idx : best;
   }, candidates[0]);
 
-  const { verb, data, form } = pairs[pairIndex];
-  const formValue = getVerbFormData(data, form);
+  const { verb, data, form, formData: formValue } = pairs[pairIndex];
   const correctAnswer = formValue.form;
   const correctReading = formValue.reading;
 
@@ -72,7 +70,7 @@ export function generateQuestion(
   // Same verb, different form
   for (const pair of pairs) {
     if (pair.verb !== verb || pair.form === form) continue;
-    const wrong = getVerbFormData(pair.data, pair.form).form;
+    const wrong = pair.formData.form;
     if (wrong !== correctAnswer) wrongAnswers.add(wrong);
   }
 
@@ -80,7 +78,7 @@ export function generateQuestion(
   for (let i = 0; i < 20 && wrongAnswers.size < 6; i++) {
     const pair = pairs[Math.floor(random() * pairs.length)];
     if (pair.form !== form || pair.verb === verb) continue;
-    const wrong = getVerbFormData(pair.data, pair.form).form;
+    const wrong = pair.formData.form;
     if (wrong !== correctAnswer) wrongAnswers.add(wrong);
   }
 
@@ -94,7 +92,7 @@ export function generateQuestion(
   const fallbackPairs = getGradableVerbPairs(allVerbEntries, activeForms);
   for (const pair of fallbackPairs) {
     if (selected.length === 3) break;
-    const wrong = getVerbFormData(pair.data, pair.form).form;
+    const wrong = pair.formData.form;
     if (wrong !== correctAnswer && !selected.includes(wrong)) {
       selected.push(wrong);
     }
