@@ -12,7 +12,7 @@ interface QuizStats {
   loadError: boolean;
   loadStats: () => Promise<void>;
   recordAnswer: (correct: boolean, currentStreak: number) => Promise<void>;
-  resetStats: () => Promise<void>;
+  resetStats: () => Promise<boolean>;
 }
 
 const queue = createStoreQueue();
@@ -120,16 +120,19 @@ export const useQuizStore = create<QuizStats>((set, get) => ({
     }
     if (!get().loaded) {
       console.warn('Skipping quiz stats reset: store never loaded');
-      return;
+      return false;
     }
-    return queue.enqueue(async () => {
+    let ok = false;
+    await queue.enqueue(async () => {
       const removed = await safeRemoveItem('quiz_stats');
       if (!removed) {
         console.warn('Failed to reset quiz stats');
         return;
       }
       set({ totalQuestions: 0, totalCorrect: 0, bestStreak: 0, loaded: true, loadError: false });
+      ok = true;
     });
+    return ok;
   },
 }));
 

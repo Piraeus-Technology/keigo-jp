@@ -15,7 +15,7 @@ interface SpacedRepStore {
   loadWeights: () => Promise<void>;
   recordResult: (key: string, correct: boolean) => Promise<void>;
   getWeight: (key: string) => number;
-  resetWeights: () => Promise<void>;
+  resetWeights: () => Promise<boolean>;
 }
 
 const DEFAULT_WEIGHT = 1;
@@ -112,16 +112,19 @@ export const useSpacedRepStore = create<SpacedRepStore>((set, get) => ({
     }
     if (!get().loaded) {
       console.warn('Skipping spaced rep reset: store never loaded');
-      return;
+      return false;
     }
-    return queue.enqueue(async () => {
+    let ok = false;
+    await queue.enqueue(async () => {
       const removed = await safeRemoveItem('spaced_rep_weights');
       if (!removed) {
         console.warn('Failed to reset spaced rep weights');
         return;
       }
       set({ weights: {}, loaded: true, loadError: false });
+      ok = true;
     });
+    return ok;
   },
 }));
 
