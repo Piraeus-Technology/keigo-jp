@@ -71,6 +71,31 @@ describe('DetailScreen', () => {
     expect(view.queryByLabelText('Play pronunciation of しぬ')).toBeNull();
   });
 
+  test('shows a conditional humble form condition on Detail', () => {
+    mockRouteParams = { key: '利用する', type: 'verb' };
+    const view = render(<DetailScreen />);
+
+    expect(view.getByText('Humble class: 謙譲語I')).toBeTruthy();
+    expect(view.getByText('Applies when')).toBeTruthy();
+    expect(view.getByText(
+      "• The facility or service is used with the provider's permission, and the speaker benefits from being allowed to use it.",
+    )).toBeTruthy();
+    expect(view.getByText('Alternatives')).toBeTruthy();
+    expect(view.getByText('利用いたす（りよういたす）')).toBeTruthy();
+  });
+
+  test('leaves an unannotated form row free of metadata chrome', () => {
+    mockRouteParams = { key: '食べる', type: 'verb' };
+    const view = render(<DetailScreen />);
+
+    expect(view.getByText('いただく')).toBeTruthy();
+    expect(view.getByLabelText('Play pronunciation of いただく'))
+      .toBeTruthy();
+    expect(view.queryByText('Applies when')).toBeNull();
+    expect(view.queryByText('Alternatives')).toBeNull();
+    expect(view.queryByText(/^Humble class:/)).toBeNull();
+  });
+
   test('leaves verb and short-expression header titles unchanged', () => {
     expect(getDetailHeaderTitle({ key: '申し上げる', type: 'verb' }))
       .toBe('申し上げる');

@@ -66,6 +66,42 @@ const expressionEntries = Object.entries(expressions as Record<string, Expressio
 const typedVerbEntries = Object.entries(
   verbs as unknown as Record<string, VerbData>,
 );
+const B3_BATCH_ONE_SLOTS = [
+  '出る:kenjougo',
+  '出席する:kenjougo',
+  '利用する:kenjougo',
+  '参加する:kenjougo',
+  '反対する:kenjougo',
+  '反対する:sonkeigo',
+  '変える:kenjougo',
+  '始める:kenjougo',
+  '対応する:kenjougo',
+  '承認する:kenjougo',
+  '提出する:kenjougo',
+  '検討する:kenjougo',
+  '死ぬ:teineigo',
+  '決める:kenjougo',
+  '注文する:kenjougo',
+  '理解する:kenjougo',
+  '着る:kenjougo',
+  '確認する:kenjougo',
+  '考える:kenjougo',
+  '記入する:kenjougo',
+  '訪問する:kenjougo',
+  '賛成する:kenjougo',
+  '賛成する:sonkeigo',
+  '質問する:kenjougo',
+  '辞退する:kenjougo',
+  '遠慮する:kenjougo',
+  '遠慮する:sonkeigo',
+  '閉める:kenjougo',
+  '開ける:kenjougo',
+].sort();
+const B3_BATCH_ONE_RESIDUAL = [
+  '確認する:kenjougo',
+  '提出する:kenjougo',
+  '対応する:kenjougo',
+].sort();
 
 function getContentDigest(data: unknown): {
   count: number;
@@ -114,6 +150,8 @@ describe('Keigo form schema', () => {
       'go_ni_naru',
       'go_suru',
       'sase_te_itadaku',
+      'itasu',
+      'nasaru',
     ]);
   });
 
@@ -351,14 +389,16 @@ describe('Verb data validation', () => {
       }, {});
 
     expect(distribution('sonkeigo')).toEqual({
-      special: 17,
+      nasaru: 4,
       o_ni_naru: 57,
-      go_ni_naru: 32,
+      go_ni_naru: 29,
+      special: 16,
     });
     expect(distribution('kenjougo')).toEqual({
+      itasu: 9,
       special: 35,
       o_suru: 32,
-      sase_te_itadaku: 25,
+      sase_te_itadaku: 16,
       go_suru: 13,
     });
   });
@@ -369,67 +409,79 @@ describe('Verb data validation', () => {
     expect(inferKeigoPattern('お電話になる')).toBe('o_ni_naru');
     expect(inferKeigoPattern('ご迷惑をおかけする')).toBe('go_suru');
     expect(inferKeigoPattern('ご覧になる')).toBe('special');
+    expect(inferKeigoPattern('検討いたす')).toBe('itasu');
+    expect(inferKeigoPattern('賛成なさる')).toBe('nasaru');
     expect(isKeigoPatternConsistent('お電話になる', 'go_ni_naru'))
       .toBe(false);
     expect(isKeigoPatternConsistent(
       '確認させていただく',
       'special',
     )).toBe(false);
+    expect(isKeigoPatternConsistent('検討いたす', 'special'))
+      .toBe(false);
+    expect(isKeigoPatternConsistent('賛成なさる', 'special'))
+      .toBe(false);
   });
 
-  test('enumerates the exact B3 review worklist without adjudicating it', () => {
-    const flagged = verbEntries.flatMap(([verb, data]) =>
+  test('adjudicates batch one while preserving the exact residual worklist', () => {
+    const reviewed = verbEntries.flatMap(([verb, data]) =>
+      ALL_FORMS
+        .filter((form) => data[form].review?.status === 'reviewed')
+        .map((form) => `${verb}:${form}`)
+    ).sort();
+    const residual = verbEntries.flatMap(([verb, data]) =>
       ALL_FORMS
         .filter((form) => data[form].review?.status === 'needs_review')
         .map((form) => `${verb}:${form}`)
     ).sort();
 
-    expect(flagged).toEqual([
-      '出る:kenjougo',
-      '出席する:kenjougo',
-      '利用する:kenjougo',
-      '参加する:kenjougo',
-      '反対する:kenjougo',
-      '反対する:sonkeigo',
-      '変える:kenjougo',
-      '始める:kenjougo',
-      '対応する:kenjougo',
-      '承認する:kenjougo',
-      '提出する:kenjougo',
-      '検討する:kenjougo',
-      '死ぬ:teineigo',
-      '決める:kenjougo',
-      '注文する:kenjougo',
-      '理解する:kenjougo',
-      '着る:kenjougo',
-      '確認する:kenjougo',
-      '考える:kenjougo',
-      '記入する:kenjougo',
-      '訪問する:kenjougo',
-      '賛成する:kenjougo',
-      '賛成する:sonkeigo',
-      '質問する:kenjougo',
-      '辞退する:kenjougo',
-      '遠慮する:kenjougo',
-      '遠慮する:sonkeigo',
-      '閉める:kenjougo',
-      '開ける:kenjougo',
-    ]);
-    expect(flagged.filter((item) => item.endsWith(':kenjougo')))
-      .toHaveLength(25);
+    expect(reviewed).toEqual(
+      B3_BATCH_ONE_SLOTS.filter((slot) =>
+        !B3_BATCH_ONE_RESIDUAL.includes(slot)
+      ),
+    );
+    expect(residual).toEqual(B3_BATCH_ONE_RESIDUAL);
   });
 
-  test('does not populate B3 adjudication fields during schema migration', () => {
-    for (const [, data] of verbEntries) {
-      for (const form of ALL_FORMS) {
-        expect(data[form].humbleSubclass).toBeUndefined();
-        expect(data[form].conditions).toBeUndefined();
-        expect(data[form].alternatives).toBeUndefined();
-        if (data[form].review?.status === 'needs_review') {
-          expect(data[form].review).toEqual({ status: 'needs_review' });
-        }
+  test('records cited metadata for resolved slots and keeps residual slots clean', () => {
+    for (const slot of B3_BATCH_ONE_SLOTS) {
+      const [verb, form] = slot.split(':') as [string, typeof ALL_FORMS[number]];
+      const formData = (verbs as Record<string, VerbEntry>)[verb][form];
+
+      if (B3_BATCH_ONE_RESIDUAL.includes(slot)) {
+        expect(formData.review).toEqual({ status: 'needs_review' });
+        expect(formData.humbleSubclass).toBeUndefined();
+        expect(formData.conditions).toBeUndefined();
+        expect(formData.alternatives).toBeUndefined();
+        continue;
+      }
+
+      expect(formData.review?.status).toBe('reviewed');
+      expect(formData.review?.rationale).toEqual(expect.any(String));
+      expect(formData.review?.citations).toEqual(expect.any(Array));
+      expect(formData.review?.confidence).toMatch(/^(low|medium|high)$/);
+      if (form === 'kenjougo') {
+        expect(formData.humbleSubclass)
+          .toMatch(/^kenjougo_(i|ii)$/);
       }
     }
+  });
+
+  test('calibrates batch-one confidence to the available evidence', () => {
+    const distribution = B3_BATCH_ONE_SLOTS.reduce<Record<string, number>>(
+      (counts, slot) => {
+        const [verb, form] = slot.split(':') as [string, typeof ALL_FORMS[number]];
+        const review = (verbs as Record<string, VerbEntry>)[verb][form].review;
+        if (review?.status === 'reviewed'
+          && typeof review.confidence === 'string') {
+          counts[review.confidence] = (counts[review.confidence] ?? 0) + 1;
+        }
+        return counts;
+      },
+      {},
+    );
+
+    expect(distribution).toEqual({ high: 12, medium: 14 });
   });
 
   test('keeps the practice form set exactly respectful plus humble', () => {
@@ -513,11 +565,11 @@ describe('Verb data validation', () => {
   });
 });
 
-describe('Content-neutral migration integrity', () => {
-  test('preserves verb content except removed absent-form sentinel values', () => {
+describe('Content integrity', () => {
+  test('locks the adjudicated verb content', () => {
     expect(getContentDigest(verbs)).toEqual({
-      count: 1479,
-      digest: 'f3540714ef2ada670df27fbb7335466be52e1679166e941adfb995ebe9e0b56e',
+      count: 1496,
+      digest: '9c9b31db1963b8b5a99c3c9d750b443e3eddd6ea3a2e3da85491101efbf6656a',
     });
   });
 

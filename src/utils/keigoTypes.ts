@@ -9,6 +9,8 @@ export const KEIGO_PATTERNS = [
   'go_ni_naru',
   'go_suru',
   'sase_te_itadaku',
+  'itasu',
+  'nasaru',
 ] as const;
 
 export type KeigoPattern = typeof KEIGO_PATTERNS[number];
@@ -132,6 +134,8 @@ const LEXICALIZED_SPECIAL_FORMS = new Set([
 
 export function inferKeigoPattern(form: string): KeigoPattern {
   if (/させていただく$/.test(form)) return 'sase_te_itadaku';
+  if (/いたす$/.test(form)) return 'itasu';
+  if (/なさる$/.test(form)) return 'nasaru';
   if (LEXICALIZED_SPECIAL_FORMS.has(form)) return 'special';
   if (/^お.+になる$/.test(form)) return 'o_ni_naru';
   if (/^ご.+になる$/.test(form)) return 'go_ni_naru';

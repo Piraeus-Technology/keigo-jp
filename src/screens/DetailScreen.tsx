@@ -205,6 +205,53 @@ export default function DetailScreen() {
                       {formData.note}
                     </Text>
                   )}
+                  {formData.humbleSubclass && (
+                    <Text style={[styles.formMetadataText, { color: colors.textSecondary }]}>
+                      Humble class: {formData.humbleSubclass === 'kenjougo_i'
+                        ? '謙譲語I'
+                        : '謙譲語II（丁重語）'}
+                    </Text>
+                  )}
+                  {formData.conditions && (
+                    <View style={styles.formMetadataGroup}>
+                      <Text style={[styles.formMetadataLabel, { color: colors.textMuted }]}>
+                        Applies when
+                      </Text>
+                      {formData.conditions.map((condition) => (
+                        <Text
+                          key={condition}
+                          style={[styles.formMetadataText, { color: colors.textSecondary }]}
+                        >
+                          • {condition}
+                        </Text>
+                      ))}
+                    </View>
+                  )}
+                  {formData.alternatives && (
+                    <View style={styles.formMetadataGroup}>
+                      <Text style={[styles.formMetadataLabel, { color: colors.textMuted }]}>
+                        Alternatives
+                      </Text>
+                      {formData.alternatives.map((alternative) => (
+                        <View key={alternative.form} style={styles.formAlternative}>
+                          <Text style={[styles.formMetadataText, { color: colors.textSecondary }]}>
+                            {alternative.form}
+                            {alternative.form !== alternative.reading
+                              ? `（${alternative.reading}）`
+                              : ''}
+                          </Text>
+                          {alternative.conditions?.map((condition) => (
+                            <Text
+                              key={condition}
+                              style={[styles.formAlternativeCondition, { color: colors.textMuted }]}
+                            >
+                              • {condition}
+                            </Text>
+                          ))}
+                        </View>
+                      ))}
+                    </View>
+                  )}
                 </View>
               </>
             );
@@ -335,6 +382,23 @@ const styles = StyleSheet.create({
     fontWeight: fonts.weights.semibold,
   },
   formNote: { fontSize: fonts.sizes.xs, marginTop: spacing.xs },
+  formMetadataGroup: { marginTop: spacing.xs },
+  formMetadataLabel: {
+    fontSize: fonts.sizes.xs,
+    fontWeight: fonts.weights.semibold,
+    marginBottom: 2,
+  },
+  formMetadataText: {
+    fontSize: fonts.sizes.xs,
+    lineHeight: 18,
+    marginTop: spacing.xs,
+  },
+  formAlternative: { marginTop: 2 },
+  formAlternativeCondition: {
+    fontSize: 10,
+    lineHeight: 16,
+    marginLeft: spacing.xs,
+  },
   usageRow: {
     paddingVertical: 14,
     paddingHorizontal: spacing.md,
