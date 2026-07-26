@@ -18,6 +18,10 @@ import {
   BusinessLevel,
   KEIGO_FORM_LABELS,
 } from '../utils/keigoTypes';
+import {
+  getGradableVerbPairs,
+  getVerbFormData,
+} from '../utils/gradableVerbs';
 import { useColors, fonts, spacing, radius } from '../utils/theme';
 import { useSessionAutosave } from '../hooks/useSessionAutosave';
 import { getTodayKey } from '../utils/dayKey';
@@ -29,7 +33,7 @@ import type { QuizStackParamList } from '../types/navigation';
 
 const allVerbEntries = Object.entries(verbs as Record<string, VerbData>);
 
-interface Question {
+export interface Question {
   verb: string;
   reading: string;
   translation: string;
@@ -39,59 +43,58 @@ interface Question {
   options: string[];
 }
 
-function getFormValue(data: VerbData, form: KeigoForm): { form: string; reading: string } {
-  if (form === 'teineigo') return data.teineigo;
-  return data[form];
-}
-
-function generateQuestion(
+export function generateQuestion(
   activeForms: KeigoForm[],
   getWeight: (key: string) => number,
   filteredEntries: [string, VerbData][],
-): Question {
-  const entries = filteredEntries.length > 0 ? filteredEntries : allVerbEntries;
+  random: () => number = Math.random,
+): Question | null {
+  const pairs = getGradableVerbPairs(filteredEntries, activeForms);
+  if (pairs.length === 0) return null;
+
   const candidates: number[] = [];
   for (let i = 0; i < 10; i++) {
-    candidates.push(Math.floor(Math.random() * entries.length));
+    candidates.push(Math.floor(random() * pairs.length));
   }
-  const verbIndex = candidates.reduce((best, idx) => {
-    const bestWeight = getWeight(entries[best][0]);
-    const thisWeight = getWeight(entries[idx][0]);
+  const pairIndex = candidates.reduce((best, idx) => {
+    const bestWeight = getWeight(pairs[best].verb);
+    const thisWeight = getWeight(pairs[idx].verb);
     return thisWeight > bestWeight ? idx : best;
   }, candidates[0]);
 
-  const [verb, data] = entries[verbIndex];
-  const form = activeForms[Math.floor(Math.random() * activeForms.length)];
-  const formValue = getFormValue(data, form);
+  const { verb, data, form } = pairs[pairIndex];
+  const formValue = getVerbFormData(data, form);
   const correctAnswer = formValue.form;
   const correctReading = formValue.reading;
 
   const wrongAnswers = new Set<string>();
 
   // Same verb, different form
-  for (const f of activeForms) {
-    if (f === form) continue;
-    const wrong = getFormValue(data, f).form;
+  for (const pair of pairs) {
+    if (pair.verb !== verb || pair.form === form) continue;
+    const wrong = getVerbFormData(pair.data, pair.form).form;
     if (wrong !== correctAnswer) wrongAnswers.add(wrong);
   }
 
   // Same form, different verbs
   for (let i = 0; i < 20 && wrongAnswers.size < 6; i++) {
-    const [, otherData] = entries[Math.floor(Math.random() * entries.length)];
-    const wrong = getFormValue(otherData, form).form;
+    const pair = pairs[Math.floor(random() * pairs.length)];
+    if (pair.form !== form || pair.verb === verb) continue;
+    const wrong = getVerbFormData(pair.data, pair.form).form;
     if (wrong !== correctAnswer) wrongAnswers.add(wrong);
   }
 
   const wrongArray = Array.from(wrongAnswers);
   const selected: string[] = [];
   while (selected.length < 3 && wrongArray.length > 0) {
-    const idx = Math.floor(Math.random() * wrongArray.length);
+    const idx = Math.floor(random() * wrongArray.length);
     selected.push(wrongArray.splice(idx, 1)[0]);
   }
 
-  while (selected.length < 3) {
-    const [, otherData] = allVerbEntries[Math.floor(Math.random() * allVerbEntries.length)];
-    const wrong = getFormValue(otherData, form).form;
+  const fallbackPairs = getGradableVerbPairs(allVerbEntries, activeForms);
+  for (const pair of fallbackPairs) {
+    if (selected.length === 3) break;
+    const wrong = getVerbFormData(pair.data, pair.form).form;
     if (wrong !== correctAnswer && !selected.includes(wrong)) {
       selected.push(wrong);
     }
@@ -99,7 +102,7 @@ function generateQuestion(
 
   const options = [correctAnswer, ...selected];
   for (let i = options.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [options[i], options[j]] = [options[j], options[i]];
   }
 
@@ -166,11 +169,10 @@ export default function QuizScreen() {
   );
 
   useEffect(() => {
-    if (weightsLoaded && settingsLoaded && activeForms.length > 0 && filteredEntries.length > 0) {
-      setQuestion(generateQuestion(activeForms, getWeight, filteredEntries));
-      setSelectedAnswer(null);
-      hasRecordedAnswer.current = false;
-    }
+    if (!weightsLoaded || !settingsLoaded) return;
+    setQuestion(generateQuestion(activeForms, getWeight, filteredEntries));
+    setSelectedAnswer(null);
+    hasRecordedAnswer.current = false;
   }, [weightsLoaded, settingsLoaded, activeForms, filteredEntries, getWeight]);
 
   const isCorrect = selectedAnswer === question?.correctAnswer;

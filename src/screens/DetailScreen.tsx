@@ -17,6 +17,10 @@ import {
   CATEGORY_LABELS,
   LEVEL_LABELS,
 } from '../utils/keigoTypes';
+import {
+  getVerbFormData,
+  hasCanonicalVerbForm,
+} from '../utils/gradableVerbs';
 
 export default function DetailScreen() {
   const colors = useColors();
@@ -169,11 +173,54 @@ export default function DetailScreen() {
         <Text style={[styles.groupTitle, { color: colors.textSecondary }]}>Keigo Forms (敬語)</Text>
         <View style={[styles.groupCard, { backgroundColor: colors.card }]}>
           {(['sonkeigo', 'kenjougo', 'teineigo'] as KeigoForm[]).map((form) => {
-            const formData = form === 'teineigo'
-              ? { form: verbData.teineigo.form, reading: verbData.teineigo.reading }
-              : verbData[form];
+            const formData = getVerbFormData(verbData, form);
+            const hasCanonicalForm = hasCanonicalVerbForm(verbData, form);
             const label = KEIGO_FORM_LABELS[form];
             const tagColor = formTagColors[form];
+
+            const rowContent = (
+              <>
+                <View style={styles.formLabel}>
+                  <View style={[styles.formTag, { backgroundColor: tagColor.bg }]}>
+                    <Text style={[styles.formTagText, { color: tagColor.text }]}>{label.ja}</Text>
+                  </View>
+                  <Text style={[styles.formLabelEn, { color: colors.textMuted }]}>{label.en}</Text>
+                </View>
+                <View style={styles.formValue}>
+                  {hasCanonicalForm ? (
+                    <>
+                      <View style={styles.formTextRow}>
+                        <Text style={[styles.formText, { color: colors.textPrimary }]}>{formData.form}</Text>
+                        <Ionicons name="volume-medium-outline" size={16} color={colors.textMuted} style={{ marginLeft: 6 }} />
+                      </View>
+                      {formData.form !== formData.reading && (
+                        <Text style={[styles.formReading, { color: colors.textMuted }]}>{formData.reading}</Text>
+                      )}
+                    </>
+                  ) : (
+                    <Text style={[styles.formUnavailable, { color: colors.textSecondary }]}>
+                      No canonical form
+                    </Text>
+                  )}
+                  {formData.note && (
+                    <Text style={[styles.formNote, { color: colors.textMuted }]}>
+                      {formData.note}
+                    </Text>
+                  )}
+                </View>
+              </>
+            );
+
+            if (!hasCanonicalForm) {
+              return (
+                <View
+                  key={form}
+                  style={[styles.formRow, { borderBottomColor: colors.divider }]}
+                >
+                  {rowContent}
+                </View>
+              );
+            }
 
             return (
               <TouchableOpacity
@@ -184,21 +231,7 @@ export default function DetailScreen() {
                 accessibilityRole="button"
                 accessibilityLabel={`Play pronunciation of ${formData.reading}`}
               >
-                <View style={styles.formLabel}>
-                  <View style={[styles.formTag, { backgroundColor: tagColor.bg }]}>
-                    <Text style={[styles.formTagText, { color: tagColor.text }]}>{label.ja}</Text>
-                  </View>
-                  <Text style={[styles.formLabelEn, { color: colors.textMuted }]}>{label.en}</Text>
-                </View>
-                <View style={styles.formValue}>
-                  <View style={styles.formTextRow}>
-                    <Text style={[styles.formText, { color: colors.textPrimary }]}>{formData.form}</Text>
-                    <Ionicons name="volume-medium-outline" size={16} color={colors.textMuted} style={{ marginLeft: 6 }} />
-                  </View>
-                  {formData.form !== formData.reading && (
-                    <Text style={[styles.formReading, { color: colors.textMuted }]}>{formData.reading}</Text>
-                  )}
-                </View>
+                {rowContent}
               </TouchableOpacity>
             );
           })}
@@ -299,6 +332,11 @@ const styles = StyleSheet.create({
   formTextRow: { flexDirection: 'row', alignItems: 'center' },
   formText: { fontSize: fonts.sizes.lg },
   formReading: { fontSize: fonts.sizes.sm, marginTop: 2 },
+  formUnavailable: {
+    fontSize: fonts.sizes.md,
+    fontWeight: fonts.weights.semibold,
+  },
+  formNote: { fontSize: fonts.sizes.xs, marginTop: spacing.xs },
   usageRow: {
     paddingVertical: 14,
     paddingHorizontal: spacing.md,

@@ -531,7 +531,7 @@
   },
   "ご多用のところありがとうございます": {
     "reading": "ごたようのところありがとうございます",
-    "translation": "Thank you for your time despite your busy schedule",
+    "translation": "Thank you for being here despite your busy schedule",
     "level": "intermediate",
     "category": "greeting",
     "usage": "Used to thank someone for attending a meeting or event despite being busy. A polite acknowledgment of their effort.",
@@ -621,7 +621,7 @@
   },
   "お忙しい中お時間をいただきありがとうございました": {
     "reading": "おいそがしいなかおじかんをいただきありがとうございました",
-    "translation": "Thank you for your time despite your busy schedule",
+    "translation": "Thank you for the time you gave us despite your busy schedule",
     "level": "intermediate",
     "category": "farewell",
     "usage": "Used at the end of a meeting or visit to thank someone for making time. Appropriate for clients and superiors.",

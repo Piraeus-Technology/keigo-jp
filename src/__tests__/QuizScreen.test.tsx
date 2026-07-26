@@ -1,6 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react-native';
-import QuizScreen from '../screens/QuizScreen';
+import verbs from '../data/verbs.json';
+import QuizScreen, { generateQuestion } from '../screens/QuizScreen';
+import { isGradableVerbForm } from '../utils/gradableVerbs';
+import type { KeigoForm, VerbData } from '../utils/keigoTypes';
 
 const mockLoadStats = jest.fn();
 const mockLoadWeights = jest.fn();
@@ -79,5 +82,35 @@ describe('QuizScreen loading state', () => {
 
     expect(screen.getByText('Loading practice…')).toBeTruthy();
     expect(screen.queryByText('No matching verbs')).toBeNull();
+  });
+});
+
+describe('QuizScreen question eligibility', () => {
+  const verbEntries = Object.entries(verbs as Record<string, VerbData>);
+  const forms: KeigoForm[] = ['sonkeigo', 'kenjougo', 'teineigo'];
+
+  test('never generates a question whose answer is its prompt', () => {
+    for (const entry of verbEntries) {
+      for (const form of forms) {
+        const question = generateQuestion([form], () => 1, [entry], () => 0);
+        if (!isGradableVerbForm(entry[0], entry[1], form)) {
+          expect(question).toBeNull();
+        } else {
+          expect(question?.correctAnswer).not.toBe(question?.verb);
+        }
+      }
+    }
+  });
+
+  test('keeps a non-degenerate form available on a partially excluded record', () => {
+    const entry = verbEntries.find(([verb]) => verb === '申す')!;
+
+    expect(generateQuestion(['kenjougo'], () => 1, [entry], () => 0)).toBeNull();
+    expect(generateQuestion(
+      ['sonkeigo'],
+      () => 1,
+      [entry],
+      () => 0,
+    )?.correctAnswer).toBe('おっしゃる');
   });
 });
