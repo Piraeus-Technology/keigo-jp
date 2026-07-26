@@ -39,7 +39,7 @@ const allExpressionEntries = Object.entries(expressions as Record<string, Expres
 
 type CardType = 'verb' | 'expression';
 
-interface Card {
+export interface Card {
   srKey: string; // spaced-rep key: verb kanji or expression headword
   front: string; // verb kanji or expression translation prompt
   reading: string;
@@ -50,17 +50,73 @@ interface Card {
   cardType: CardType;
 }
 
-function generateCard(
+const MIN_SELECTION_WEIGHT = 0.2;
+const RECENT_CARD_MULTIPLIER = 0.25;
+const RECENT_CARD_WINDOW = 3;
+
+export function filterEntriesByLevels<T extends { level: string }>(
+  entries: [string, T][],
+  activeLevels: BusinessLevel[],
+): [string, T][] {
+  return entries.filter(([, data]) => activeLevels.includes(data.level as BusinessLevel));
+}
+
+export function selectWeightedEntry<T>(
+  entries: [string, T][],
+  getWeight: (key: string) => number,
+  recentKeys: string[],
+  random: () => number = Math.random,
+): [string, T] | null {
+  if (entries.length === 0) return null;
+
+  const recent = new Set(recentKeys);
+  const weightedEntries = entries.map((entry) => {
+    const storedWeight = getWeight(entry[0]);
+    const safeWeight =
+      Number.isFinite(storedWeight) && storedWeight > 0
+        ? Math.max(MIN_SELECTION_WEIGHT, storedWeight)
+        : 1;
+    // Square-root scaling keeps weak cards meaningfully favored without
+    // allowing a few max-weight cards to dominate a long review run.
+    const selectionWeight =
+      Math.sqrt(safeWeight) * (recent.has(entry[0]) ? RECENT_CARD_MULTIPLIER : 1);
+    return { entry, selectionWeight };
+  });
+  const totalWeight = weightedEntries.reduce(
+    (total, item) => total + item.selectionWeight,
+    0,
+  );
+  const boundedRandom = Math.min(Math.max(random(), 0), 1 - Number.EPSILON);
+  let target = boundedRandom * totalWeight;
+
+  for (const item of weightedEntries) {
+    if (target < item.selectionWeight) return item.entry;
+    target -= item.selectionWeight;
+  }
+  return weightedEntries[weightedEntries.length - 1].entry;
+}
+
+export function generateCard(
   filteredVerbs: [string, VerbData][],
   filteredExpressions: [string, ExpressionData][],
   includeExpressions: boolean,
   activeForms: KeigoForm[],
+  getWeight: (key: string) => number,
+  recentKeys: string[],
+  random: () => number = Math.random,
 ): Card | null {
   const useExpression =
-    includeExpressions && filteredExpressions.length > 0 && Math.random() < 0.3;
+    includeExpressions && filteredExpressions.length > 0 && random() < 0.3;
 
   if (useExpression) {
-    const [key, data] = filteredExpressions[Math.floor(Math.random() * filteredExpressions.length)];
+    const selected = selectWeightedEntry(
+      filteredExpressions,
+      getWeight,
+      recentKeys,
+      random,
+    );
+    if (!selected) return null;
+    const [key, data] = selected;
     return {
       srKey: key,
       front: data.translation,
@@ -73,8 +129,10 @@ function generateCard(
   }
 
   if (filteredVerbs.length === 0 || activeForms.length === 0) return null;
-  const [verb, data] = filteredVerbs[Math.floor(Math.random() * filteredVerbs.length)];
-  const form = activeForms[Math.floor(Math.random() * activeForms.length)];
+  const selected = selectWeightedEntry(filteredVerbs, getWeight, recentKeys, random);
+  if (!selected) return null;
+  const [verb, data] = selected;
+  const form = activeForms[Math.floor(random() * activeForms.length)];
   const formData = data[form];
   return {
     srKey: verb,
@@ -95,20 +153,27 @@ export default function FlashcardScreen() {
   const { activeForms, activeLevels, includeExpressions, loaded: settingsLoaded, loadPracticeSettings } = usePracticeSettingsStore();
   const { sessions, loadSessions, saveSession } = useFlashcardSessionStore();
   const { loadStats, recordReview } = useFlashcardStatsStore();
-  const { recordResult } = useSpacedRepStore();
+  const { loaded: weightsLoaded, loadWeights, recordResult, getWeight } = useSpacedRepStore();
   const { autoTTS } = useThemeStore();
 
   const filteredVerbs = useMemo(() =>
-    allVerbEntries.filter(([, d]) => activeLevels.includes(d.level as BusinessLevel)),
+    filterEntriesByLevels(allVerbEntries, activeLevels),
     [activeLevels]
   );
   const filteredExpressions = useMemo(() =>
-    allExpressionEntries.filter(([, d]) => activeLevels.includes(d.level as BusinessLevel)),
+    filterEntriesByLevels(allExpressionEntries, activeLevels),
     [activeLevels]
   );
 
   const [card, setCard] = useState<Card | null>(() =>
-    generateCard(allVerbEntries, allExpressionEntries, true, ['sonkeigo', 'kenjougo']));
+    generateCard(
+      allVerbEntries,
+      allExpressionEntries,
+      true,
+      ['sonkeigo', 'kenjougo'],
+      () => 1,
+      [],
+    ));
   const [flipped, setFlipped] = useState(false);
   // This-visit answers (monotonic); persisted as deltas by useSessionAutosave.
   const [newReviewed, setNewReviewed] = useState(0);
@@ -116,6 +181,7 @@ export default function FlashcardScreen() {
   const flipAnim = useRef(new Animated.Value(0)).current;
   const isAnimating = useRef(false);
   const hasGradedCard = useRef(false);
+  const recentCardKeys = useRef<string[]>(card ? [card.srKey] : []);
   const speechGate = useRef({
     focused: true,
     appState: AppState.currentState as AppStateStatus,
@@ -125,7 +191,8 @@ export default function FlashcardScreen() {
     loadPracticeSettings();
     loadSessions();
     loadStats();
-  }, [loadPracticeSettings, loadSessions, loadStats]);
+    loadWeights();
+  }, [loadPracticeSettings, loadSessions, loadStats, loadWeights]);
 
   useFocusEffect(useCallback(() => {
     speechGate.current.focused = true;
@@ -162,16 +229,35 @@ export default function FlashcardScreen() {
     });
   }, [navigation, colors]);
 
+  const selectNextCard = useCallback(() => {
+    const next = generateCard(
+      filteredVerbs,
+      filteredExpressions,
+      includeExpressions,
+      activeForms,
+      getWeight,
+      recentCardKeys.current,
+    );
+    if (next) {
+      recentCardKeys.current = [
+        next.srKey,
+        ...recentCardKeys.current.filter((key) => key !== next.srKey),
+      ].slice(0, RECENT_CARD_WINDOW);
+    }
+    return next;
+  }, [activeForms, filteredExpressions, filteredVerbs, getWeight, includeExpressions]);
+
   useEffect(() => {
     if (!settingsLoaded) return;
     flipAnim.stopAnimation(() => {
       flipAnim.setValue(0);
       isAnimating.current = false;
       hasGradedCard.current = false;
+      recentCardKeys.current = [];
       setFlipped(false);
-      setCard(generateCard(filteredVerbs, filteredExpressions, includeExpressions, activeForms));
+      setCard(selectNextCard());
     });
-  }, [settingsLoaded, activeForms, filteredVerbs, filteredExpressions, includeExpressions, flipAnim]);
+  }, [settingsLoaded, weightsLoaded, flipAnim, selectNextCard]);
 
   const flipToFront = () => {
     isAnimating.current = true;
@@ -185,7 +271,7 @@ export default function FlashcardScreen() {
         hasGradedCard.current = false;
         return;
       }
-      setCard(generateCard(filteredVerbs, filteredExpressions, includeExpressions, activeForms));
+      setCard(selectNextCard());
       setFlipped(false);
       isAnimating.current = false;
       hasGradedCard.current = false;
