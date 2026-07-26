@@ -125,7 +125,7 @@ export default function FlashcardScreen() {
     loadPracticeSettings();
     loadSessions();
     loadStats();
-  }, []);
+  }, [loadPracticeSettings, loadSessions, loadStats]);
 
   useFocusEffect(useCallback(() => {
     speechGate.current.focused = true;
@@ -301,11 +301,20 @@ export default function FlashcardScreen() {
           style={[styles.cardContainer, { width: width - spacing.lg * 2 }]}
           onPress={flip}
           activeOpacity={0.95}
+          accessible={!flipped}
           accessibilityRole="button"
+          accessibilityLabel={
+            !flipped
+              ? `Flashcard prompt: ${card.front}. Tap to reveal the answer.`
+              : undefined
+          }
           accessibilityState={{ disabled: flipped }}
         >
           {/* Front */}
           <Animated.View
+            accessibilityElementsHidden={flipped}
+            importantForAccessibility={flipped ? 'no-hide-descendants' : 'auto'}
+            pointerEvents={flipped ? 'none' : 'auto'}
             style={[
               styles.card,
               {
@@ -354,11 +363,15 @@ export default function FlashcardScreen() {
 
           {/* Back */}
           <Animated.View
+            accessibilityElementsHidden={!flipped}
+            importantForAccessibility={!flipped ? 'no-hide-descendants' : 'auto'}
+            pointerEvents={flipped ? 'auto' : 'none'}
             style={[
               styles.card,
               styles.cardBack,
               {
                 backgroundColor: colors.primary + '10',
+                borderColor: colors.divider,
                 transform: [{ perspective: 1000 }, { rotateY: backRotateY }],
               },
             ]}
@@ -391,7 +404,7 @@ export default function FlashcardScreen() {
             <SpeakButton
               text={card.answerReading || card.answer}
               size={20}
-              color="#fff"
+              color={colors.pillActiveText}
               backgroundColor={colors.primary}
               style={styles.speakButton}
               accessibilityLabel={`Play pronunciation of ${card.answer}`}
@@ -400,7 +413,12 @@ export default function FlashcardScreen() {
         </TouchableOpacity>
 
         {/* Got it / Missed buttons */}
-        <View style={[styles.buttonRow, { opacity: flipped ? 1 : 0 }]} pointerEvents={flipped ? 'auto' : 'none'}>
+        <View
+          style={[styles.buttonRow, { opacity: flipped ? 1 : 0 }]}
+          pointerEvents={flipped ? 'auto' : 'none'}
+          accessibilityElementsHidden={!flipped}
+          importantForAccessibility={!flipped ? 'no-hide-descendants' : 'auto'}
+        >
           <TouchableOpacity
             style={[styles.actionButton, { backgroundColor: colors.errorBg, borderColor: colors.errorText }]}
             onPress={handleMissed}
@@ -479,7 +497,6 @@ const styles = StyleSheet.create({
   },
   cardBack: {
     borderWidth: 2,
-    borderColor: 'rgba(0,0,0,0.05)',
   },
   formLabel: {
     fontSize: fonts.sizes.sm,

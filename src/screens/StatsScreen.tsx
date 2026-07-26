@@ -21,6 +21,8 @@ export default function StatsScreen() {
     totalQuestions,
     totalCorrect,
     bestStreak,
+    loaded: statsLoaded,
+    loadError: statsLoadError,
     loadStats,
   } = useQuizStore();
 
@@ -34,6 +36,20 @@ export default function StatsScreen() {
     () => sessions.map(s => ({ day: s.day, count: s.total, correct: s.correct })),
     [sessions],
   );
+  const retainedQuestionCount = React.useMemo(
+    () => sessions.reduce((sum, session) => sum + session.total, 0),
+    [sessions],
+  );
+  const allTimeOverride =
+    statsLoaded
+    && !statsLoadError
+    && totalQuestions >= retainedQuestionCount
+      ? {
+          count: totalQuestions,
+          correct: totalCorrect,
+          thirdStat: { value: bestStreak, label: 'Best Streak' },
+        }
+      : undefined;
 
   return (
     <PracticeStatsView
@@ -43,11 +59,7 @@ export default function StatsScreen() {
       weights={weights}
       weightsLoaded={weightsLoaded}
       weightsLoadError={weightsLoadError}
-      allTimeOverride={{
-        count: totalQuestions,
-        correct: totalCorrect,
-        thirdStat: { value: bestStreak, label: 'Best Streak' },
-      }}
+      allTimeOverride={allTimeOverride}
       onRetry={() => {
         loadSessions();
         loadWeights();

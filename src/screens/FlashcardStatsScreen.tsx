@@ -35,13 +35,20 @@ export default function FlashcardStatsScreen() {
     () => sessions.map(s => ({ day: s.day, count: s.reviewed, correct: s.correct })),
     [sessions],
   );
-  const allTimeOverride = statsLoaded && !statsLoadError
-    ? {
-      count: totalReviewed,
-      correct: totalCorrect,
-      thirdStat: { value: sessions.length, label: 'Days' },
-    }
-    : undefined;
+  const retainedReviewedCount = React.useMemo(
+    () => sessions.reduce((sum, session) => sum + session.reviewed, 0),
+    [sessions],
+  );
+  const allTimeOverride =
+    statsLoaded
+    && !statsLoadError
+    && totalReviewed >= retainedReviewedCount
+      ? {
+          count: totalReviewed,
+          correct: totalCorrect,
+          thirdStat: { value: sessions.length, label: 'Days' },
+        }
+      : undefined;
 
   return (
     <PracticeStatsView

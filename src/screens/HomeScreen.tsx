@@ -12,7 +12,6 @@ import {
 import { Swipeable } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import Fuse from 'fuse.js';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -23,78 +22,16 @@ import { useHistoryStore } from '../store/historyStore';
 import { useFavoritesStore } from '../store/favoritesStore';
 import type { SearchStackParamList } from '../types/navigation';
 import { VerbData, ExpressionData, BusinessLevel, LEVEL_LABELS } from '../utils/keigoTypes';
+import { getDailyItemIndex, millisecondsUntilNextLocalDay } from '../utils/dailyItem';
+import { searchKeigo } from '../utils/search';
+import type { SearchResult } from '../utils/search';
 
 type NavProp = NativeStackNavigationProp<SearchStackParamList>;
 
 const verbEntries = Object.entries(verbs as Record<string, VerbData>);
-const expressionEntries = Object.entries(expressions as Record<string, ExpressionData>);
 
-const allSearchData = [
-  ...verbEntries.map(([key, data]) => ({
-    key,
-    reading: data.reading,
-    translation: data.translation,
-    level: data.level,
-    type: 'verb' as const,
-    sonkeigo: data.sonkeigo.form,
-    sonkeigoReading: data.sonkeigo.reading,
-    kenjougo: data.kenjougo.form,
-    kenjougoReading: data.kenjougo.reading,
-    teineigo: data.teineigo.form,
-    teineigoReading: data.teineigo.reading,
-  })),
-  ...expressionEntries.map(([key, data]) => ({
-    key,
-    reading: data.reading,
-    translation: data.translation,
-    level: data.level,
-    type: 'expression' as const,
-    sonkeigo: '',
-    sonkeigoReading: '',
-    kenjougo: '',
-    kenjougoReading: '',
-    teineigo: '',
-    teineigoReading: '',
-  })),
-];
-
-const KEIGO_FIELD_LABELS: Record<string, string> = {
-  sonkeigo: '尊敬語',
-  sonkeigoReading: '尊敬語',
-  kenjougo: '謙譲語',
-  kenjougoReading: '謙譲語',
-  teineigo: '丁寧語',
-  teineigoReading: '丁寧語',
-};
-
-const fuse = new Fuse(allSearchData, {
-  keys: [
-    { name: 'key', weight: 3 },
-    { name: 'reading', weight: 2 },
-    { name: 'translation', weight: 1.5 },
-    { name: 'sonkeigo', weight: 2 },
-    { name: 'sonkeigoReading', weight: 1.5 },
-    { name: 'kenjougo', weight: 2 },
-    { name: 'kenjougoReading', weight: 1.5 },
-    { name: 'teineigo', weight: 2 },
-    { name: 'teineigoReading', weight: 1.5 },
-  ],
-  threshold: 0.3,
-  ignoreLocation: true,
-  includeMatches: true,
-});
-
-interface SearchResult {
-  key: string;
-  reading: string;
-  translation: string;
-  level: BusinessLevel;
-  type: 'verb' | 'expression';
-  matchDetail?: string;
-}
-
-function getItemOfTheDay(): { key: string; data: VerbData; type: 'verb' } {
-  const dayIndex = Math.floor(Date.now() / 86400000) % verbEntries.length;
+function getItemOfTheDay(date: Date): { key: string; data: VerbData; type: 'verb' } {
+  const dayIndex = getDailyItemIndex(date, verbEntries.length);
   const [key, data] = verbEntries[dayIndex];
   return { key, data, type: 'verb' };
 }
@@ -105,44 +42,35 @@ export default function HomeScreen() {
   const { history, loadHistory, addToHistory, removeFromHistory } = useHistoryStore();
   const { favorites, loadFavorites, toggleFavorite } = useFavoritesStore();
   const [query, setQuery] = useState('');
+  const [itemOfTheDay, setItemOfTheDay] = useState(() => getItemOfTheDay(new Date()));
 
   useEffect(() => {
     loadHistory();
     loadFavorites();
+  }, [loadHistory, loadFavorites]);
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const scheduleNextDay = () => {
+      const now = new Date();
+      timer = setTimeout(() => {
+        setItemOfTheDay(getItemOfTheDay(new Date()));
+        scheduleNextDay();
+      }, millisecondsUntilNextLocalDay(now) + 50);
+    };
+    scheduleNextDay();
+    return () => clearTimeout(timer);
   }, []);
 
   const results = useMemo((): SearchResult[] => {
     if (!query.trim()) return [];
-    const q = query.trim();
-    const fuseResults = fuse.search(q);
-    return fuseResults.slice(0, 20).map((r) => {
-      let matchDetail: string | undefined;
-      if (r.matches) {
-        for (const m of r.matches) {
-          const label = KEIGO_FIELD_LABELS[m.key ?? ''];
-          if (label && m.value) {
-            matchDetail = `${label}: ${m.value}`;
-            break;
-          }
-        }
-      }
-      return {
-        key: r.item.key,
-        reading: r.item.reading,
-        translation: r.item.translation,
-        level: r.item.level,
-        type: r.item.type,
-        matchDetail,
-      };
-    });
+    return searchKeigo(query);
   }, [query]);
 
   const handleItemPress = useCallback((key: string, type: 'verb' | 'expression') => {
     addToHistory(key);
     navigation.navigate('Detail', { key, type });
-  }, [navigation]);
-
-  const itemOfTheDay = getItemOfTheDay();
+  }, [addToHistory, navigation]);
 
   const levelTagColors: Record<BusinessLevel, { bg: string; text: string }> = {
     basic: { bg: colors.basicTag, text: colors.basicTagText },
@@ -175,6 +103,8 @@ export default function HomeScreen() {
         style={[styles.resultItem, { backgroundColor: colors.card }]}
         onPress={() => handleItemPress(item.key, item.type)}
         activeOpacity={0.7}
+        accessibilityRole="button"
+        accessibilityLabel={`${item.key}, ${item.reading}, ${item.translation}`}
       >
         <View style={styles.resultLeft}>
           <Text style={[styles.resultVerb, { color: colors.textPrimary }]}>{item.key}</Text>
@@ -230,6 +160,9 @@ export default function HomeScreen() {
           style={[styles.historyItem, { backgroundColor: colors.bg }]}
           onPress={() => handleItemPress(key, verbData ? 'verb' : 'expression')}
           activeOpacity={0.6}
+          accessibilityRole="button"
+          accessibilityLabel={`${listType === 'favorite' ? 'Favorite' : 'Recent'}: ${key}, ${data.reading}, ${data.translation}`}
+          accessibilityHint="Opens details. Swipe left to remove."
         >
           <View style={styles.historyLeft}>
             <Text style={[styles.historyVerb, { color: colors.textPrimary }]} numberOfLines={1}>{key}</Text>
@@ -263,7 +196,12 @@ export default function HomeScreen() {
           autoCapitalize="none"
         />
         {query.length > 0 && (
-          <TouchableOpacity onPress={() => setQuery('')}>
+          <TouchableOpacity
+            onPress={() => setQuery('')}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+            accessibilityRole="button"
+            accessibilityLabel="Clear search"
+          >
             <Ionicons name="close-circle" size={18} color={colors.textMuted} />
           </TouchableOpacity>
         )}
@@ -286,6 +224,8 @@ export default function HomeScreen() {
             style={[styles.vodCard, { backgroundColor: colors.card }]}
             onPress={() => handleItemPress(itemOfTheDay.key, 'verb')}
             activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel={`Keigo of the Day: ${itemOfTheDay.key}, ${itemOfTheDay.data.reading}, ${itemOfTheDay.data.translation}`}
           >
             <Text style={[styles.vodLabel, { color: colors.textMuted }]}>Keigo of the Day</Text>
             <Text style={[styles.vodVerb, { color: colors.primary }]}>{itemOfTheDay.key}</Text>

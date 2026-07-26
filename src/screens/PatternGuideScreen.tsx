@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useColors, fonts, spacing, radius } from '../utils/theme';
+import type { ThemeColors } from '../utils/theme';
 import { speak } from '../utils/speech';
 
 /* ─── data ─── */
@@ -174,7 +175,7 @@ function SectionHeader({
   );
 }
 
-function FormulaBox({ formula, colors }: { formula: string; colors: any }) {
+function FormulaBox({ formula, colors }: { formula: string; colors: ThemeColors }) {
   return (
     <View style={[sty.formulaBox, { backgroundColor: colors.pillBg }]}>
       <Text style={[sty.formulaText, { color: colors.primary }]}>{formula}</Text>
@@ -182,7 +183,7 @@ function FormulaBox({ formula, colors }: { formula: string; colors: any }) {
   );
 }
 
-function ExampleRow({ example, colors }: { example: Example; colors: any }) {
+function ExampleRow({ example, colors }: { example: Example; colors: ThemeColors }) {
   return (
     <TouchableOpacity
       style={[sty.exampleRow, { borderBottomColor: colors.divider }]}
@@ -207,7 +208,7 @@ function PatternCard({
 }: {
   index: number;
   pattern: PatternInfo;
-  colors: any;
+  colors: ThemeColors;
 }) {
   return (
     <View style={[sty.card, { backgroundColor: colors.card }]}>
@@ -221,19 +222,21 @@ function PatternCard({
 }
 
 function SpecialVerbTable({
+  index,
   section,
-  tagBg,
   tagText,
   colors,
 }: {
+  index: number;
   section: TableSection;
-  tagBg: string;
   tagText: string;
-  colors: any;
+  colors: ThemeColors;
 }) {
   return (
     <View style={[sty.card, { backgroundColor: colors.card }]}>
-      <Text style={[sty.patternLabel, { color: colors.textSecondary }]}>{section.title}</Text>
+      <Text style={[sty.patternLabel, { color: colors.textSecondary }]}>
+        Pattern {index}: {section.title}
+      </Text>
       {/* Header row */}
       <View style={[sty.tableHeaderRow, { borderBottomColor: colors.divider }]}>
         <Text style={[sty.tableHeaderCell, { color: colors.textMuted, flex: 1.2 }]}>Plain</Text>
@@ -261,16 +264,16 @@ function SpecialVerbTable({
   );
 }
 
-function MistakeCard({ mistake, colors }: { mistake: MistakeInfo; colors: any }) {
+function MistakeCard({ mistake, colors }: { mistake: MistakeInfo; colors: ThemeColors }) {
   return (
     <View style={[sty.card, { backgroundColor: colors.card }]}>
       <View style={sty.mistakeRow}>
-        <Ionicons name="close-circle" size={18} color="#D32F2F" />
-        <Text style={[sty.mistakeWrong, { color: '#D32F2F' }]}>  {mistake.wrong}</Text>
+        <Ionicons name="close-circle" size={18} color={colors.errorText} />
+        <Text style={[sty.mistakeWrong, { color: colors.errorText }]}>  {mistake.wrong}</Text>
       </View>
       <View style={[sty.mistakeRow, { marginTop: spacing.xs }]}>
-        <Ionicons name="checkmark-circle" size={18} color="#2E7D32" />
-        <Text style={[sty.mistakeRight, { color: '#2E7D32' }]}>  {mistake.right}</Text>
+        <Ionicons name="checkmark-circle" size={18} color={colors.successText} />
+        <Text style={[sty.mistakeRight, { color: colors.successText }]}>  {mistake.right}</Text>
       </View>
       <Text style={[sty.mistakeExplanation, { color: colors.textSecondary }]}>{mistake.explanation}</Text>
     </View>
@@ -302,7 +305,7 @@ export default function PatternGuideScreen() {
                 <Text style={[sty.typeBadgeText, { color: colors.sonkeigoTagText }]}>尊敬語</Text>
               </View>
               <Text style={[sty.typeDesc, { color: colors.textSecondary }]}>
-                Respectful — elevates the listener's actions
+                Respectful — elevates the listener’s actions
               </Text>
             </View>
             <View style={sty.typeRow}>
@@ -310,7 +313,7 @@ export default function PatternGuideScreen() {
                 <Text style={[sty.typeBadgeText, { color: colors.kenjougoTagText }]}>謙譲語</Text>
               </View>
               <Text style={[sty.typeDesc, { color: colors.textSecondary }]}>
-                Humble — lowers the speaker's own actions
+                Humble — lowers the speaker’s own actions
               </Text>
             </View>
             <View style={sty.typeRow}>
@@ -337,8 +340,8 @@ export default function PatternGuideScreen() {
           <PatternCard key={i} index={i + 1} pattern={p} colors={colors} />
         ))}
         <SpecialVerbTable
+          index={3}
           section={SONKEIGO_SPECIAL}
-          tagBg={colors.sonkeigoTag}
           tagText={colors.sonkeigoTagText}
           colors={colors}
         />
@@ -363,8 +366,8 @@ export default function PatternGuideScreen() {
           <PatternCard key={i} index={i + 1} pattern={p} colors={colors} />
         ))}
         <SpecialVerbTable
+          index={3}
           section={KENJOUGO_SPECIAL}
-          tagBg={colors.kenjougoTag}
           tagText={colors.kenjougoTagText}
           colors={colors}
         />
@@ -431,8 +434,8 @@ export default function PatternGuideScreen() {
         <SectionHeader
           title="よくある間違い"
           subtitle="Common Mistakes"
-          color="#C62828"
-          bgColor="#FFEBEE"
+          color={colors.errorText}
+          bgColor={colors.errorBg}
         />
         {COMMON_MISTAKES.map((m, i) => (
           <MistakeCard key={i} mistake={m} colors={colors} />

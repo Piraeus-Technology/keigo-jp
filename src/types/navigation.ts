@@ -15,10 +15,6 @@ export type FlashcardStackParamList = {
   PracticeSettings: PracticeSettingsParams;
 };
 
-export type GuideStackParamList = {
-  GuideMain: undefined;
-};
-
 export type MoreStackParamList = {
   MoreMain: undefined;
   Stats: undefined;

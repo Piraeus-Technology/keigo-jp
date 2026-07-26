@@ -110,8 +110,20 @@ export default function QuizScreen() {
   const colors = useColors();
   const navigation = useNavigation<NativeStackNavigationProp<QuizStackParamList, 'QuizMain'>>();
   const { totalQuestions, totalCorrect, bestStreak, loadStats, recordAnswer } = useQuizStore();
-  const { loaded: weightsLoaded, loadWeights, recordResult, getWeight } = useSpacedRepStore();
-  const { activeForms, activeLevels, loaded: settingsLoaded, loadPracticeSettings } = usePracticeSettingsStore();
+  const {
+    loaded: weightsLoaded,
+    loadError: weightsLoadError,
+    loadWeights,
+    recordResult,
+    getWeight,
+  } = useSpacedRepStore();
+  const {
+    activeForms,
+    activeLevels,
+    loaded: settingsLoaded,
+    loadError: settingsLoadError,
+    loadPracticeSettings,
+  } = usePracticeSettingsStore();
   const { sessions, loadSessions, saveSession } = useSessionStore();
   const [question, setQuestion] = useState<Question | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -127,7 +139,7 @@ export default function QuizScreen() {
     loadWeights();
     loadPracticeSettings();
     loadSessions();
-  }, []);
+  }, [loadStats, loadWeights, loadPracticeSettings, loadSessions]);
 
   useFocusEffect(useCallback(() => () => stopSpeech(), []));
 
@@ -159,7 +171,7 @@ export default function QuizScreen() {
       setSelectedAnswer(null);
       hasRecordedAnswer.current = false;
     }
-  }, [weightsLoaded, settingsLoaded, activeForms, activeLevels]);
+  }, [weightsLoaded, settingsLoaded, activeForms, filteredEntries, getWeight]);
 
   const isCorrect = selectedAnswer === question?.correctAnswer;
   const answered = selectedAnswer !== null;
@@ -235,11 +247,37 @@ export default function QuizScreen() {
     return colors.textMuted;
   };
 
-  if (!question) return (
-    <View style={[styles.container, { backgroundColor: colors.bg, justifyContent: 'center', alignItems: 'center' }]}>
-      <Text style={{ color: colors.textMuted, fontSize: fonts.sizes.md }}>No matching verbs</Text>
-    </View>
-  );
+  if (!weightsLoaded || !settingsLoaded) {
+    const loadFailed = weightsLoadError || settingsLoadError;
+    return (
+      <View style={[styles.container, styles.statusContainer, { backgroundColor: colors.bg }]}>
+        <Text style={{ color: colors.textMuted, fontSize: fonts.sizes.md }}>
+          {loadFailed ? 'Could not load practice data.' : 'Loading practice…'}
+        </Text>
+        {loadFailed && (
+          <TouchableOpacity
+            style={[styles.retryButton, { backgroundColor: colors.primary }]}
+            onPress={() => {
+              loadWeights();
+              loadPracticeSettings();
+            }}
+            accessibilityRole="button"
+            accessibilityLabel="Retry loading practice data"
+          >
+            <Text style={[styles.retryButtonText, { color: colors.pillActiveText }]}>Retry</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  }
+
+  if (!question) {
+    return (
+      <View style={[styles.container, styles.statusContainer, { backgroundColor: colors.bg }]}>
+        <Text style={{ color: colors.textMuted, fontSize: fonts.sizes.md }}>No matching verbs</Text>
+      </View>
+    );
+  }
 
   const formLabel = KEIGO_FORM_LABELS[question.form];
 
@@ -269,7 +307,7 @@ export default function QuizScreen() {
             </View>
           </View>
           {totalQuestions > 0 && (
-            <Text style={[styles.allTimeText, { color: colors.textMuted }]}>
+            <Text style={[styles.allTimeText, { color: colors.textMuted, borderTopColor: colors.divider }]}>
               All-time: {totalCorrect}/{totalQuestions} ({Math.round((totalCorrect / totalQuestions) * 100)}%) · Best streak: {bestStreak}
             </Text>
           )}
@@ -348,8 +386,8 @@ export default function QuizScreen() {
             accessibilityLabel="Next question"
             accessibilityState={{ disabled: !answered }}
           >
-            <Text style={styles.bottomButtonText}>Next</Text>
-            <Ionicons name="arrow-forward" size={16} color="#fff" />
+            <Text style={[styles.bottomButtonText, { color: colors.pillActiveText }]}>Next</Text>
+            <Ionicons name="arrow-forward" size={16} color={colors.pillActiveText} />
           </TouchableOpacity>
         </View>
       </View>
@@ -359,6 +397,23 @@ export default function QuizScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  statusContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: spacing.lg,
+    gap: spacing.md,
+  },
+  retryButton: {
+    minHeight: 44,
+    minWidth: 96,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: radius.md,
+  },
+  retryButtonText: {
+    fontSize: fonts.sizes.md,
+    fontWeight: fonts.weights.bold,
+  },
   content: {
     flex: 1,
     paddingHorizontal: spacing.lg,
@@ -383,7 +438,6 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
     paddingTop: spacing.sm,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: 'rgba(0,0,0,0.08)',
   },
   scoreValue: {
     fontSize: fonts.sizes.xl,
@@ -459,7 +513,6 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
   },
   bottomButtonText: {
-    color: '#fff',
     fontSize: fonts.sizes.md,
     fontWeight: fonts.weights.bold,
   },

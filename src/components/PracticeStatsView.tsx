@@ -63,6 +63,7 @@ export default function PracticeStatsView({
   sessionsLoadError,
   weights,
   weightsLoaded,
+  weightsLoadError,
   onRetry,
   labels,
   allTimeOverride,
@@ -155,7 +156,7 @@ export default function PracticeStatsView({
           accessibilityRole="button"
           accessibilityLabel={labels.retryAccessibilityLabel}
         >
-          <Text style={styles.retryButtonText}>Retry</Text>
+          <Text style={[styles.retryButtonText, { color: colors.pillActiveText }]}>Retry</Text>
         </TouchableOpacity>
       </View>
     );
@@ -169,11 +170,46 @@ export default function PracticeStatsView({
     );
   }
 
+  const weightsErrorNotice = weightsLoadError && !weightsLoaded ? (
+    <View style={[styles.warningCard, { backgroundColor: colors.errorBg, borderColor: colors.errorText }]}>
+      <Text style={[styles.warningText, { color: colors.errorText }]}>
+        Weak-area data could not be loaded.
+      </Text>
+      <TouchableOpacity
+        onPress={onRetry}
+        accessibilityRole="button"
+        accessibilityLabel="Retry loading weak-area data"
+      >
+        <Text style={[styles.warningAction, { color: colors.errorText }]}>Retry</Text>
+      </TouchableOpacity>
+    </View>
+  ) : null;
+
+  if (allTimeCount === 0) {
+    return (
+      <ScrollView
+        style={[styles.container, { backgroundColor: colors.bg }]}
+        contentContainerStyle={[styles.content, styles.emptyScreen]}
+      >
+        {weightsErrorNotice}
+        <View style={styles.emptyContainer}>
+          <Ionicons name={labels.emptyIcon} size={48} color={colors.textMuted} />
+          <Text style={[styles.emptyTitle, { color: colors.textPrimary }]}>No stats yet</Text>
+          <Text style={[styles.emptySubtitle, { color: colors.textMuted }]}>
+            {labels.emptySubtitle}
+          </Text>
+        </View>
+      </ScrollView>
+    );
+  }
+
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: colors.bg }]}
       contentContainerStyle={styles.content}
     >
+      {weightsErrorNotice}
+
       {/* Streak */}
       {streak > 0 && (
         <View style={[styles.streakCard, { backgroundColor: colors.card }]}>
@@ -364,16 +400,6 @@ export default function PracticeStatsView({
         </>
       )}
 
-      {/* Empty state */}
-      {allTimeCount === 0 && (
-        <View style={styles.emptyContainer}>
-          <Ionicons name={labels.emptyIcon} size={48} color={colors.textMuted} />
-          <Text style={[styles.emptyTitle, { color: colors.textPrimary }]}>No stats yet</Text>
-          <Text style={[styles.emptySubtitle, { color: colors.textMuted }]}>
-            {labels.emptySubtitle}
-          </Text>
-        </View>
-      )}
     </ScrollView>
   );
 }
@@ -398,11 +424,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   retryButtonText: {
-    color: '#fff',
     fontSize: fonts.sizes.md,
     fontWeight: fonts.weights.bold,
   },
+  warningCard: {
+    minHeight: 44,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing.md,
+    borderWidth: 1,
+    borderRadius: radius.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    marginBottom: spacing.lg,
+  },
+  warningText: {
+    flex: 1,
+    fontSize: fonts.sizes.sm,
+  },
+  warningAction: {
+    fontSize: fonts.sizes.sm,
+    fontWeight: fonts.weights.bold,
+  },
   content: { padding: spacing.lg, paddingBottom: 40 },
+  emptyScreen: {
+    flexGrow: 1,
+  },
   streakCard: {
     flexDirection: 'row',
     alignItems: 'center',

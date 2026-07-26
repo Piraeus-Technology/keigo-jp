@@ -15,7 +15,6 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useColors, fonts, spacing, radius } from '../utils/theme';
 import {
   KeigoForm,
-  BusinessLevel,
   KEIGO_FORM_LABELS,
   LEVEL_LABELS,
 } from '../utils/keigoTypes';
@@ -40,7 +39,7 @@ export default function PracticeSettingsScreen() {
 
   useEffect(() => {
     loadPracticeSettings();
-  }, []);
+  }, [loadPracticeSettings]);
 
   const allFormsSelected = activeForms.length === allForms.length;
   const allLevelsSelected = activeLevels.length === allLevels.length;
@@ -69,10 +68,10 @@ export default function PracticeSettingsScreen() {
             setActiveForms(allFormsSelected ? ['sonkeigo'] : [...allForms]);
           }}
           accessibilityRole="button"
-          accessibilityLabel={allFormsSelected ? 'Deselect all forms' : 'Select all forms'}
+          accessibilityLabel={allFormsSelected ? 'Use respectful form only' : 'Select all forms'}
         >
           <Text style={[styles.selectAllText, { color: colors.primary }]}>
-            {allFormsSelected ? 'Deselect All' : 'Select All'}
+            {allFormsSelected ? 'Respectful Only' : 'Select All'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -115,10 +114,10 @@ export default function PracticeSettingsScreen() {
             setActiveLevels(allLevelsSelected ? ['basic'] : [...allLevels]);
           }}
           accessibilityRole="button"
-          accessibilityLabel={allLevelsSelected ? 'Deselect all levels' : 'Select all levels'}
+          accessibilityLabel={allLevelsSelected ? 'Use basic level only' : 'Select all levels'}
         >
           <Text style={[styles.selectAllText, { color: colors.primary }]}>
-            {allLevelsSelected ? 'Deselect All' : 'Select All'}
+            {allLevelsSelected ? 'Basic Only' : 'Select All'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -184,8 +183,8 @@ export default function PracticeSettingsScreen() {
         accessibilityRole="button"
         accessibilityLabel={mode === 'quiz' ? 'Start quiz' : 'Start flashcards'}
       >
-        <Ionicons name="play" size={20} color="#fff" />
-        <Text style={styles.startButtonText}>
+        <Ionicons name="play" size={20} color={colors.pillActiveText} />
+        <Text style={[styles.startButtonText, { color: colors.pillActiveText }]}>
           {mode === 'quiz' ? 'Start Quiz' : 'Start Flashcards'}
         </Text>
       </TouchableOpacity>
@@ -242,7 +241,6 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
   },
   startButtonText: {
-    color: '#fff',
     fontSize: fonts.sizes.lg,
     fontWeight: fonts.weights.bold,
   },

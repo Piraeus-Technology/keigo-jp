@@ -13,28 +13,47 @@ import {
   Switch,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Application from 'expo-application';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useColors, fonts, spacing, radius } from '../utils/theme';
 import { useThemeStore } from '../store/themeStore';
 import type { MoreStackParamList } from '../types/navigation';
 
-const APP_VERSION = '1.0.0';
+export const APP_STORE_URL =
+  'https://apps.apple.com/app/apple-store/id6787575609?action=write-review';
+export const PLAY_STORE_URL =
+  'https://play.google.com/store/apps/details?id=com.piraeus.keigojp';
+const PLAY_STORE_APP_URL = 'market://details?id=com.piraeus.keigojp';
 
 export default function FeedbackScreen() {
   const colors = useColors();
   const navigation = useNavigation<NativeStackNavigationProp<MoreStackParamList, 'MoreMain'>>();
   const { isDark, toggleTheme, autoTTS, toggleAutoTTS } = useThemeStore();
 
-  const handleRateApp = () => {
-    const url = Platform.select({
-      ios: 'https://apps.apple.com/app/keigo-jp', // TODO: update with real App Store ID
-      android: 'market://details?id=com.piraeus.keigojp',
-      default: 'https://apps.apple.com/app/keigo-jp',
-    });
-    Linking.openURL(url).catch(() => {
-      Alert.alert('Not Available Yet', 'Rating will be available once the app is on the App Store.');
-    });
+  const storeName = Platform.OS === 'android' ? 'Google Play' : 'App Store';
+  const shareUrl = Platform.OS === 'android' ? PLAY_STORE_URL : APP_STORE_URL;
+  const installedVersion = Application.nativeApplicationVersion;
+  const installedBuild = Application.nativeBuildVersion;
+  const versionLabel = installedVersion
+    ? `KeiGo JP v${installedVersion}${installedBuild ? ` (${installedBuild})` : ''}`
+    : 'KeiGo JP version unavailable';
+
+  const handleRateApp = async () => {
+    const url = Platform.OS === 'android' ? PLAY_STORE_APP_URL : APP_STORE_URL;
+    try {
+      await Linking.openURL(url);
+    } catch {
+      if (Platform.OS === 'android') {
+        try {
+          await Linking.openURL(PLAY_STORE_URL);
+          return;
+        } catch {
+          // Fall through to the platform-correct error below.
+        }
+      }
+      Alert.alert(`Could Not Open ${storeName}`, `Please try opening KeiGo JP in ${storeName} directly.`);
+    }
   };
 
   const handleSendEmail = () => {
@@ -66,6 +85,7 @@ export default function FeedbackScreen() {
               onValueChange={toggleTheme}
               trackColor={{ false: colors.border, true: colors.primary }}
               thumbColor="#fff"
+              accessibilityLabel="Dark Mode"
             />
           </View>
           <View style={[styles.settingRow, { borderBottomWidth: 0 }]}>
@@ -132,7 +152,9 @@ export default function FeedbackScreen() {
           <Text style={styles.rowEmoji}>⭐</Text>
           <View style={styles.rowInfo}>
             <Text style={[styles.rowTitle, { color: colors.textPrimary }]}>Enjoying KeiGo JP?</Text>
-            <Text style={[styles.rowSubtitle, { color: colors.textSecondary }]}>Rate us on the App Store</Text>
+            <Text style={[styles.rowSubtitle, { color: colors.textSecondary }]}>
+              Rate us on {storeName}
+            </Text>
           </View>
           <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
         </TouchableOpacity>
@@ -140,10 +162,15 @@ export default function FeedbackScreen() {
         {/* Share */}
         <TouchableOpacity
           style={[styles.rowCard, { backgroundColor: colors.card }]}
-          onPress={() => {
-            Share.share({
-              message: 'Check out KeiGo JP — master Japanese business keigo!',
-            });
+          onPress={async () => {
+            try {
+              await Share.share({
+                message: `Check out KeiGo JP — master Japanese business keigo! ${shareUrl}`,
+                url: shareUrl,
+              });
+            } catch {
+              Alert.alert('Could Not Share', 'Please try again.');
+            }
           }}
           activeOpacity={0.7}
         >
@@ -158,7 +185,11 @@ export default function FeedbackScreen() {
         {/* Privacy Policy */}
         <TouchableOpacity
           style={[styles.rowCard, { backgroundColor: colors.card }]}
-          onPress={() => Linking.openURL('https://piraeus-technology.github.io/keigo-jp/')}
+          onPress={() => {
+            Linking.openURL('https://piraeus-technology.github.io/keigo-jp/').catch(() => {
+              Alert.alert('Could Not Open Privacy Policy', 'Please try again when you are online.');
+            });
+          }}
           activeOpacity={0.7}
         >
           <Ionicons name="shield-checkmark-outline" size={20} color={colors.textSecondary} style={{ marginRight: spacing.md }} />
@@ -168,7 +199,7 @@ export default function FeedbackScreen() {
 
         {/* Version */}
         <Text style={[styles.version, { color: colors.textMuted }]}>
-          KeiGo JP v{APP_VERSION}
+          {versionLabel}
         </Text>
       </ScrollView>
     </KeyboardAvoidingView>

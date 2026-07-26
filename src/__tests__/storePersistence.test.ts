@@ -56,6 +56,49 @@ describe('store persistence hardening', () => {
     expect(useQuizStore.getState()).toMatchObject({ loaded: false, loadError: true });
   });
 
+  test('quiz answer succeeds after a transient read failure and retry', async () => {
+    mockStorage.set('quiz_stats', JSON.stringify({ totalQuestions: 20, totalCorrect: 15, bestStreak: 6 }));
+    jest.mocked(AsyncStorage.getItem).mockRejectedValueOnce(new Error('disk locked'));
+
+    await useQuizStore.getState().recordAnswer(true, 7);
+    await useQuizStore.getState().recordAnswer(true, 7);
+
+    expect(useQuizStore.getState()).toMatchObject({
+      totalQuestions: 21,
+      totalCorrect: 16,
+      bestStreak: 7,
+      loaded: true,
+      loadError: false,
+    });
+    expect(JSON.parse(mockStorage.get('quiz_stats')!)).toEqual({
+      totalQuestions: 21,
+      totalCorrect: 16,
+      bestStreak: 7,
+    });
+  });
+
+  test.each([
+    JSON.stringify([]),
+    JSON.stringify({ totalQuestions: null, totalCorrect: -1, bestStreak: 'six' }),
+    '{"totalQuestions": NaN}',
+  ])('quiz stats reset malformed payload %s', async (payload) => {
+    mockStorage.set('quiz_stats', payload);
+
+    await useQuizStore.getState().loadStats();
+
+    expect(useQuizStore.getState()).toMatchObject({
+      totalQuestions: 0,
+      totalCorrect: 0,
+      bestStreak: 0,
+      loaded: true,
+      loadError: false,
+    });
+    const stored = mockStorage.get('quiz_stats');
+    if (stored) {
+      expect(JSON.parse(stored)).toEqual({ totalQuestions: 0, totalCorrect: 0, bestStreak: 0 });
+    }
+  });
+
   test('spaced repetition result stays bare-key and recovers after transient load failure', async () => {
     mockStorage.set('spaced_rep_weights', JSON.stringify({ 書く: 4 }));
     jest.mocked(AsyncStorage.getItem).mockRejectedValueOnce(new Error('transient'));
@@ -73,6 +116,25 @@ describe('store persistence hardening', () => {
       weights: { 書く: 5 },
     });
     expect(JSON.parse(mockStorage.get('spaced_rep_weights')!)).toEqual({ 書く: 5 });
+  });
+
+  test.each([
+    JSON.stringify(['not', 'an', 'object']),
+    JSON.stringify({ 書く: -2, 読む: 'heavy', 話す: 99, 行く: 2 }),
+    '{"書く": NaN}',
+  ])('spaced repetition sanitizes malformed payload %s', async (payload) => {
+    mockStorage.set('spaced_rep_weights', payload);
+
+    await useSpacedRepStore.getState().loadWeights();
+
+    expect(useSpacedRepStore.getState()).toMatchObject({
+      loaded: true,
+      loadError: false,
+    });
+    expect(Object.values(useSpacedRepStore.getState().weights).every((weight) =>
+      Number.isFinite(weight) && weight >= 0.2 && weight <= 5
+    )).toBe(true);
+    expect(() => useSpacedRepStore.getState().getWeight('書く')).not.toThrow();
   });
 
   test('practice settings drops unknown persisted values and refills empty subsets', async () => {
@@ -149,6 +211,23 @@ describe('store persistence hardening', () => {
 
     expect(JSON.parse(mockStorage.get('flashcard_stats')!)).toEqual({ totalReviewed: 10, totalCorrect: 7 });
     expect(useFlashcardStatsStore.getState()).toMatchObject({ loaded: false, loadError: true });
+  });
+
+  test('flashcard lifetime stats sanitize malformed counters', async () => {
+    mockStorage.set('flashcard_stats', JSON.stringify({ totalReviewed: 2, totalCorrect: 9 }));
+
+    await useFlashcardStatsStore.getState().loadStats();
+
+    expect(useFlashcardStatsStore.getState()).toMatchObject({
+      totalReviewed: 2,
+      totalCorrect: 2,
+      loaded: true,
+      loadError: false,
+    });
+    expect(JSON.parse(mockStorage.get('flashcard_stats')!)).toEqual({
+      totalReviewed: 2,
+      totalCorrect: 2,
+    });
   });
 
   // Keep last: this uses a persistent mockRejectedValue that clearAllMocks does
