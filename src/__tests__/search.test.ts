@@ -1,4 +1,9 @@
-import { searchKeigo } from '../utils/search';
+import verbs from '../data/verbs.json';
+import {
+  buildVerbSearchDocument,
+  searchKeigo,
+} from '../utils/search';
+import type { VerbData } from '../utils/keigoTypes';
 
 describe('keigo search', () => {
   test('finds non-adjacent English words in the same translation', () => {
@@ -35,5 +40,13 @@ describe('keigo search', () => {
         expect.objectContaining({ key, type: 'verb' }),
       ]));
     }
+  });
+
+  test('does not put explicitly absent form data in the search index', () => {
+    const death = (verbs as unknown as Record<string, VerbData>)['死ぬ'];
+    const document = buildVerbSearchDocument('死ぬ', death);
+
+    expect(document.kenjougo).toBe('');
+    expect(document.kenjougoReading).toBe('');
   });
 });

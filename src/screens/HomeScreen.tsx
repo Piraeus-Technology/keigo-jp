@@ -23,6 +23,7 @@ import { useFavoritesStore } from '../store/favoritesStore';
 import type { SearchStackParamList } from '../types/navigation';
 import { VerbData, ExpressionData, BusinessLevel, LEVEL_LABELS } from '../utils/keigoTypes';
 import { getDailyItemIndex, millisecondsUntilNextLocalDay } from '../utils/dailyItem';
+import { getVerbFormData } from '../utils/gradableVerbs';
 import { searchKeigo } from '../utils/search';
 import type { SearchResult } from '../utils/search';
 
@@ -43,6 +44,8 @@ export default function HomeScreen() {
   const { favorites, loadFavorites, toggleFavorite } = useFavoritesStore();
   const [query, setQuery] = useState('');
   const [itemOfTheDay, setItemOfTheDay] = useState(() => getItemOfTheDay(new Date()));
+  const dailySonkeigo = getVerbFormData(itemOfTheDay.data, 'sonkeigo');
+  const dailyKenjougo = getVerbFormData(itemOfTheDay.data, 'kenjougo');
 
   useEffect(() => {
     loadHistory();
@@ -234,11 +237,15 @@ export default function HomeScreen() {
             <View style={[styles.vodKeigoColumn]}>
               <View style={[styles.vodKeigoItem, { backgroundColor: colors.sonkeigoTag }]}>
                 <Text style={[styles.vodKeigoLabel, { color: colors.sonkeigoTagText }]}>尊敬語</Text>
-                <Text style={[styles.vodKeigoForm, { color: colors.sonkeigoTagText }]}>{itemOfTheDay.data.sonkeigo.form}</Text>
+                <Text style={[styles.vodKeigoForm, { color: colors.sonkeigoTagText }]}>
+                  {dailySonkeigo.availability === 'present' ? dailySonkeigo.form : ''}
+                </Text>
               </View>
               <View style={[styles.vodKeigoItem, { backgroundColor: colors.kenjougoTag }]}>
                 <Text style={[styles.vodKeigoLabel, { color: colors.kenjougoTagText }]}>謙譲語</Text>
-                <Text style={[styles.vodKeigoForm, { color: colors.kenjougoTagText }]}>{itemOfTheDay.data.kenjougo.form}</Text>
+                <Text style={[styles.vodKeigoForm, { color: colors.kenjougoTagText }]}>
+                  {dailyKenjougo.availability === 'present' ? dailyKenjougo.form : ''}
+                </Text>
               </View>
             </View>
           </TouchableOpacity>

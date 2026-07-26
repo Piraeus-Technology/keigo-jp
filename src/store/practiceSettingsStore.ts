@@ -1,12 +1,17 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { KeigoForm, BusinessLevel, ALL_LEVELS } from '../utils/keigoTypes';
+import {
+  KeigoForm,
+  BusinessLevel,
+  ALL_LEVELS,
+  GRADABLE_FORMS,
+} from '../utils/keigoTypes';
 import { safeSetItem } from '../utils/safeStorage';
 import { createStoreQueue } from '../utils/storeQueue';
 
 // Only sonkeigo + kenjougo are quizzed/drilled — teineigo is usually just the
 // です/ます polite form and not a meaningful multiple-choice target.
-const allForms: KeigoForm[] = ['sonkeigo', 'kenjougo'];
+const allForms: KeigoForm[] = [...GRADABLE_FORMS];
 const allLevels: BusinessLevel[] = [...ALL_LEVELS];
 
 interface PracticeSettingsStore {
