@@ -189,7 +189,12 @@ export default function DetailScreen() {
                     <>
                       <View style={styles.formTextRow}>
                         <Text style={[styles.formText, { color: colors.textPrimary }]}>{formData.form}</Text>
-                        <Ionicons name="volume-medium-outline" size={16} color={colors.textMuted} style={{ marginLeft: 6 }} />
+                        <SpeakButton
+                          text={formData.reading}
+                          size={16}
+                          color={colors.textMuted}
+                          style={styles.formSpeakButton}
+                        />
                       </View>
                       {formData.form !== formData.reading && (
                         <Text style={[styles.formReading, { color: colors.textMuted }]}>{formData.reading}</Text>
@@ -234,12 +239,24 @@ export default function DetailScreen() {
                       </Text>
                       {formData.alternatives.map((alternative) => (
                         <View key={alternative.form} style={styles.formAlternative}>
-                          <Text style={[styles.formMetadataText, { color: colors.textSecondary }]}>
-                            {alternative.form}
-                            {alternative.form !== alternative.reading
-                              ? `（${alternative.reading}）`
-                              : ''}
-                          </Text>
+                          <View style={styles.formAlternativeRow}>
+                            <Text style={[
+                              styles.formMetadataText,
+                              styles.formAlternativeText,
+                              { color: colors.textSecondary },
+                            ]}>
+                              {alternative.form}
+                              {alternative.form !== alternative.reading
+                                ? `（${alternative.reading}）`
+                                : ''}
+                            </Text>
+                            <SpeakButton
+                              text={alternative.reading}
+                              size={16}
+                              color={colors.textMuted}
+                              style={styles.formSpeakButton}
+                            />
+                          </View>
                           {alternative.conditions?.map((condition) => (
                             <Text
                               key={condition}
@@ -256,28 +273,13 @@ export default function DetailScreen() {
               </>
             );
 
-            if (formData.availability === 'absent') {
-              return (
-                <View
-                  key={form}
-                  style={[styles.formRow, { borderBottomColor: colors.divider }]}
-                >
-                  {rowContent}
-                </View>
-              );
-            }
-
             return (
-              <TouchableOpacity
+              <View
                 key={form}
                 style={[styles.formRow, { borderBottomColor: colors.divider }]}
-                onPress={() => speak(formData.reading)}
-                activeOpacity={0.7}
-                accessibilityRole="button"
-                accessibilityLabel={`Play pronunciation of ${formData.reading}`}
               >
                 {rowContent}
-              </TouchableOpacity>
+              </View>
             );
           })}
         </View>
@@ -375,6 +377,7 @@ const styles = StyleSheet.create({
   formLabelEn: { fontSize: 10 },
   formValue: { flex: 1 },
   formTextRow: { flexDirection: 'row', alignItems: 'center' },
+  formSpeakButton: { marginLeft: spacing.xs },
   formText: { fontSize: fonts.sizes.lg },
   formReading: { fontSize: fonts.sizes.sm, marginTop: 2 },
   formUnavailable: {
@@ -394,9 +397,15 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   formAlternative: { marginTop: 2 },
+  formAlternativeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  formAlternativeText: { flex: 1 },
   formAlternativeCondition: {
-    fontSize: 10,
-    lineHeight: 16,
+    fontSize: fonts.sizes.xs,
+    lineHeight: 18,
     marginLeft: spacing.xs,
   },
   usageRow: {

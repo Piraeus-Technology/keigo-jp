@@ -34,6 +34,8 @@ export function isGradableVerbForm(
   if (!hasCanonicalVerbForm(data, form)) return false;
   const formData = getVerbFormData(data, form);
   return formData.availability === 'present'
+    && formData.review?.status !== 'needs_review'
+    && formData.conditions === undefined
     && formData.form.trim() !== verb.trim();
 }
 
