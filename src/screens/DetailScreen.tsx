@@ -189,7 +189,12 @@ export default function DetailScreen() {
                     <>
                       <View style={styles.formTextRow}>
                         <Text style={[styles.formText, { color: colors.textPrimary }]}>{formData.form}</Text>
-                        <Ionicons name="volume-medium-outline" size={16} color={colors.textMuted} style={{ marginLeft: 6 }} />
+                        <SpeakButton
+                          text={formData.reading}
+                          size={16}
+                          color={colors.textMuted}
+                          style={styles.formSpeakButton}
+                        />
                       </View>
                       {formData.form !== formData.reading && (
                         <Text style={[styles.formReading, { color: colors.textMuted }]}>{formData.reading}</Text>
@@ -205,32 +210,76 @@ export default function DetailScreen() {
                       {formData.note}
                     </Text>
                   )}
+                  {formData.humbleSubclass && (
+                    <Text style={[styles.formMetadataText, { color: colors.textSecondary }]}>
+                      Humble class: {formData.humbleSubclass === 'kenjougo_i'
+                        ? '謙譲語I'
+                        : '謙譲語II（丁重語）'}
+                    </Text>
+                  )}
+                  {formData.conditions && (
+                    <View style={styles.formMetadataGroup}>
+                      <Text style={[styles.formMetadataLabel, { color: colors.textMuted }]}>
+                        Applies when
+                      </Text>
+                      {formData.conditions.map((condition) => (
+                        <Text
+                          key={condition}
+                          style={[styles.formMetadataText, { color: colors.textSecondary }]}
+                        >
+                          • {condition}
+                        </Text>
+                      ))}
+                    </View>
+                  )}
+                  {formData.alternatives && (
+                    <View style={styles.formMetadataGroup}>
+                      <Text style={[styles.formMetadataLabel, { color: colors.textMuted }]}>
+                        Alternatives
+                      </Text>
+                      {formData.alternatives.map((alternative) => (
+                        <View key={alternative.form} style={styles.formAlternative}>
+                          <View style={styles.formAlternativeRow}>
+                            <Text style={[
+                              styles.formMetadataText,
+                              styles.formAlternativeText,
+                              { color: colors.textSecondary },
+                            ]}>
+                              {alternative.form}
+                              {alternative.form !== alternative.reading
+                                ? `（${alternative.reading}）`
+                                : ''}
+                            </Text>
+                            <SpeakButton
+                              text={alternative.reading}
+                              size={16}
+                              color={colors.textMuted}
+                              style={styles.formSpeakButton}
+                            />
+                          </View>
+                          {alternative.conditions?.map((condition) => (
+                            <Text
+                              key={condition}
+                              style={[styles.formAlternativeCondition, { color: colors.textMuted }]}
+                            >
+                              • {condition}
+                            </Text>
+                          ))}
+                        </View>
+                      ))}
+                    </View>
+                  )}
                 </View>
               </>
             );
 
-            if (formData.availability === 'absent') {
-              return (
-                <View
-                  key={form}
-                  style={[styles.formRow, { borderBottomColor: colors.divider }]}
-                >
-                  {rowContent}
-                </View>
-              );
-            }
-
             return (
-              <TouchableOpacity
+              <View
                 key={form}
                 style={[styles.formRow, { borderBottomColor: colors.divider }]}
-                onPress={() => speak(formData.reading)}
-                activeOpacity={0.7}
-                accessibilityRole="button"
-                accessibilityLabel={`Play pronunciation of ${formData.reading}`}
               >
                 {rowContent}
-              </TouchableOpacity>
+              </View>
             );
           })}
         </View>
@@ -328,6 +377,7 @@ const styles = StyleSheet.create({
   formLabelEn: { fontSize: 10 },
   formValue: { flex: 1 },
   formTextRow: { flexDirection: 'row', alignItems: 'center' },
+  formSpeakButton: { marginLeft: spacing.xs },
   formText: { fontSize: fonts.sizes.lg },
   formReading: { fontSize: fonts.sizes.sm, marginTop: 2 },
   formUnavailable: {
@@ -335,6 +385,29 @@ const styles = StyleSheet.create({
     fontWeight: fonts.weights.semibold,
   },
   formNote: { fontSize: fonts.sizes.xs, marginTop: spacing.xs },
+  formMetadataGroup: { marginTop: spacing.xs },
+  formMetadataLabel: {
+    fontSize: fonts.sizes.xs,
+    fontWeight: fonts.weights.semibold,
+    marginBottom: 2,
+  },
+  formMetadataText: {
+    fontSize: fonts.sizes.xs,
+    lineHeight: 18,
+    marginTop: spacing.xs,
+  },
+  formAlternative: { marginTop: 2 },
+  formAlternativeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  formAlternativeText: { flex: 1 },
+  formAlternativeCondition: {
+    fontSize: fonts.sizes.xs,
+    lineHeight: 18,
+    marginLeft: spacing.xs,
+  },
   usageRow: {
     paddingVertical: 14,
     paddingHorizontal: spacing.md,

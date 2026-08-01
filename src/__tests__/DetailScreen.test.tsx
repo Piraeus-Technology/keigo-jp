@@ -28,8 +28,23 @@ jest.mock('../utils/speech', () => ({
 }));
 
 jest.mock('../components/SpeakButton', () => {
-  return function MockSpeakButton() {
-    return null;
+  // Jest hoists mock factories, so dependencies must be loaded inside it.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const React = require('react');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { TouchableOpacity } = require('react-native');
+  return function MockSpeakButton({
+    text,
+    accessibilityLabel,
+  }: {
+    text: string;
+    accessibilityLabel?: string;
+  }) {
+    return React.createElement(TouchableOpacity, {
+      accessibilityRole: 'button',
+      accessibilityLabel:
+        accessibilityLabel ?? `Play pronunciation of ${text}`,
+    });
   };
 });
 
@@ -69,6 +84,51 @@ describe('DetailScreen', () => {
     expect(view.getByText('There is no canonical humble form for dying.'))
       .toBeTruthy();
     expect(view.queryByLabelText('Play pronunciation of しぬ')).toBeNull();
+  });
+
+  test('shows an unconditional canonical form and its conditional alternative', () => {
+    mockRouteParams = { key: '利用する', type: 'verb' };
+    const view = render(<DetailScreen />);
+
+    expect(view.getByText('Humble class: 謙譲語II（丁重語）')).toBeTruthy();
+    expect(view.getByText('利用いたす')).toBeTruthy();
+    expect(view.getByLabelText('Play pronunciation of りよういたす'))
+      .toBeTruthy();
+    expect(view.queryByText('Applies when')).toBeNull();
+    expect(view.getByText('Alternatives')).toBeTruthy();
+    expect(view.getByText(
+      '利用させていただく（りようさせていただく）',
+    )).toBeTruthy();
+    expect(view.getByText(
+      '• Use when the facility or service is used with the provider\'s permission and the speaker benefits from being allowed to use it.',
+    )).toBeTruthy();
+    expect(view.getByLabelText(
+      'Play pronunciation of りようさせていただく',
+    )).toBeTruthy();
+  });
+
+  test('keeps conditional metadata outside the pronunciation control', () => {
+    mockRouteParams = { key: '着る', type: 'verb' };
+    const view = render(<DetailScreen />);
+
+    expect(view.getByText('Applies when')).toBeTruthy();
+    expect(view.getByText(
+      '• The listener or a third party permits the speaker to wear something, and the speaker benefits from that permission.',
+    )).toBeTruthy();
+    expect(view.getByLabelText('Play pronunciation of きさせていただく'))
+      .toBeTruthy();
+  });
+
+  test('leaves an unannotated form row free of metadata chrome', () => {
+    mockRouteParams = { key: '食べる', type: 'verb' };
+    const view = render(<DetailScreen />);
+
+    expect(view.getByText('いただく')).toBeTruthy();
+    expect(view.getByLabelText('Play pronunciation of いただく'))
+      .toBeTruthy();
+    expect(view.queryByText('Applies when')).toBeNull();
+    expect(view.queryByText('Alternatives')).toBeNull();
+    expect(view.queryByText(/^Humble class:/)).toBeNull();
   });
 
   test('leaves verb and short-expression header titles unchanged', () => {

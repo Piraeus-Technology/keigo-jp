@@ -37,7 +37,11 @@ type RawKeigoFormEntry = {
   review?: {
     status?: string;
     rationale?: unknown;
-    citations?: unknown;
+    citations?: {
+      source?: unknown;
+      locator?: unknown;
+      url?: unknown;
+    }[];
     confidence?: unknown;
   };
 };
@@ -66,15 +70,71 @@ const expressionEntries = Object.entries(expressions as Record<string, Expressio
 const typedVerbEntries = Object.entries(
   verbs as unknown as Record<string, VerbData>,
 );
+const B3_BATCH_ONE_SLOTS = [
+  '出る:kenjougo',
+  '出席する:kenjougo',
+  '利用する:kenjougo',
+  '参加する:kenjougo',
+  '反対する:kenjougo',
+  '反対する:sonkeigo',
+  '変える:kenjougo',
+  '始める:kenjougo',
+  '対応する:kenjougo',
+  '承認する:kenjougo',
+  '提出する:kenjougo',
+  '検討する:kenjougo',
+  '死ぬ:teineigo',
+  '決める:kenjougo',
+  '注文する:kenjougo',
+  '理解する:kenjougo',
+  '着る:kenjougo',
+  '確認する:kenjougo',
+  '考える:kenjougo',
+  '記入する:kenjougo',
+  '訪問する:kenjougo',
+  '賛成する:kenjougo',
+  '賛成する:sonkeigo',
+  '質問する:kenjougo',
+  '辞退する:kenjougo',
+  '遠慮する:kenjougo',
+  '遠慮する:sonkeigo',
+  '閉める:kenjougo',
+  '開ける:kenjougo',
+].sort();
+const OFFICIAL_GUIDANCE_SOURCE = '文化審議会「敬語の指針」';
+const OFFICIAL_GUIDANCE_URL =
+  'https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf';
+const VERIFIED_GUIDANCE_LOCATORS = new Set([
+  'printed p. 24 (PDF p. 27), 2007',
+  'printed p. 26 (PDF p. 29) and printed pp. 40–41 (PDF pp. 43–44), 2007',
+  'printed p. 27 (PDF p. 30) and printed pp. 40–41 (PDF pp. 43–44), 2007',
+  'printed p. 28 (PDF p. 31), 2007',
+  'printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007',
+  'printed pp. 27–28 (PDF pp. 30–31) and printed pp. 40–41 (PDF pp. 43–44), 2007',
+  'printed pp. 40–41 (PDF pp. 43–44), 2007',
+]);
 
 function getContentDigest(data: unknown): {
   count: number;
   digest: string;
 } {
   const protectedFields = new Set([
+    'availability',
     'form',
     'reading',
     'translation',
+    'pattern',
+    'note',
+    'humbleSubclass',
+    'conditions',
+    'alternatives',
+    'review',
+    'status',
+    'rationale',
+    'source',
+    'locator',
+    'url',
+    'confidence',
     'usage',
     'context',
     'ja',
@@ -105,6 +165,15 @@ function getContentDigest(data: unknown): {
   };
 }
 
+function getExampleDemonstrationStem(form: string): string {
+  if (form.endsWith('させていただく')) return form.slice(0, -1);
+  if (form.endsWith('いたす')) return form.slice(0, -1);
+  if (form.endsWith('なさる')) return form.slice(0, -1);
+  if (form.endsWith('する')) return `${form.slice(0, -2)}し`;
+  if (form === '伺う') return '伺';
+  return form;
+}
+
 describe('Keigo form schema', () => {
   test('derives the runtime pattern whitelist from the pattern type source', () => {
     expect(KEIGO_PATTERNS).toEqual([
@@ -114,6 +183,10 @@ describe('Keigo form schema', () => {
       'go_ni_naru',
       'go_suru',
       'sase_te_itadaku',
+      'itasu',
+      'nasaru',
+      'o_itasu',
+      'go_itasu',
     ]);
   });
 
@@ -341,94 +414,78 @@ describe('Verb data validation', () => {
     });
   });
 
-  test('has the expected mechanically consistent pattern distribution', () => {
-    const distribution = (form: 'sonkeigo' | 'kenjougo') =>
-      verbEntries.reduce<Record<string, number>>((counts, [, data]) => {
-        const pattern = data[form].pattern;
-        if (!pattern) return counts;
-        counts[pattern] = (counts[pattern] ?? 0) + 1;
-        return counts;
-      }, {});
-
-    expect(distribution('sonkeigo')).toEqual({
-      special: 17,
-      o_ni_naru: 57,
-      go_ni_naru: 32,
-    });
-    expect(distribution('kenjougo')).toEqual({
-      special: 35,
-      o_suru: 32,
-      sase_te_itadaku: 25,
-      go_suru: 13,
-    });
-  });
-
   test('classifies construction shape rather than only checking membership', () => {
     expect(inferKeigoPattern('確認させていただく'))
       .toBe('sase_te_itadaku');
     expect(inferKeigoPattern('お電話になる')).toBe('o_ni_naru');
     expect(inferKeigoPattern('ご迷惑をおかけする')).toBe('go_suru');
     expect(inferKeigoPattern('ご覧になる')).toBe('special');
+    expect(inferKeigoPattern('検討いたす')).toBe('itasu');
+    expect(inferKeigoPattern('賛成なさる')).toBe('nasaru');
+    expect(inferKeigoPattern('お待ちいたす')).toBe('o_itasu');
+    expect(inferKeigoPattern('ご案内いたす')).toBe('go_itasu');
+    expect(inferKeigoPattern('いたす')).toBe('special');
+    expect(inferKeigoPattern('なさる')).toBe('special');
     expect(isKeigoPatternConsistent('お電話になる', 'go_ni_naru'))
       .toBe(false);
     expect(isKeigoPatternConsistent(
       '確認させていただく',
       'special',
     )).toBe(false);
+    expect(isKeigoPatternConsistent('検討いたす', 'special'))
+      .toBe(false);
+    expect(isKeigoPatternConsistent('賛成なさる', 'special'))
+      .toBe(false);
+    expect(isKeigoPatternConsistent('いたす', 'itasu')).toBe(false);
+    expect(isKeigoPatternConsistent('なさる', 'nasaru')).toBe(false);
   });
 
-  test('enumerates the exact B3 review worklist without adjudicating it', () => {
-    const flagged = verbEntries.flatMap(([verb, data]) =>
+  test('adjudicates every B3 slot without leaving a residual worklist', () => {
+    const reviewed = verbEntries.flatMap(([verb, data]) =>
+      ALL_FORMS
+        .filter((form) => data[form].review?.status === 'reviewed')
+        .map((form) => `${verb}:${form}`)
+    ).sort();
+    const residual = verbEntries.flatMap(([verb, data]) =>
       ALL_FORMS
         .filter((form) => data[form].review?.status === 'needs_review')
         .map((form) => `${verb}:${form}`)
     ).sort();
 
-    expect(flagged).toEqual([
-      '出る:kenjougo',
-      '出席する:kenjougo',
-      '利用する:kenjougo',
-      '参加する:kenjougo',
-      '反対する:kenjougo',
-      '反対する:sonkeigo',
-      '変える:kenjougo',
-      '始める:kenjougo',
-      '対応する:kenjougo',
-      '承認する:kenjougo',
-      '提出する:kenjougo',
-      '検討する:kenjougo',
-      '死ぬ:teineigo',
-      '決める:kenjougo',
-      '注文する:kenjougo',
-      '理解する:kenjougo',
-      '着る:kenjougo',
-      '確認する:kenjougo',
-      '考える:kenjougo',
-      '記入する:kenjougo',
-      '訪問する:kenjougo',
-      '賛成する:kenjougo',
-      '賛成する:sonkeigo',
-      '質問する:kenjougo',
-      '辞退する:kenjougo',
-      '遠慮する:kenjougo',
-      '遠慮する:sonkeigo',
-      '閉める:kenjougo',
-      '開ける:kenjougo',
-    ]);
-    expect(flagged.filter((item) => item.endsWith(':kenjougo')))
-      .toHaveLength(25);
+    expect(reviewed).toEqual(B3_BATCH_ONE_SLOTS);
+    expect(residual).toEqual([]);
   });
 
-  test('does not populate B3 adjudication fields during schema migration', () => {
-    for (const [, data] of verbEntries) {
-      for (const form of ALL_FORMS) {
-        expect(data[form].humbleSubclass).toBeUndefined();
-        expect(data[form].conditions).toBeUndefined();
-        expect(data[form].alternatives).toBeUndefined();
-        if (data[form].review?.status === 'needs_review') {
-          expect(data[form].review).toEqual({ status: 'needs_review' });
-        }
+  test('records cited metadata and explicit humble subclasses for every B3 slot', () => {
+    for (const slot of B3_BATCH_ONE_SLOTS) {
+      const [verb, form] = slot.split(':') as [string, typeof ALL_FORMS[number]];
+      const formData = (verbs as Record<string, VerbEntry>)[verb][form];
+
+      expect(formData.review?.status).toBe('reviewed');
+      expect(formData.review?.rationale).toEqual(expect.any(String));
+      expect(formData.review?.citations).toEqual(expect.any(Array));
+      expect(formData.review?.confidence).toMatch(/^(low|medium|high)$/);
+      if (form === 'kenjougo') {
+        expect(formData.humbleSubclass)
+          .toMatch(/^kenjougo_(i|ii)$/);
       }
+    }
+  });
+
+  test('uses only verified printed/PDF locator pairs for the primary guidance', () => {
+    for (const slot of B3_BATCH_ONE_SLOTS) {
+      const [verb, form] = slot.split(':') as [string, typeof ALL_FORMS[number]];
+      const review = (verbs as Record<string, VerbEntry>)[verb][form].review;
+      expect(review?.status).toBe('reviewed');
+      if (review?.status !== 'reviewed') continue;
+
+      const primaryCitations = review.citations?.filter((citation) =>
+        citation.source === OFFICIAL_GUIDANCE_SOURCE
+      ) ?? [];
+      expect(primaryCitations).toHaveLength(1);
+      expect(primaryCitations[0].url).toBe(OFFICIAL_GUIDANCE_URL);
+      expect(VERIFIED_GUIDANCE_LOCATORS)
+        .toContain(primaryCitations[0].locator);
     }
   });
 
@@ -453,6 +510,82 @@ describe('Verb data validation', () => {
     expect(pairs.some(({ form }) => form === 'kenjougo')).toBe(false);
     expect(isGradableVerbForm('死ぬ', death[1], 'kenjougo')).toBe(false);
   });
+
+  test('a needs-review form cannot reach any graded pool', () => {
+    const source = (verbs as unknown as Record<string, VerbData>)['確認する'];
+    const needsReviewData: VerbData = {
+      ...source,
+      kenjougo: {
+        availability: 'present',
+        form: '確認させていただく',
+        reading: 'かくにんさせていただく',
+        pattern: 'sase_te_itadaku',
+        review: { status: 'needs_review' },
+      },
+    };
+
+    expect(isGradableVerbForm(
+      '確認する',
+      needsReviewData,
+      'kenjougo',
+    )).toBe(false);
+    expect(getGradableVerbPairs(
+      [['確認する', needsReviewData]],
+      ['kenjougo'],
+    )).toEqual([]);
+  });
+
+  test('a condition-dependent canonical form cannot reach context-free practice', () => {
+    const conditionalPairs = typedVerbEntries.flatMap(([verb, data]) =>
+      GRADABLE_FORMS.flatMap((form) => {
+        const formData = getVerbFormData(data, form);
+        return formData.conditions ? [{ verb, data, form }] : [];
+      })
+    );
+
+    expect(conditionalPairs.length).toBeGreaterThan(0);
+    for (const { verb, data, form } of conditionalPairs) {
+      expect(isGradableVerbForm(verb, data, form)).toBe(false);
+      expect(getGradableVerbPairs([[verb, data]], [form])).toEqual([]);
+    }
+  });
+
+  test('uses productive humble-II forms for the former residual slots', () => {
+    const expected = {
+      '確認する': '確認いたす',
+      '提出する': '提出いたす',
+      '対応する': '対応いたす',
+    } as const;
+    const data = verbs as unknown as Record<string, VerbData>;
+
+    for (const [verb, expectedForm] of Object.entries(expected)) {
+      const formData = getVerbFormData(data[verb], 'kenjougo');
+      expect(formData.availability).toBe('present');
+      if (formData.availability !== 'present') continue;
+      expect(formData.form).toBe(expectedForm);
+      expect(formData.pattern).toBe('itasu');
+      expect(formData.humbleSubclass).toBe('kenjougo_ii');
+      expect(formData.review?.status).toBe('reviewed');
+      expect(isGradableVerbForm(verb, data[verb], 'kenjougo')).toBe(true);
+    }
+  });
+
+  test.each(B3_BATCH_ONE_SLOTS)(
+    '%s has an example demonstrating a conjugation of its reviewed form',
+    (slot) => {
+      const [verb, form] = slot.split(':') as [string, typeof ALL_FORMS[number]];
+      const data = (verbs as Record<string, VerbEntry>)[verb];
+      const formData = data[form];
+      expect(formData.review?.status).toBe('reviewed');
+      expect(formData.form).toEqual(expect.any(String));
+      if (typeof formData.form !== 'string') return;
+
+      const stem = getExampleDemonstrationStem(formData.form);
+      expect(data.examples.some((example) =>
+        example.type === form && example.ja.includes(stem)
+      )).toBe(true);
+    },
+  );
 
   test('derives pair-level exclusions while preserving other forms on the same records', () => {
     const identityPairs = typedVerbEntries.flatMap(([verb, data]) =>
@@ -513,11 +646,11 @@ describe('Verb data validation', () => {
   });
 });
 
-describe('Content-neutral migration integrity', () => {
-  test('preserves verb content except removed absent-form sentinel values', () => {
+describe('Content integrity', () => {
+  test('locks the adjudicated verb content', () => {
     expect(getContentDigest(verbs)).toEqual({
-      count: 1479,
-      digest: 'f3540714ef2ada670df27fbb7335466be52e1679166e941adfb995ebe9e0b56e',
+      count: 2288,
+      digest: '347faeb902694d1d4f12c8c5979ebcf1000f0de345f9314233f24fc4bd228aa1',
     });
   });
 

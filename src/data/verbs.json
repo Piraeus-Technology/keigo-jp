@@ -244,7 +244,7 @@
     "translation": "to wear",
     "level": "advanced",
     "sonkeigo": { "form": "お召しになる", "reading": "おめしになる", "pattern": "special", "availability": "present" },
-    "kenjougo": { "form": "着させていただく", "reading": "きさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "着させていただく", "reading": "きさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "humbleSubclass": "kenjougo_i", "conditions": ["The listener or a third party permits the speaker to wear something, and the speaker benefits from that permission."], "review": { "status": "reviewed", "rationale": "This is a permission-and-benefit construction, not an unconditional humble equivalent of 着る; the example supplies both required conditions.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "high" } },
     "teineigo": { "form": "着ます", "reading": "きます", "availability": "present" },
     "examples": [
       { "context": "Complimenting a superior's outfit", "ja": "素敵なお着物をお召しになっていますね。", "en": "You're wearing a lovely kimono.", "type": "sonkeigo" },
@@ -376,7 +376,7 @@
     "translation": "to think / to consider",
     "level": "intermediate",
     "sonkeigo": { "form": "お考えになる", "reading": "おかんがえになる", "pattern": "o_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "考えさせていただく", "reading": "かんがえさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "考えさせていただく", "reading": "かんがえさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "humbleSubclass": "kenjougo_i", "conditions": ["The listener or a third party permits the speaker time to think, and the speaker benefits from that permission."], "review": { "status": "reviewed", "rationale": "The form is appropriate when it requests permission and benefit, as in asking the listener for time to think; it is not an unconditional humble equivalent.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "high" } },
     "teineigo": { "form": "考えます", "reading": "かんがえます", "availability": "present" },
     "examples": [
       { "context": "Asking a superior's thoughts", "ja": "こちらのプランはどうお考えになりますか。", "en": "What do you think of this plan?", "type": "sonkeigo" },
@@ -412,11 +412,11 @@
     "translation": "to confirm / to check",
     "level": "intermediate",
     "sonkeigo": { "form": "ご確認になる", "reading": "ごかくにんになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "確認させていただく", "reading": "かくにんさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "確認いたす", "reading": "かくにんいたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "review": { "status": "reviewed", "rationale": "The context-free record reports the speaker's own act of checking, so the productive する→いたす humble-II form is the standalone answer.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "確認します", "reading": "かくにんします", "availability": "present" },
     "examples": [
       { "context": "Asking someone to check", "ja": "こちらの内容をご確認いただけますか。", "en": "Could you please check this content?", "type": "sonkeigo" },
-      { "context": "Saying you will check", "ja": "すぐに確認させていただきます。", "en": "I will check on it right away.", "type": "kenjougo" }
+      { "context": "Saying you will check", "ja": "すぐに確認いたします。", "en": "I will check on it right away.", "type": "kenjougo" }
     ]
   },
   "連絡する": {
@@ -460,11 +460,11 @@
     "translation": "to use / to utilize",
     "level": "advanced",
     "sonkeigo": { "form": "ご利用になる", "reading": "ごりようになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "利用させていただく", "reading": "りようさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "利用いたす", "reading": "りよういたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "alternatives": [{ "form": "利用させていただく", "reading": "りようさせていただく", "conditions": ["Use when the facility or service is used with the provider's permission and the speaker benefits from being allowed to use it."] }], "review": { "status": "reviewed", "rationale": "The guidance explicitly gives 利用する→利用いたす as the context-free humble-II form; the former permission-and-benefit construction remains a conditional alternative.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "high" } },
     "teineigo": { "form": "利用します", "reading": "りようします", "availability": "present" },
     "examples": [
       { "context": "Thanking for using a service", "ja": "ご利用いただきありがとうございます。", "en": "Thank you for using our service.", "type": "sonkeigo" },
-      { "context": "Asking to use a facility", "ja": "こちらの施設を利用させていただきたいのですが。", "en": "I would like to use this facility.", "type": "kenjougo" }
+      { "context": "Reporting use of a facility", "ja": "こちらの施設を利用いたします。", "en": "I will use this facility.", "type": "kenjougo" }
     ]
   },
   "出席する": {
@@ -472,11 +472,11 @@
     "translation": "to attend",
     "level": "advanced",
     "sonkeigo": { "form": "ご出席になる", "reading": "ごしゅっせきになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "出席させていただく", "reading": "しゅっせきさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "出席いたす", "reading": "しゅっせきいたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "alternatives": [{ "form": "出席させていただく", "reading": "しゅっせきさせていただく", "conditions": ["Use when the speaker attends with the organizer's permission or invitation and regards the opportunity as a benefit."] }], "review": { "status": "reviewed", "rationale": "The productive する→いたす humble-II form is the context-free answer; the invitation-and-benefit construction remains a conditional alternative.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "high" } },
     "teineigo": { "form": "出席します", "reading": "しゅっせきします", "availability": "present" },
     "examples": [
       { "context": "Asking about attendance", "ja": "明日の会議にご出席になりますか。", "en": "Will you attend tomorrow's meeting?", "type": "sonkeigo" },
-      { "context": "Confirming your attendance", "ja": "喜んで出席させていただきます。", "en": "I would be delighted to attend.", "type": "kenjougo" }
+      { "context": "Confirming your attendance", "ja": "明日の会議には私も出席いたします。", "en": "I will also attend tomorrow's meeting.", "type": "kenjougo" }
     ]
   },
   "検討する": {
@@ -484,11 +484,11 @@
     "translation": "to consider / to examine",
     "level": "advanced",
     "sonkeigo": { "form": "ご検討になる", "reading": "ごけんとうになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "検討させていただく", "reading": "けんとうさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "検討いたす", "reading": "けんとういたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "review": { "status": "reviewed", "rationale": "The record states only that the speaker will consider the matter, without permission or benefit; the general する→いたす humble-II transformation is therefore the standalone answer.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "検討します", "reading": "けんとうします", "availability": "present" },
     "examples": [
       { "context": "Asking someone to consider a proposal", "ja": "ぜひご検討いただければ幸いです。", "en": "I would appreciate it if you could consider this.", "type": "sonkeigo" },
-      { "context": "Saying you will consider", "ja": "社内で検討させていただきます。", "en": "We will consider it internally.", "type": "kenjougo" }
+      { "context": "Saying you will consider", "ja": "社内で検討いたします。", "en": "We will consider it internally.", "type": "kenjougo" }
     ]
   },
   "相談する": {
@@ -521,9 +521,10 @@
     "level": "advanced",
     "sonkeigo": { "form": "お亡くなりになる", "reading": "おなくなりになる", "pattern": "special", "availability": "present" },
     "kenjougo": { "note": "There is no canonical humble form for dying.", "availability": "absent" },
-    "teineigo": { "form": "亡くなります", "reading": "なくなります", "availability": "present", "review": { "status": "needs_review" } },
+    "teineigo": { "form": "死にます", "reading": "しにます", "availability": "present", "review": { "status": "reviewed", "rationale": "丁寧語 adds ます to the headword, yielding 死にます; 亡くなる is a separate euphemistic verb rather than the polite inflection of 死ぬ.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }, { "source": "小学館『デジタル大辞泉』「亡くなる」", "locator": "語義2", "url": "https://dictionary.goo.ne.jp/word/%E7%84%A1%E3%81%8F%E3%81%AA%E3%82%8B/" }], "confidence": "high" } },
     "examples": [
-      { "context": "Speaking about someone who passed", "ja": "会長がお亡くなりになりました。", "en": "The chairman has passed away.", "type": "sonkeigo" }
+      { "context": "Speaking about someone who passed", "ja": "会長がお亡くなりになりました。", "en": "The chairman has passed away.", "type": "sonkeigo" },
+      { "context": "Explaining what happens to a plant without water", "ja": "この植物は水がないと死にます。", "en": "This plant will die without water.", "type": "teineigo" }
     ]
   },
   "くれる": {
@@ -591,11 +592,11 @@
     "translation": "to decide",
     "level": "intermediate",
     "sonkeigo": { "form": "お決めになる", "reading": "おきめになる", "pattern": "o_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "決めさせていただく", "reading": "きめさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "決めさせていただく", "reading": "きめさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "humbleSubclass": "kenjougo_i", "conditions": ["The listener or a third party permits the decision, and the speaker benefits from being allowed to make it."], "review": { "status": "reviewed", "rationale": "The form is defensible when the speaker's decision depends on the listener's consent; it is not an unconditional humble equivalent.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "決めます", "reading": "きめます", "availability": "present" },
     "examples": [
       { "context": "Asking a client for a decision", "ja": "日程はお決めになりましたか。", "en": "Have you decided on the schedule?", "type": "sonkeigo" },
-      { "context": "Announcing a decision humbly", "ja": "こちらのプランに決めさせていただきます。", "en": "We will go with this plan, if you don't mind.", "type": "kenjougo" }
+      { "context": "Asking permission to make the decision", "ja": "日程はこちらで決めさせていただいてもよろしいでしょうか。", "en": "May we decide the schedule on our side?", "type": "kenjougo" }
     ]
   },
   "断る": {
@@ -651,11 +652,11 @@
     "translation": "to begin / to start",
     "level": "intermediate",
     "sonkeigo": { "form": "お始めになる", "reading": "おはじめになる", "pattern": "o_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "始めさせていただく", "reading": "はじめさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "始めさせていただく", "reading": "はじめさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "humbleSubclass": "kenjougo_i", "conditions": ["The speaker begins with the participants' or organizer's permission and regards being allowed to begin as a benefit."], "review": { "status": "reviewed", "rationale": "The meeting-opening use parallels the guidance's 発表させていただく example, whose acceptability depends on actual or reasonably understood permission and benefit.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "始めます", "reading": "はじめます", "availability": "present" },
     "examples": [
       { "context": "Asking when a superior started", "ja": "いつお始めになったのですか。", "en": "When did you start?", "type": "sonkeigo" },
-      { "context": "Opening a meeting", "ja": "それでは、会議を始めさせていただきます。", "en": "Now then, let us begin the meeting.", "type": "kenjougo" }
+      { "context": "Opening a meeting with the participants' consent", "ja": "皆様のご了承をいただきましたので、会議を始めさせていただきます。", "en": "With everyone's consent, we will begin the meeting.", "type": "kenjougo" }
     ]
   },
   "終わる": {
@@ -675,7 +676,7 @@
     "translation": "to change",
     "level": "intermediate",
     "sonkeigo": { "form": "お変えになる", "reading": "おかえになる", "pattern": "o_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "変えさせていただく", "reading": "かえさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "変えさせていただく", "reading": "かえさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "humbleSubclass": "kenjougo_i", "conditions": ["The listener or a third party permits the change, and the speaker benefits from being allowed to make it."], "review": { "status": "reviewed", "rationale": "The existing request to alter a jointly relevant schedule explicitly seeks permission and benefit, satisfying the construction's two conditions.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "high" } },
     "teineigo": { "form": "変えます", "reading": "かえます", "availability": "present" },
     "examples": [
       { "context": "Asking if a superior changed something", "ja": "予定をお変えになりましたか。", "en": "Did you change the schedule?", "type": "sonkeigo" },
@@ -759,11 +760,11 @@
     "translation": "to open",
     "level": "basic",
     "sonkeigo": { "form": "お開けになる", "reading": "おあけになる", "pattern": "o_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "開けさせていただく", "reading": "あけさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "お開けする", "reading": "おあけする", "pattern": "o_suru", "availability": "present", "humbleSubclass": "kenjougo_i", "alternatives": [{ "form": "開けさせていただく", "reading": "あけさせていただく", "conditions": ["Use when the listener or a third party permits the speaker to open something and the speaker benefits from that permission."] }], "review": { "status": "reviewed", "rationale": "Opening something for a guest has a person-directed recipient, so the productive お〜する humble-I form is the standalone service-context answer; the permission-and-benefit construction remains conditional.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 27 (PDF p. 30) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "high" } },
     "teineigo": { "form": "開けます", "reading": "あけます", "availability": "present" },
     "examples": [
-      { "context": "Asking a guest to open something", "ja": "どうぞお開けになってください。", "en": "Please go ahead and open it.", "type": "sonkeigo" },
-      { "context": "Asking permission to open a window", "ja": "窓を開けさせていただいてもよろしいですか。", "en": "May I open the window?", "type": "kenjougo" }
+      { "context": "Noting that a guest opened a package", "ja": "お客様が包みをお開けになりました。", "en": "The guest opened the package.", "type": "sonkeigo" },
+      { "context": "Opening a window for a guest", "ja": "私が窓をお開けします。", "en": "I will open the window for you.", "type": "kenjougo" }
     ]
   },
   "閉める": {
@@ -771,11 +772,11 @@
     "translation": "to close",
     "level": "basic",
     "sonkeigo": { "form": "お閉めになる", "reading": "おしめになる", "pattern": "o_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "閉めさせていただく", "reading": "しめさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "お閉めする", "reading": "おしめする", "pattern": "o_suru", "availability": "present", "humbleSubclass": "kenjougo_i", "alternatives": [{ "form": "閉めさせていただく", "reading": "しめさせていただく", "conditions": ["Use when the listener or a third party permits the speaker to close something and the speaker benefits from that permission."] }], "review": { "status": "reviewed", "rationale": "Closing something for a guest has a person-directed recipient, so the productive お〜する humble-I form is the standalone service-context answer; the permission-and-benefit construction remains conditional.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 27 (PDF p. 30) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "high" } },
     "teineigo": { "form": "閉めます", "reading": "しめます", "availability": "present" },
     "examples": [
-      { "context": "Asking permission to close the door", "ja": "ドアをお閉めになりますか。", "en": "Would you like the door closed?", "type": "sonkeigo" },
-      { "context": "Closing a shop or office", "ja": "本日の営業を閉めさせていただきます。", "en": "We will be closing for the day.", "type": "kenjougo" }
+      { "context": "Noting that a guest closed the door", "ja": "お客様がドアをお閉めになりました。", "en": "The guest closed the door.", "type": "sonkeigo" },
+      { "context": "Closing a door for a guest", "ja": "私がドアをお閉めします。", "en": "I will close the door for you.", "type": "kenjougo" }
     ]
   },
   "入る": {
@@ -792,14 +793,14 @@
   },
   "出る": {
     "reading": "でる",
-    "translation": "to leave / to go out",
+    "translation": "to leave / to go out / to attend",
     "level": "basic",
     "sonkeigo": { "form": "お出になる", "reading": "おでになる", "pattern": "o_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "出させていただく", "reading": "ださせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "出させていただく", "reading": "でさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "humbleSubclass": "kenjougo_i", "conditions": ["The speaker is permitted or invited to attend, and regards the opportunity to attend as a benefit."], "review": { "status": "reviewed", "rationale": "Using 出る in the sense of attending is defensible with an invitation or permission and benefit; the example demonstrates that sense and the reading follows 出る（でる） rather than 出す（だす）.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "出ます", "reading": "でます", "availability": "present" },
     "examples": [
       { "context": "Noting that a superior has left", "ja": "課長はもうお出になりました。", "en": "The section chief has already left.", "type": "sonkeigo" },
-      { "context": "Excusing yourself from a meeting", "ja": "少々席を外させていただきます。", "en": "Please excuse me for a moment.", "type": "kenjougo" }
+      { "context": "Accepting an invitation to attend a meeting", "ja": "明日の会議には私も出させていただきます。", "en": "I will be glad to attend tomorrow's meeting.", "type": "kenjougo" }
     ]
   },
   "答える": {
@@ -879,11 +880,11 @@
     "translation": "to submit",
     "level": "intermediate",
     "sonkeigo": { "form": "ご提出になる", "reading": "ごていしゅつになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "提出させていただく", "reading": "ていしゅつさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "提出いたす", "reading": "ていしゅついたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "review": { "status": "reviewed", "rationale": "The context-free record reports the speaker's own act of submitting, so the productive する→いたす humble-II form is the standalone answer.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "提出します", "reading": "ていしゅつします", "availability": "present" },
     "examples": [
       { "context": "Asking for submission", "ja": "金曜日までにご提出いただけますか。", "en": "Could you submit it by Friday?", "type": "sonkeigo" },
-      { "context": "Submitting a proposal", "ja": "企画書を提出させていただきます。", "en": "I would like to submit the proposal.", "type": "kenjougo" }
+      { "context": "Submitting a proposal", "ja": "企画書を提出いたします。", "en": "I will submit the proposal.", "type": "kenjougo" }
     ]
   },
   "参加する": {
@@ -891,11 +892,11 @@
     "translation": "to participate",
     "level": "intermediate",
     "sonkeigo": { "form": "ご参加になる", "reading": "ごさんかになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "参加させていただく", "reading": "さんかさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "参加いたす", "reading": "さんかいたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "alternatives": [{ "form": "参加させていただく", "reading": "さんかさせていただく", "conditions": ["Use when the speaker participates with the organizer's permission or invitation and regards the opportunity as a benefit."] }], "review": { "status": "reviewed", "rationale": "The productive する→いたす humble-II form is the context-free answer; the invitation-and-benefit construction remains a conditional alternative.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "high" } },
     "teineigo": { "form": "参加します", "reading": "さんかします", "availability": "present" },
     "examples": [
       { "context": "Inviting someone to participate", "ja": "ぜひご参加いただければ幸いです。", "en": "We would be grateful if you could participate.", "type": "sonkeigo" },
-      { "context": "Accepting an invitation", "ja": "喜んで参加させていただきます。", "en": "I would be happy to participate.", "type": "kenjougo" }
+      { "context": "Confirming participation", "ja": "来月の研修に参加いたします。", "en": "I will participate in next month's training.", "type": "kenjougo" }
     ]
   },
   "招待する": {
@@ -915,35 +916,35 @@
     "translation": "to understand / to comprehend",
     "level": "advanced",
     "sonkeigo": { "form": "ご理解になる", "reading": "ごりかいになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "理解させていただく", "reading": "りかいさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "理解いたす", "reading": "りかいいたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "review": { "status": "reviewed", "rationale": "Objective comprehension does not ordinarily depend on another party's permission or confer a permission-based benefit, so the general する→いたす humble-II form is the standalone answer.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "理解します", "reading": "りかいします", "availability": "present" },
     "examples": [
       { "context": "Asking for understanding", "ja": "ご理解いただけますようお願いいたします。", "en": "We kindly ask for your understanding.", "type": "sonkeigo" },
-      { "context": "Confirming comprehension", "ja": "状況は理解させていただきました。", "en": "I have understood the situation.", "type": "kenjougo" }
+      { "context": "Confirming objective comprehension", "ja": "システムの仕組みは理解いたしました。", "en": "I have understood how the system works.", "type": "kenjougo" }
     ]
   },
   "賛成する": {
     "reading": "さんせいする",
     "translation": "to agree / to approve",
     "level": "advanced",
-    "sonkeigo": { "form": "ご賛成になる", "reading": "ごさんせいになる", "pattern": "go_ni_naru", "availability": "present", "review": { "status": "needs_review" } },
-    "kenjougo": { "form": "賛成させていただく", "reading": "さんせいさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "sonkeigo": { "form": "賛成なさる", "reading": "さんせいなさる", "pattern": "nasaru", "availability": "present", "review": { "status": "reviewed", "rationale": "Replacing する with なさる is the guidance's productive respectful construction for する-verbs and provides a natural respectful predicate for another person's agreement.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 24 (PDF p. 27), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
+    "kenjougo": { "form": "賛成いたす", "reading": "さんせいいたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "review": { "status": "reviewed", "rationale": "The guidance explicitly says 御賛成する is not conventionally formable, while する→いたす is the general humble-II transformation; agreement normally requires no permission-and-benefit framing.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed pp. 27–28 (PDF pp. 30–31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "賛成します", "reading": "さんせいします", "availability": "present" },
     "examples": [
-      { "context": "Asking if someone agrees", "ja": "こちらの案にご賛成いただけますか。", "en": "Would you agree with this proposal?", "type": "sonkeigo" },
-      { "context": "Expressing agreement", "ja": "その方針に賛成させていただきます。", "en": "I agree with that policy.", "type": "kenjougo" }
+      { "context": "Reporting a superior's agreement", "ja": "部長もこちらの案に賛成なさいました。", "en": "The manager also agreed with this proposal.", "type": "sonkeigo" },
+      { "context": "Expressing agreement", "ja": "その方針に賛成いたします。", "en": "I agree with that policy.", "type": "kenjougo" }
     ]
   },
   "反対する": {
     "reading": "はんたいする",
     "translation": "to oppose / to object",
     "level": "advanced",
-    "sonkeigo": { "form": "ご反対になる", "reading": "ごはんたいになる", "pattern": "go_ni_naru", "availability": "present", "review": { "status": "needs_review" } },
-    "kenjougo": { "form": "反対させていただく", "reading": "はんたいさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "sonkeigo": { "form": "反対なさる", "reading": "はんたいなさる", "pattern": "nasaru", "availability": "present", "review": { "status": "reviewed", "rationale": "Replacing する with なさる is the guidance's productive respectful construction for する-verbs and gives a natural respectful predicate for another person's opposition.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 24 (PDF p. 27), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
+    "kenjougo": { "form": "反対いたす", "reading": "はんたいいたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "review": { "status": "reviewed", "rationale": "Opposition normally does not depend on another party's permission or confer a permission-based benefit, so the general する→いたす humble-II form is the standalone answer.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "反対します", "reading": "はんたいします", "availability": "present" },
     "examples": [
-      { "context": "Noting a superior's objection", "ja": "部長はこの案にご反対のようです。", "en": "The manager seems to oppose this plan.", "type": "sonkeigo" },
-      { "context": "Politely expressing disagreement", "ja": "恐れ入りますが、その点については反対させていただきます。", "en": "I'm sorry, but I must respectfully disagree on that point.", "type": "kenjougo" }
+      { "context": "Noting a superior's objection", "ja": "部長はこの案に反対なさっています。", "en": "The manager opposes this plan.", "type": "sonkeigo" },
+      { "context": "Politely expressing disagreement", "ja": "恐れ入りますが、その点については反対いたします。", "en": "I'm sorry, but I respectfully disagree on that point.", "type": "kenjougo" }
     ]
   },
   "心配する": {
@@ -963,11 +964,11 @@
     "translation": "to fill in / to write in",
     "level": "intermediate",
     "sonkeigo": { "form": "ご記入になる", "reading": "ごきにゅうになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "記入させていただく", "reading": "きにゅうさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "記入いたす", "reading": "きにゅういたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "review": { "status": "reviewed", "rationale": "The example merely reports the speaker's own act of filling in a form and establishes no permission-based benefit, so the general する→いたす humble-II form is the standalone answer.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "記入します", "reading": "きにゅうします", "availability": "present" },
     "examples": [
       { "context": "Asking a guest to fill out a form", "ja": "こちらにご記入いただけますか。", "en": "Could you please fill this in?", "type": "sonkeigo" },
-      { "context": "Filling out a form yourself", "ja": "こちらに記入させていただきます。", "en": "I will fill this in.", "type": "kenjougo" }
+      { "context": "Filling out a form yourself", "ja": "こちらに記入いたします。", "en": "I will fill this in.", "type": "kenjougo" }
     ]
   },
   "予約する": {
@@ -987,11 +988,11 @@
     "translation": "to order",
     "level": "intermediate",
     "sonkeigo": { "form": "ご注文になる", "reading": "ごちゅうもんになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "注文させていただく", "reading": "ちゅうもんさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "注文いたす", "reading": "ちゅうもんいたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "review": { "status": "reviewed", "rationale": "Placing an ordinary order does not require representing the action as permission received for the speaker's benefit, so the general する→いたす humble-II form is the standalone answer.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "注文します", "reading": "ちゅうもんします", "availability": "present" },
     "examples": [
       { "context": "Taking an order", "ja": "ご注文はお決まりでしょうか。", "en": "Are you ready to order?", "type": "sonkeigo" },
-      { "context": "Placing an order", "ja": "こちらを注文させていただきます。", "en": "I would like to order this.", "type": "kenjougo" }
+      { "context": "Placing an order", "ja": "こちらを注文いたします。", "en": "I would like to order this.", "type": "kenjougo" }
     ]
   },
   "質問する": {
@@ -999,11 +1000,11 @@
     "translation": "to ask a question",
     "level": "intermediate",
     "sonkeigo": { "form": "ご質問になる", "reading": "ごしつもんになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "質問させていただく", "reading": "しつもんさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "伺う", "reading": "うかがう", "pattern": "special", "availability": "present", "humbleSubclass": "kenjougo_i", "alternatives": [{ "form": "質問させていただく", "reading": "しつもんさせていただく", "conditions": ["Use when the listener or a third party permits the question and the speaker benefits from being allowed to ask it."] }], "review": { "status": "reviewed", "rationale": "The guidance lists 伺う as the specific humble-I form of 尋ねる and 聞く, making it the natural standalone answer for asking a question; the former form remains conditional.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 26 (PDF p. 29) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "質問します", "reading": "しつもんします", "availability": "present" },
     "examples": [
       { "context": "Inviting questions", "ja": "何かご質問がございましたらどうぞ。", "en": "If you have any questions, please go ahead.", "type": "sonkeigo" },
-      { "context": "Asking a question in a meeting", "ja": "一点質問させていただいてもよろしいですか。", "en": "May I ask one question?", "type": "kenjougo" }
+      { "context": "Asking a question in a meeting", "ja": "一点、伺ってもよろしいですか。", "en": "May I ask one question?", "type": "kenjougo" }
     ]
   },
   "返事する": {
@@ -1023,11 +1024,11 @@
     "translation": "to handle / to deal with",
     "level": "advanced",
     "sonkeigo": { "form": "ご対応になる", "reading": "ごたいおうになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "対応させていただく", "reading": "たいおうさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "対応いたす", "reading": "たいおういたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "review": { "status": "reviewed", "rationale": "The context-free record reports the speaker's own act of handling the matter, so the productive する→いたす humble-II form is the standalone answer.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "対応します", "reading": "たいおうします", "availability": "present" },
     "examples": [
       { "context": "Thanking for handling a matter", "ja": "迅速にご対応いただきありがとうございます。", "en": "Thank you for handling this promptly.", "type": "sonkeigo" },
-      { "context": "Offering to handle it", "ja": "私が対応させていただきます。", "en": "I will take care of it.", "type": "kenjougo" }
+      { "context": "Offering to handle it", "ja": "私が対応いたします。", "en": "I will take care of it.", "type": "kenjougo" }
     ]
   },
   "用意する": {
@@ -1058,12 +1059,12 @@
     "reading": "えんりょする",
     "translation": "to refrain / to hold back",
     "level": "advanced",
-    "sonkeigo": { "form": "ご遠慮になる", "reading": "ごえんりょになる", "pattern": "go_ni_naru", "availability": "present", "review": { "status": "needs_review" } },
-    "kenjougo": { "form": "遠慮させていただく", "reading": "えんりょさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "sonkeigo": { "form": "遠慮なさる", "reading": "えんりょなさる", "pattern": "nasaru", "availability": "present", "review": { "status": "reviewed", "rationale": "Replacing する with なさる supplies a respectful predicate for another person's act of refraining; the example describes that act instead of making the different request ご遠慮なく.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 24 (PDF p. 27), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
+    "kenjougo": { "form": "遠慮いたす", "reading": "えんりょいたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "alternatives": [{ "form": "遠慮させていただく", "reading": "えんりょさせていただく", "conditions": ["Use when declining another party's invitation or offer and framing the refusal as permitted and beneficial to the speaker."] }], "review": { "status": "reviewed", "rationale": "The productive する→いたす humble-II form is the context-free answer; the established させていただく expression remains conditional on permission-and-benefit framing.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }, { "source": "語彙力.com「『遠慮させていただく』のメール例文と言い換え表現」", "locator": "「遠慮させていただく」の意味", "url": "https://goiryoku.com/enryo/" }], "confidence": "medium" } },
     "teineigo": { "form": "遠慮します", "reading": "えんりょします", "availability": "present" },
     "examples": [
-      { "context": "Telling someone not to hold back", "ja": "どうぞご遠慮なくおっしゃってください。", "en": "Please don't hesitate to say so.", "type": "sonkeigo" },
-      { "context": "Politely declining", "ja": "今回は遠慮させていただきます。", "en": "I will refrain this time.", "type": "kenjougo" }
+      { "context": "Reporting a superior's decision to refrain", "ja": "部長は今回は出席を遠慮なさいました。", "en": "The manager decided not to attend this time.", "type": "sonkeigo" },
+      { "context": "Politely declining", "ja": "今回は遠慮いたします。", "en": "I will refrain this time.", "type": "kenjougo" }
     ]
   },
   "了解する": {
@@ -1071,7 +1072,7 @@
     "translation": "to acknowledge / to understand",
     "level": "advanced",
     "sonkeigo": { "form": "ご了解になる", "reading": "ごりょうかいになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "了解いたす", "reading": "りょうかいいたす", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "了解いたす", "reading": "りょうかいいたす", "pattern": "itasu", "availability": "present" },
     "teineigo": { "form": "了解します", "reading": "りょうかいします", "availability": "present" },
     "examples": [
       { "context": "Asking for acknowledgment", "ja": "ご了解いただけますでしょうか。", "en": "Could we have your acknowledgment?", "type": "sonkeigo" },
@@ -1083,11 +1084,11 @@
     "translation": "to decline / to withdraw",
     "level": "advanced",
     "sonkeigo": { "form": "ご辞退になる", "reading": "ごじたいになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "辞退させていただく", "reading": "じたいさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "辞退いたす", "reading": "じたいいたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "alternatives": [{ "form": "辞退させていただく", "reading": "じたいさせていただく", "conditions": ["Use when declining another party's offer, award, or position and framing that refusal as permitted and beneficial to the speaker."] }], "review": { "status": "reviewed", "rationale": "The productive する→いたす humble-II form is the context-free answer; the permission-and-benefit construction remains a conditional alternative.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "辞退します", "reading": "じたいします", "availability": "present" },
     "examples": [
       { "context": "Reporting that someone declined", "ja": "先方はご辞退になりました。", "en": "The other party has declined.", "type": "sonkeigo" },
-      { "context": "Declining an award or position", "ja": "誠に恐縮ですが、辞退させていただきます。", "en": "I'm very sorry, but I must respectfully decline.", "type": "kenjougo" }
+      { "context": "Declining an award or position", "ja": "誠に恐縮ですが、辞退いたします。", "en": "I'm very sorry, but I must respectfully decline.", "type": "kenjougo" }
     ]
   },
   "拝借する": {
@@ -1227,11 +1228,11 @@
     "translation": "to visit (formal)",
     "level": "advanced",
     "sonkeigo": { "form": "ご訪問になる", "reading": "ごほうもんになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "訪問させていただく", "reading": "ほうもんさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "伺う", "reading": "うかがう", "pattern": "special", "availability": "present", "humbleSubclass": "kenjougo_i", "alternatives": [{ "form": "訪問させていただく", "reading": "ほうもんさせていただく", "conditions": ["Use when the host or a third party permits the visit and the speaker benefits from being allowed to visit."] }], "review": { "status": "reviewed", "rationale": "The guidance explicitly lists 伺う as the specific humble-I form of 訪ねる, so it is the natural standalone answer for visiting; the former form remains conditional.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 26 (PDF p. 29) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "訪問します", "reading": "ほうもんします", "availability": "present" },
     "examples": [
       { "context": "Confirming a visit from a client", "ja": "来週ご訪問いただけるとのこと、お待ちしております。", "en": "We look forward to your visit next week.", "type": "sonkeigo" },
-      { "context": "Requesting to visit", "ja": "来週、御社を訪問させていただきたいのですが。", "en": "I would like to visit your company next week.", "type": "kenjougo" }
+      { "context": "Requesting to visit", "ja": "来週、御社へ伺いたいのですが。", "en": "I would like to visit your company next week.", "type": "kenjougo" }
     ]
   },
   "確かめる": {
@@ -1251,11 +1252,11 @@
     "translation": "to approve / to authorize",
     "level": "advanced",
     "sonkeigo": { "form": "ご承認になる", "reading": "ごしょうにんになる", "pattern": "go_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "承認させていただく", "reading": "しょうにんさせていただく", "pattern": "sase_te_itadaku", "availability": "present", "review": { "status": "needs_review" } },
+    "kenjougo": { "form": "承認いたす", "reading": "しょうにんいたす", "pattern": "itasu", "availability": "present", "humbleSubclass": "kenjougo_ii", "review": { "status": "reviewed", "rationale": "Granting approval is an exercise of the speaker's authority rather than an action ordinarily permitted by the proposal's author for the speaker's benefit, so the general する→いたす humble-II form is the standalone answer.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed p. 28 (PDF p. 31) and printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "承認します", "reading": "しょうにんします", "availability": "present" },
     "examples": [
       { "context": "Requesting approval", "ja": "こちらの企画をご承認いただけますでしょうか。", "en": "Could you approve this project plan?", "type": "sonkeigo" },
-      { "context": "Granting approval", "ja": "ご提案を承認させていただきます。", "en": "I will approve your proposal.", "type": "kenjougo" }
+      { "context": "Granting approval", "ja": "ご提案を承認いたします。", "en": "I will approve your proposal.", "type": "kenjougo" }
     ]
   },
   "依頼する": {

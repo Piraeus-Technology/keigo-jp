@@ -9,6 +9,10 @@ export const KEIGO_PATTERNS = [
   'go_ni_naru',
   'go_suru',
   'sase_te_itadaku',
+  'itasu',
+  'nasaru',
+  'o_itasu',
+  'go_itasu',
 ] as const;
 
 export type KeigoPattern = typeof KEIGO_PATTERNS[number];
@@ -123,6 +127,8 @@ export const GRADABLE_FORMS: KeigoForm[] = ['sonkeigo', 'kenjougo'];
 export const ALL_LEVELS: BusinessLevel[] = ['basic', 'intermediate', 'advanced'];
 
 const LEXICALIZED_SPECIAL_FORMS = new Set([
+  'なさる',
+  'いたす',
   'ご覧になる',
   'おかけになる',
   'お休みになる',
@@ -131,8 +137,12 @@ const LEXICALIZED_SPECIAL_FORMS = new Set([
 ]);
 
 export function inferKeigoPattern(form: string): KeigoPattern {
-  if (/させていただく$/.test(form)) return 'sase_te_itadaku';
   if (LEXICALIZED_SPECIAL_FORMS.has(form)) return 'special';
+  if (/させていただく$/.test(form)) return 'sase_te_itadaku';
+  if (/^お.+いたす$/.test(form)) return 'o_itasu';
+  if (/^ご.+いたす$/.test(form)) return 'go_itasu';
+  if (/いたす$/.test(form)) return 'itasu';
+  if (/なさる$/.test(form)) return 'nasaru';
   if (/^お.+になる$/.test(form)) return 'o_ni_naru';
   if (/^ご.+になる$/.test(form)) return 'go_ni_naru';
   if (/^お.+する$/.test(form)) return 'o_suru';
