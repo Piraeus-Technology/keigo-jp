@@ -149,6 +149,9 @@ export default function FeedbackScreen() {
           style={[styles.rowCard, { backgroundColor: colors.card }]}
           onPress={() => navigation.navigate('Stats')}
           activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel="Quiz Stats"
+          accessibilityHint="Streak, accuracy, activity calendar"
         >
           <Text style={styles.rowEmoji}>📊</Text>
           <View style={styles.rowInfo}>
@@ -161,6 +164,9 @@ export default function FeedbackScreen() {
           style={[styles.rowCard, { backgroundColor: colors.card }]}
           onPress={() => navigation.navigate('FlashcardStats')}
           activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel="Flashcard Stats"
+          accessibilityHint="Cards reviewed, accuracy, weak verbs"
         >
           <Text style={styles.rowEmoji}>🗂️</Text>
           <View style={styles.rowInfo}>
@@ -179,6 +185,7 @@ export default function FeedbackScreen() {
           disabled={isResetting}
           accessibilityRole="button"
           accessibilityLabel="Reset Learning Data"
+          accessibilityHint="Deletes progress, favorites, and history; keeps settings"
           accessibilityState={{ disabled: isResetting }}
         >
           <Ionicons name="trash-outline" size={22} color={colors.errorText} style={{ marginRight: spacing.md }} />
@@ -198,6 +205,9 @@ export default function FeedbackScreen() {
           style={[styles.rowCard, { backgroundColor: colors.card }]}
           onPress={handleSendEmail}
           activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel="Send Feedback, opens email app"
+          accessibilityHint="Bug reports, suggestions, missing content"
         >
           <Text style={styles.rowEmoji}>💬</Text>
           <View style={styles.rowInfo}>
@@ -212,6 +222,9 @@ export default function FeedbackScreen() {
           style={[styles.rowCard, { backgroundColor: colors.card }]}
           onPress={handleRateApp}
           activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel="Enjoying KeiGo JP? Rate the app"
+          accessibilityHint={`Rate us on ${storeName}`}
         >
           <Text style={styles.rowEmoji}>⭐</Text>
           <View style={styles.rowInfo}>
@@ -237,6 +250,9 @@ export default function FeedbackScreen() {
             }
           }}
           activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel="Share KeiGo JP"
+          accessibilityHint="Tell a friend about the app"
         >
           <Text style={styles.rowEmoji}>🔗</Text>
           <View style={styles.rowInfo}>
@@ -255,6 +271,8 @@ export default function FeedbackScreen() {
             });
           }}
           activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel="Privacy Policy, opens in browser"
         >
           <Ionicons name="shield-checkmark-outline" size={20} color={colors.textSecondary} style={{ marginRight: spacing.md }} />
           <Text style={[styles.linkText, { color: colors.textPrimary }]}>Privacy Policy</Text>
