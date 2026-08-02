@@ -103,7 +103,7 @@ describe('QuizScreen question eligibility', () => {
   });
 
   test('keeps a non-degenerate form available on a partially excluded record', () => {
-    const entry = verbEntries.find(([verb]) => verb === '申す')!;
+    const entry = verbEntries.find(([verb]) => verb === '死ぬ')!;
 
     expect(generateQuestion(['kenjougo'], () => 1, [entry], () => 0)).toBeNull();
     expect(generateQuestion(
@@ -111,6 +111,6 @@ describe('QuizScreen question eligibility', () => {
       () => 1,
       [entry],
       () => 0,
-    )?.correctAnswer).toBe('おっしゃる');
+    )?.correctAnswer).toBe('お亡くなりになる');
   });
 });

@@ -343,9 +343,10 @@ describe('FlashcardScreen prompt language', () => {
   });
 
   test('carries the direction-neutral gloss from verb data onto a generated card', () => {
-    const data = (verbs as unknown as Record<string, VerbData>)['拝借する'];
+    const source = (verbs as unknown as Record<string, VerbData>)['知る'];
+    const data = { ...source, promptGloss: 'to know' };
     const card = generateCard(
-      [['拝借する', data]],
+      [['知る', data]],
       [],
       false,
       ['sonkeigo'],
@@ -354,9 +355,9 @@ describe('FlashcardScreen prompt language', () => {
       () => 0,
     );
 
-    expect(card?.promptGloss).toBe('to borrow');
+    expect(card?.promptGloss).toBe('to know');
     expect(card && getPromptFace(card, 'english').primary)
-      .toBe('How do you say “to borrow” in keigo?');
+      .toBe('How do you say “to know” in keigo?');
   });
 
   test('falls back to the Japanese headword when a verb has no translation', () => {
