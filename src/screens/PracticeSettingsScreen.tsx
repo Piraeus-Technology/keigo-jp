@@ -17,6 +17,8 @@ import {
   KeigoForm,
   KEIGO_FORM_LABELS,
   LEVEL_LABELS,
+  PROMPT_LANGUAGES,
+  PROMPT_LANGUAGE_LABELS,
 } from '../utils/keigoTypes';
 import { usePracticeSettingsStore, allForms, allLevels } from '../store/practiceSettingsStore';
 import type { PracticeSettingsParams, QuizStackParamList } from '../types/navigation';
@@ -32,9 +34,9 @@ export default function PracticeSettingsScreen() {
   const mode = route.params.mode;
 
   const {
-    activeForms, activeLevels, includeExpressions,
+    activeForms, activeLevels, includeExpressions, promptLanguage,
     loadPracticeSettings, toggleForm, toggleLevel, toggleIncludeExpressions,
-    setActiveForms, setActiveLevels,
+    setActiveForms, setActiveLevels, setPromptLanguage,
   } = usePracticeSettingsStore();
 
   useEffect(() => {
@@ -151,17 +153,62 @@ export default function PracticeSettingsScreen() {
         })}
       </View>
 
-      {/* Flashcard-only: include expression cards */}
+      {/* Flashcard-only: prompt language and expression cards */}
       {mode === 'flashcards' && (
         <>
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Prompt Language</Text>
+          </View>
+          <View style={[styles.card, { backgroundColor: colors.card }]}>
+            {PROMPT_LANGUAGES.map((language, i) => {
+              const active = promptLanguage === language;
+              const { title, detail } = PROMPT_LANGUAGE_LABELS[language];
+              return (
+                <TouchableOpacity
+                  key={language}
+                  style={[
+                    styles.row,
+                    i < PROMPT_LANGUAGES.length - 1 && { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.divider },
+                  ]}
+                  onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setPromptLanguage(language);
+                  }}
+                  activeOpacity={0.7}
+                  accessibilityRole="radio"
+                  accessibilityLabel={`${title}. ${detail}`}
+                  accessibilityState={{ checked: active }}
+                >
+                  <View style={styles.rowTextGroup}>
+                    <Text style={[styles.rowText, { color: colors.textPrimary }]}>{title}</Text>
+                    <Text style={[styles.rowDetail, { color: colors.textMuted }]}>{detail}</Text>
+                  </View>
+                  <Ionicons
+                    name={active ? 'radio-button-on' : 'radio-button-off'}
+                    size={24}
+                    color={active ? colors.primary : colors.border}
+                  />
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
           <View style={styles.sectionHeader}>
             <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Cards</Text>
           </View>
           <View style={[styles.card, { backgroundColor: colors.card }]}>
             <View style={styles.row}>
-              <Text style={[styles.rowText, { color: colors.textPrimary }]}>Include expressions</Text>
+              <View style={styles.rowTextGroup}>
+                <Text style={[styles.rowText, { color: colors.textPrimary }]}>Include expressions</Text>
+                {promptLanguage === 'japanese' && (
+                  <Text style={[styles.rowDetail, { color: colors.textMuted }]}>
+                    Off while prompts are Japanese — expressions are asked in English.
+                  </Text>
+                )}
+              </View>
               <Switch
-                value={includeExpressions}
+                value={includeExpressions && promptLanguage !== 'japanese'}
+                disabled={promptLanguage === 'japanese'}
                 onValueChange={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   toggleIncludeExpressions();
@@ -227,9 +274,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: spacing.md,
   },
+  rowTextGroup: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
   rowText: {
     fontSize: fonts.sizes.md,
     fontWeight: fonts.weights.medium,
+  },
+  rowDetail: {
+    fontSize: fonts.sizes.sm,
+    marginTop: 2,
   },
   startButton: {
     flexDirection: 'row',

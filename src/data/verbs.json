@@ -4,7 +4,7 @@
     "translation": "to say",
     "level": "basic",
     "sonkeigo": { "form": "おっしゃる", "reading": "おっしゃる", "pattern": "special", "availability": "present" },
-    "kenjougo": { "form": "申す", "reading": "もうす", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "申す", "reading": "もうす", "pattern": "special", "availability": "present", "alternatives": [{ "form": "申し上げる", "reading": "もうしあげる" }] },
     "teineigo": { "form": "言います", "reading": "いいます", "availability": "present" },
     "examples": [
       { "context": "Asking a superior what they said", "ja": "部長は何とおっしゃいましたか。", "en": "What did the department head say?", "type": "sonkeigo" },
@@ -100,7 +100,7 @@
     "translation": "to listen / to ask",
     "level": "basic",
     "sonkeigo": { "form": "お聞きになる", "reading": "おききになる", "pattern": "o_ni_naru", "availability": "present" },
-    "kenjougo": { "form": "伺う", "reading": "うかがう", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "伺う", "reading": "うかがう", "pattern": "special", "availability": "present", "alternatives": [{ "form": "承る", "reading": "うけたまわる" }] },
     "teineigo": { "form": "聞きます", "reading": "ききます", "availability": "present" },
     "examples": [
       { "context": "Checking if a superior heard news", "ja": "この件についてお聞きになりましたか。", "en": "Have you heard about this matter?", "type": "sonkeigo" },
@@ -1094,48 +1094,48 @@
   "拝借する": {
     "reading": "はいしゃくする",
     "translation": "to borrow (humble)",
+    "promptGloss": "to borrow",
     "level": "advanced",
-    "sonkeigo": { "form": "お貸しになる", "reading": "おかしになる", "pattern": "o_ni_naru", "availability": "present" },
+    "sonkeigo": { "note": "拝借する is inherently humble; use 借りる for the respectful form.", "availability": "absent" },
     "kenjougo": { "form": "拝借する", "reading": "はいしゃくする", "pattern": "special", "availability": "present" },
     "teineigo": { "form": "借ります", "reading": "かります", "availability": "present" },
     "examples": [
-      { "context": "Lending something to a colleague", "ja": "どうぞお貸しになってください。", "en": "Please lend it to them.", "type": "sonkeigo" },
       { "context": "Asking to borrow something", "ja": "お電話を拝借してもよろしいですか。", "en": "May I borrow your phone?", "type": "kenjougo" }
     ]
   },
   "存じる": {
     "reading": "ぞんじる",
     "translation": "to know / to think (humble)",
+    "promptGloss": "to know",
     "level": "advanced",
-    "sonkeigo": { "form": "ご存じだ", "reading": "ごぞんじだ", "pattern": "special", "availability": "present" },
+    "sonkeigo": { "note": "存じる is inherently humble; use 知る for the respectful form ご存じだ.", "availability": "absent" },
     "kenjougo": { "form": "存じる", "reading": "ぞんじる", "pattern": "special", "availability": "present" },
     "teineigo": { "form": "知っています", "reading": "しっています", "availability": "present" },
     "examples": [
-      { "context": "Asking if someone knows a person", "ja": "山田様のことはご存じでいらっしゃいますか。", "en": "Are you acquainted with Mr. Yamada?", "type": "sonkeigo" },
       { "context": "Saying you know something", "ja": "その件は存じております。", "en": "I am aware of that matter.", "type": "kenjougo" }
     ]
   },
   "承る": {
     "reading": "うけたまわる",
     "translation": "to humbly receive / to hear",
+    "promptGloss": "to hear / to accept a request",
     "level": "advanced",
-    "sonkeigo": { "form": "お聞きになる", "reading": "おききになる", "pattern": "o_ni_naru", "availability": "present" },
+    "sonkeigo": { "note": "承る is inherently humble; use 聞く for the respectful form お聞きになる.", "availability": "absent" },
     "kenjougo": { "form": "承る", "reading": "うけたまわる", "pattern": "special", "availability": "present" },
     "teineigo": { "form": "聞きます", "reading": "ききます", "availability": "present" },
     "examples": [
-      { "context": "When a superior hears a customer's request", "ja": "部長はお客様のご要望をお聞きになりました。", "en": "The manager listened to the customer's request.", "type": "sonkeigo" },
       { "context": "Receiving an order or reservation", "ja": "ご予約を承りました。", "en": "I have received your reservation.", "type": "kenjougo" }
     ]
   },
   "申し上げる": {
     "reading": "もうしあげる",
     "translation": "to humbly say / to tell",
+    "promptGloss": "to say / to tell",
     "level": "advanced",
-    "sonkeigo": { "form": "おっしゃる", "reading": "おっしゃる", "pattern": "special", "availability": "present" },
+    "sonkeigo": { "note": "申し上げる is inherently humble; use 言う for the respectful form おっしゃる.", "availability": "absent" },
     "kenjougo": { "form": "申し上げる", "reading": "もうしあげる", "pattern": "special", "availability": "present" },
     "teineigo": { "form": "言います", "reading": "いいます", "availability": "present" },
     "examples": [
-      { "context": "When a superior says something", "ja": "社長がおっしゃった通りでございます。", "en": "It is just as the president said.", "type": "sonkeigo" },
       { "context": "Making a formal announcement", "ja": "一言お礼を申し上げます。", "en": "I would like to express a word of thanks.", "type": "kenjougo" }
     ]
   },
@@ -1178,12 +1178,12 @@
   "申す": {
     "reading": "もうす",
     "translation": "to be called / to say (humble)",
+    "promptGloss": "to say / to be named",
     "level": "advanced",
-    "sonkeigo": { "form": "おっしゃる", "reading": "おっしゃる", "pattern": "special", "availability": "present" },
+    "sonkeigo": { "note": "申す is inherently humble; use 言う for the respectful form おっしゃる.", "availability": "absent" },
     "kenjougo": { "form": "申す", "reading": "もうす", "pattern": "special", "availability": "present" },
     "teineigo": { "form": "言います", "reading": "いいます", "availability": "present" },
     "examples": [
-      { "context": "When a superior is speaking", "ja": "課長がおっしゃる通りです。", "en": "It is as the section chief says.", "type": "sonkeigo" },
       { "context": "Introducing yourself on the phone", "ja": "ABC商事の鈴木と申します。", "en": "My name is Suzuki from ABC Trading.", "type": "kenjougo" }
     ]
   },

@@ -78,6 +78,9 @@ export interface VerbExample {
 export interface VerbData {
   reading: string;
   translation: string;
+  /** Direction-neutral gloss for English-mode flashcard prompts. Falls back to
+   * `translation`, which may encode the answer's own register. */
+  promptGloss?: string;
   level: BusinessLevel;
   sonkeigo: KeigoFormData;
   kenjougo: KeigoFormData;
@@ -109,6 +112,28 @@ export const LEVEL_LABELS: Record<BusinessLevel, string> = {
   basic: 'Basic',
   intermediate: 'Intermediate',
   advanced: 'Advanced',
+};
+
+// Which language a flashcard's prompt side is written in. Expression cards
+// only exist in the English direction — their Japanese headword is the answer —
+// so 'japanese' drills verbs alone.
+export const PROMPT_LANGUAGES = ['japanese', 'english', 'both'] as const;
+
+export type PromptLanguage = typeof PROMPT_LANGUAGES[number];
+
+export const PROMPT_LANGUAGE_LABELS: Record<PromptLanguage, { title: string; detail: string }> = {
+  japanese: {
+    title: 'Japanese',
+    detail: 'Verb cards only, shown without their English meaning.',
+  },
+  english: {
+    title: 'English',
+    detail: 'Every card asks for the keigo of an English meaning.',
+  },
+  both: {
+    title: 'Both',
+    detail: 'Mixes Japanese verb prompts with English expression prompts.',
+  },
 };
 
 export const CATEGORY_LABELS: Record<ExpressionCategory, { ja: string; en: string }> = {

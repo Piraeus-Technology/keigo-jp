@@ -302,6 +302,27 @@ describe('Verb data validation', () => {
     expect(verbEntries.length).toBeGreaterThan(0);
   });
 
+  test('English prompt glosses never encode the answer direction', () => {
+    const answerDirectionPattern = /humbl|respectful|honorific|\b(?:to|by|from)\s+(?:(?:a|an|the|your)\s+)?(?:superior|customer|client)\b/i;
+    const directionMarkers = [
+      'humble',
+      'respectful',
+      'honorific',
+      'to state / to express (to a superior)',
+      'to a customer',
+      'by a superior',
+      'from a client',
+    ];
+    const offenders = typedVerbEntries.filter(([, data]) =>
+      answerDirectionPattern.test(data.promptGloss || data.translation)
+    );
+
+    expect(directionMarkers.every((marker) =>
+      answerDirectionPattern.test(marker)
+    )).toBe(true);
+    expect(offenders.map(([verb]) => verb)).toEqual([]);
+  });
+
   describe.each(verbEntries)('verb "%s"', (verbKey, verb) => {
     test('has all required fields', () => {
       expect(verb).toHaveProperty('reading');
@@ -317,9 +338,13 @@ describe('Verb data validation', () => {
       expect(ALL_LEVELS).toContain(verb.level);
     });
 
-    test('sonkeigo has availability and pattern fields', () => {
+    test('sonkeigo has availability and a pattern only when present', () => {
       expect(verb.sonkeigo).toHaveProperty('availability');
-      expect(verb.sonkeigo).toHaveProperty('pattern');
+      if (verb.sonkeigo.availability === 'present') {
+        expect(verb.sonkeigo).toHaveProperty('pattern');
+      } else {
+        expect(verb.sonkeigo).not.toHaveProperty('pattern');
+      }
     });
 
     test('kenjougo has availability and a pattern only when present', () => {
@@ -337,11 +362,15 @@ describe('Verb data validation', () => {
     });
 
     test('sonkeigo pattern is valid and consistent with its form', () => {
-      expect(KEIGO_PATTERNS).toContain(verb.sonkeigo.pattern);
-      expect(isKeigoPatternConsistent(
-        verb.sonkeigo.form ?? '',
-        verb.sonkeigo.pattern as typeof KEIGO_PATTERNS[number],
-      )).toBe(true);
+      if (verb.sonkeigo.availability === 'present') {
+        expect(KEIGO_PATTERNS).toContain(verb.sonkeigo.pattern);
+        expect(isKeigoPatternConsistent(
+          verb.sonkeigo.form ?? '',
+          verb.sonkeigo.pattern as typeof KEIGO_PATTERNS[number],
+        )).toBe(true);
+      } else {
+        expect(verb.sonkeigo.pattern).toBeUndefined();
+      }
     });
 
     test('kenjougo pattern is valid and consistent with its form', () => {
@@ -412,6 +441,18 @@ describe('Verb data validation', () => {
       const hiraganaOnly = /^[\u3040-\u309Fー]+$/;
       expect(verb.reading).toMatch(hiraganaOnly);
     });
+  });
+
+  test('never attaches an example to a form marked absent', () => {
+    const offenders = typedVerbEntries.flatMap(([verb, data]) =>
+      data.examples
+        .filter((example) =>
+          getVerbFormData(data, example.type).availability === 'absent'
+        )
+        .map((example) => `${verb}:${example.type}`)
+    );
+
+    expect(offenders).toEqual([]);
   });
 
   test('classifies construction shape rather than only checking membership', () => {
@@ -495,12 +536,23 @@ describe('Verb data validation', () => {
   });
 
   test('every gradable verb/form pair has an answer distinct from its prompt', () => {
-    const pairs = getGradableVerbPairs(typedVerbEntries, ALL_FORMS);
+    const pairs = getGradableVerbPairs(typedVerbEntries, GRADABLE_FORMS);
 
-    expect(pairs.length).toBeGreaterThan(0);
+    expect(pairs).toHaveLength(195);
     expect(pairs.every(({ verb, formData }) =>
       formData.form !== verb
     )).toBe(true);
+  });
+
+  test('graded English prompts are unique within each requested form', () => {
+    const promptKeys = getGradableVerbPairs(
+      typedVerbEntries,
+      GRADABLE_FORMS,
+    ).map(({ data, form }) =>
+      `${form}:${(data.promptGloss || data.translation).trim().toLowerCase()}`
+    );
+
+    expect(new Set(promptKeys).size).toBe(promptKeys.length);
   });
 
   test('an absent form cannot reach any graded pool', () => {
@@ -587,7 +639,7 @@ describe('Verb data validation', () => {
     },
   );
 
-  test('derives pair-level exclusions while preserving other forms on the same records', () => {
+  test('excludes identity pairs and fully consolidates identity records', () => {
     const identityPairs = typedVerbEntries.flatMap(([verb, data]) =>
       ALL_FORMS.flatMap((form) => {
         const formData = getVerbFormData(data, form);
@@ -608,9 +660,35 @@ describe('Verb data validation', () => {
     for (const { verb, form } of identityPairs) {
       const data = (verbs as unknown as Record<string, VerbData>)[verb];
       expect(isGradableVerbForm(verb, data, form)).toBe(false);
-      expect(ALL_FORMS.some((otherForm) =>
-        isGradableVerbForm(verb, data, otherForm)
-      )).toBe(true);
+    }
+
+    for (const verb of [
+      '拝借する',
+      '存じる',
+      '承る',
+      '申し上げる',
+      '申す',
+    ]) {
+      const data = (verbs as unknown as Record<string, VerbData>)[verb];
+      expect(data).toBeDefined();
+      expect(getGradableVerbPairs([[verb, data]], GRADABLE_FORMS))
+        .toEqual([]);
+    }
+  });
+
+  test('promotes orphaned humble forms to plain-verb alternatives', () => {
+    const data = verbs as unknown as Record<string, VerbData>;
+    const expected = [
+      ['言う', { form: '申し上げる', reading: 'もうしあげる' }],
+      ['聞く', { form: '承る', reading: 'うけたまわる' }],
+    ] as const;
+
+    for (const [verb, alternative] of expected) {
+      const formData = getVerbFormData(data[verb], 'kenjougo');
+      expect(formData.availability).toBe('present');
+      expect(formData.alternatives).toEqual(
+        expect.arrayContaining([alternative]),
+      );
     }
   });
 
@@ -628,13 +706,13 @@ describe('Verb data validation', () => {
       example.type === 'sonkeigo' && example.ja.includes('お与えにな')
     )).toBe(true);
 
-    expect(receiving.availability).toBe('present');
-    if (receiving.availability === 'present') {
-      expect(receiving.form).toBe('お聞きになる');
-    }
+    expect(receiving.availability).toBe('absent');
+    expect(receiving.note).toMatch(
+      /inherently humble.*聞く.*お聞きになる/i,
+    );
     expect(data['承る'].examples.some((example) =>
-      example.type === 'sonkeigo' && example.ja.includes('お聞きにな')
-    )).toBe(true);
+      example.type === 'sonkeigo'
+    )).toBe(false);
 
     expect(death.availability).toBe('absent');
     expect(death.note).toMatch(/no canonical humble form/i);
@@ -649,8 +727,8 @@ describe('Verb data validation', () => {
 describe('Content integrity', () => {
   test('locks the adjudicated verb content', () => {
     expect(getContentDigest(verbs)).toEqual({
-      count: 2288,
-      digest: '347faeb902694d1d4f12c8c5979ebcf1000f0de345f9314233f24fc4bd228aa1',
+      count: 2269,
+      digest: 'a235d90faeac58aca60f222a957e765dd0f004b28c901d05ef97dfde931a6044',
     });
   });
 

@@ -9,6 +9,7 @@ import { __resetQuizStoreForTests, useQuizStore } from '../store/quizStore';
 import { __resetFlashcardStatsStoreForTests, useFlashcardStatsStore } from '../store/flashcardStatsStore';
 import { __resetSpacedRepStoreForTests, useSpacedRepStore } from '../store/spacedRepStore';
 import { __resetThemeStoreForTests, useThemeStore } from '../store/themeStore';
+import type { PromptLanguage } from '../utils/keigoTypes';
 
 const mockStorage = new Map<string, string>();
 
@@ -169,7 +170,45 @@ describe('store persistence hardening', () => {
       activeForms: ['sonkeigo'],
       activeLevels: allLevels,
       includeExpressions: true,
+      promptLanguage: 'both',
     });
+  });
+
+  test('prompt language defaults to both, persists, and rejects unknown values', async () => {
+    await usePracticeSettingsStore.getState().loadPracticeSettings();
+    expect(usePracticeSettingsStore.getState().promptLanguage).toBe('both');
+
+    await usePracticeSettingsStore.getState().setPromptLanguage('japanese');
+
+    expect(usePracticeSettingsStore.getState().promptLanguage).toBe('japanese');
+    expect(JSON.parse(mockStorage.get('practiceSettings')!).promptLanguage).toBe('japanese');
+
+    await usePracticeSettingsStore.getState().setPromptLanguage(
+      'klingon' as unknown as PromptLanguage,
+    );
+
+    expect(usePracticeSettingsStore.getState().promptLanguage).toBe('japanese');
+  });
+
+  test('prompt language survives a write failure and a pre-existing settings blob', async () => {
+    mockStorage.set(
+      'practiceSettings',
+      JSON.stringify({ activeForms: ['sonkeigo'], activeLevels: ['basic'], includeExpressions: false }),
+    );
+
+    await usePracticeSettingsStore.getState().loadPracticeSettings();
+
+    // Settings written before the prompt-language option existed read as 'both'
+    // and get rewritten with the new key.
+    expect(usePracticeSettingsStore.getState().promptLanguage).toBe('both');
+    expect(usePracticeSettingsStore.getState().includeExpressions).toBe(false);
+    expect(JSON.parse(mockStorage.get('practiceSettings')!).promptLanguage).toBe('both');
+
+    jest.mocked(AsyncStorage.setItem).mockRejectedValueOnce(new Error('disk full'));
+    await usePracticeSettingsStore.getState().setPromptLanguage('english');
+
+    expect(usePracticeSettingsStore.getState().promptLanguage).toBe('both');
+    expect(JSON.parse(mockStorage.get('practiceSettings')!).promptLanguage).toBe('both');
   });
 
   test('flashcard lifetime stats accumulate reviewed/correct', async () => {
