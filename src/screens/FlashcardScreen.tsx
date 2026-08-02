@@ -50,6 +50,7 @@ export interface Card {
   front: string; // verb kanji or expression translation prompt
   reading: string;
   translation: string;
+  promptGloss?: string;
   form?: KeigoForm;
   answer: string;
   answerReading: string;
@@ -95,6 +96,19 @@ export function englishPromptFor(translation: string): string {
   return `How do you say “${translation}” in keigo?`;
 }
 
+function asSentence(text: string): string {
+  const trimmed = text.trim();
+  return /[.!?。！？…]$/u.test(trimmed) ? trimmed : `${trimmed}.`;
+}
+
+function promptAccessibilityLabel(promptFace: PromptFace): string {
+  const prompt = [promptFace.label, promptFace.primary]
+    .filter((part): part is string => Boolean(part))
+    .map(asSentence)
+    .join(' ');
+  return `Flashcard prompt: ${prompt} Tap to reveal the answer.`;
+}
+
 /**
  * Decides what the prompt side of a card shows. Expression cards are always
  * English-prompted — their Japanese headword is the answer — so 'japanese' is
@@ -114,10 +128,11 @@ export function getPromptFace(card: Card, promptLanguage: PromptLanguage): Promp
   const formLabel = card.form ? KEIGO_FORM_LABELS[card.form] : null;
   const label = formLabel ? `${formLabel.ja} — ${formLabel.en}` : null;
 
-  if (promptLanguage === 'english' && card.translation) {
+  const gloss = card.promptGloss || card.translation;
+  if (promptLanguage === 'english' && gloss) {
     return {
       label,
-      primary: englishPromptFor(card.translation),
+      primary: englishPromptFor(gloss),
       primaryVariant: 'sentence',
       reading: null,
       translation: null,
@@ -227,6 +242,7 @@ export function generateCard(
     front: verb,
     reading: data.reading,
     translation: data.translation,
+    promptGloss: data.promptGloss,
     form,
     answer: formData.form,
     answerReading: formData.reading,
@@ -440,6 +456,13 @@ export default function FlashcardScreen() {
     outputRange: ['180deg', '360deg'],
   });
 
+  // The placeholder card is generated before persisted settings load. Keep it
+  // hidden until the saved prompt language is known, and never expose a stale
+  // English-only expression while Japanese prompts are active.
+  if (!settingsLoaded || (promptLanguage === 'japanese' && card?.cardType === 'expression')) {
+    return <View style={[styles.container, { backgroundColor: colors.bg }]} />;
+  }
+
   if (!card) return (
     <View style={[styles.container, { backgroundColor: colors.bg, justifyContent: 'center', alignItems: 'center' }]}>
       <Text style={{ color: colors.textMuted, fontSize: fonts.sizes.md }}>No matching cards</Text>
@@ -486,7 +509,7 @@ export default function FlashcardScreen() {
           accessibilityRole="button"
           accessibilityLabel={
             !flipped
-              ? `Flashcard prompt: ${promptFace.primary}. Tap to reveal the answer.`
+              ? promptAccessibilityLabel(promptFace)
               : undefined
           }
           accessibilityState={{ disabled: flipped }}

@@ -302,6 +302,14 @@ describe('Verb data validation', () => {
     expect(verbEntries.length).toBeGreaterThan(0);
   });
 
+  test('English prompt glosses never encode the answer direction', () => {
+    const offenders = typedVerbEntries.filter(([, data]) =>
+      /humbl|respectful|honorific/i.test(data.promptGloss || data.translation)
+    );
+
+    expect(offenders.map(([verb]) => verb)).toEqual([]);
+  });
+
   describe.each(verbEntries)('verb "%s"', (verbKey, verb) => {
     test('has all required fields', () => {
       expect(verb).toHaveProperty('reading');

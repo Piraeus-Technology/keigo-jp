@@ -78,6 +78,9 @@ export interface VerbExample {
 export interface VerbData {
   reading: string;
   translation: string;
+  /** Direction-neutral gloss for English-mode flashcard prompts. Falls back to
+   * `translation`, which may encode the answer's own register. */
+  promptGloss?: string;
   level: BusinessLevel;
   sonkeigo: KeigoFormData;
   kenjougo: KeigoFormData;

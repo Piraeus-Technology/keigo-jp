@@ -1094,6 +1094,7 @@
   "拝借する": {
     "reading": "はいしゃくする",
     "translation": "to borrow (humble)",
+    "promptGloss": "to borrow",
     "level": "advanced",
     "sonkeigo": { "form": "お貸しになる", "reading": "おかしになる", "pattern": "o_ni_naru", "availability": "present" },
     "kenjougo": { "form": "拝借する", "reading": "はいしゃくする", "pattern": "special", "availability": "present" },
@@ -1106,6 +1107,7 @@
   "存じる": {
     "reading": "ぞんじる",
     "translation": "to know / to think (humble)",
+    "promptGloss": "to know / to think",
     "level": "advanced",
     "sonkeigo": { "form": "ご存じだ", "reading": "ごぞんじだ", "pattern": "special", "availability": "present" },
     "kenjougo": { "form": "存じる", "reading": "ぞんじる", "pattern": "special", "availability": "present" },
@@ -1118,6 +1120,7 @@
   "承る": {
     "reading": "うけたまわる",
     "translation": "to humbly receive / to hear",
+    "promptGloss": "to receive / to hear",
     "level": "advanced",
     "sonkeigo": { "form": "お聞きになる", "reading": "おききになる", "pattern": "o_ni_naru", "availability": "present" },
     "kenjougo": { "form": "承る", "reading": "うけたまわる", "pattern": "special", "availability": "present" },
@@ -1130,6 +1133,7 @@
   "申し上げる": {
     "reading": "もうしあげる",
     "translation": "to humbly say / to tell",
+    "promptGloss": "to say / to tell",
     "level": "advanced",
     "sonkeigo": { "form": "おっしゃる", "reading": "おっしゃる", "pattern": "special", "availability": "present" },
     "kenjougo": { "form": "申し上げる", "reading": "もうしあげる", "pattern": "special", "availability": "present" },
@@ -1178,6 +1182,7 @@
   "申す": {
     "reading": "もうす",
     "translation": "to be called / to say (humble)",
+    "promptGloss": "to say / to be called",
     "level": "advanced",
     "sonkeigo": { "form": "おっしゃる", "reading": "おっしゃる", "pattern": "special", "availability": "present" },
     "kenjougo": { "form": "申す", "reading": "もうす", "pattern": "special", "availability": "present" },

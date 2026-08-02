@@ -332,6 +332,33 @@ describe('FlashcardScreen prompt language', () => {
     });
   });
 
+  test('prefers a direction-neutral gloss for an English prompt', () => {
+    const face = getPromptFace({
+      ...verbCard,
+      translation: 'to borrow (humble)',
+      promptGloss: 'to borrow',
+    }, 'english');
+
+    expect(face.primary).toBe('How do you say “to borrow” in keigo?');
+  });
+
+  test('carries the direction-neutral gloss from verb data onto a generated card', () => {
+    const data = (verbs as unknown as Record<string, VerbData>)['拝借する'];
+    const card = generateCard(
+      [['拝借する', data]],
+      [],
+      false,
+      ['sonkeigo'],
+      () => 1,
+      [],
+      () => 0,
+    );
+
+    expect(card?.promptGloss).toBe('to borrow');
+    expect(card && getPromptFace(card, 'english').primary)
+      .toBe('How do you say “to borrow” in keigo?');
+  });
+
   test('falls back to the Japanese headword when a verb has no translation', () => {
     const face = getPromptFace({ ...verbCard, translation: '' }, 'english');
 
@@ -364,17 +391,31 @@ describe('FlashcardScreen prompt language wiring', () => {
 
   const promptTextOf = (view: ReturnType<typeof render>) => {
     const label = view.getByLabelText(/Flashcard prompt:/).props.accessibilityLabel as string;
-    return /^Flashcard prompt: (.*)\. Tap to reveal the answer\.$/.exec(label)![1];
+    const prompt = /^Flashcard prompt: (?:尊敬語 — Respectful|謙譲語 — Humble)\. (.*) Tap to reveal the answer\.$/
+      .exec(label)![1];
+    return prompt.endsWith('.') ? prompt.slice(0, -1) : prompt;
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
     mockPracticeSettingsState.promptLanguage = 'both';
+    mockPracticeSettingsState.loaded = true;
   });
 
   afterEach(() => {
     jest.restoreAllMocks();
     mockPracticeSettingsState.promptLanguage = 'both';
+    mockPracticeSettingsState.loaded = true;
+  });
+
+  test('withholds the placeholder card until persisted settings load', () => {
+    mockPracticeSettingsState.loaded = false;
+    mockPracticeSettingsState.promptLanguage = 'japanese';
+
+    const view = render(<FlashcardScreen />);
+
+    expect(view.queryByLabelText(/Flashcard prompt:/)).toBeNull();
+    expect(view.queryByText('No matching cards')).toBeNull();
   });
 
   test('keeps expression cards out of the pool when prompts are Japanese', () => {
@@ -424,10 +465,23 @@ describe('FlashcardScreen prompt language wiring', () => {
     expect(headword).toBeDefined();
     expect(
       Object.values(verbs as Record<string, VerbData>).some(
-        (data) => data.translation === headword,
+        (data) => (data.promptGloss || data.translation) === headword,
       ),
     ).toBe(true);
     expect(view.getByText(prompt)).toBeTruthy();
+  });
+
+  test('announces the requested form without adding punctuation after a question mark', () => {
+    jest.spyOn(Math, 'random').mockReturnValue(0.9);
+    mockPracticeSettingsState.promptLanguage = 'english';
+
+    const view = render(<FlashcardScreen />);
+    const label = view.getByLabelText(/Flashcard prompt:/).props.accessibilityLabel as string;
+
+    expect(label).toMatch(
+      /^Flashcard prompt: (?:尊敬語 — Respectful|謙譲語 — Humble)\. How do you say “.+” in keigo\? Tap to reveal the answer\.$/,
+    );
+    expect(label).not.toContain('?.');
   });
 });
 

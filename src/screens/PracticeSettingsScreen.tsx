@@ -177,7 +177,7 @@ export default function PracticeSettingsScreen() {
                   activeOpacity={0.7}
                   accessibilityRole="radio"
                   accessibilityLabel={`${title}. ${detail}`}
-                  accessibilityState={{ checked: active, selected: active }}
+                  accessibilityState={{ checked: active }}
                 >
                   <View style={styles.rowTextGroup}>
                     <Text style={[styles.rowText, { color: colors.textPrimary }]}>{title}</Text>
