@@ -14,7 +14,6 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.lkh9596.keigojp",
-      "buildNumber": "1",
       "infoPlist": {
         "CFBundleDisplayName": "KeiGo JP",
         "ITSAppUsesNonExemptEncryption": false,
@@ -41,8 +40,7 @@
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE"
       ],
-      "package": "com.piraeus.keigojp",
-      "versionCode": 1
+      "package": "com.piraeus.keigojp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
