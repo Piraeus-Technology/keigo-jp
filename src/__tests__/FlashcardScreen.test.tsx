@@ -5,12 +5,15 @@ import verbs from '../data/verbs.json';
 import expressions from '../data/expressions.json';
 import FlashcardScreen, {
   FlashcardAnswerText,
+  englishPromptFor,
   filterEntriesByLevels,
   generateCard,
+  getPromptFace,
   selectWeightedEntry,
 } from '../screens/FlashcardScreen';
+import type { Card } from '../screens/FlashcardScreen';
 import { isGradableVerbForm } from '../utils/gradableVerbs';
-import type { ExpressionData, VerbData } from '../utils/keigoTypes';
+import type { ExpressionData, PromptLanguage, VerbData } from '../utils/keigoTypes';
 
 const mockRecordReview = jest.fn(() => Promise.resolve());
 const mockRecordResult = jest.fn(() => Promise.resolve());
@@ -23,6 +26,7 @@ const mockPracticeSettingsState = {
   activeForms: ['sonkeigo', 'kenjougo'],
   activeLevels: ['basic', 'intermediate', 'advanced'],
   includeExpressions: true,
+  promptLanguage: 'both' as PromptLanguage,
   loaded: true,
   loadPracticeSettings: mockLoadPracticeSettings,
 };
@@ -274,6 +278,156 @@ describe('FlashcardScreen weighted card selection', () => {
         }
       }
     }
+  });
+});
+
+describe('FlashcardScreen prompt language', () => {
+  const verbCard: Card = {
+    srKey: '食べる',
+    front: '食べる',
+    reading: 'たべる',
+    translation: 'to eat',
+    form: 'sonkeigo',
+    answer: '召し上がる',
+    answerReading: 'めしあがる',
+    cardType: 'verb',
+  };
+  const expressionCard: Card = {
+    srKey: 'お世話になっております',
+    front: 'Thank you for your continued support',
+    reading: '',
+    translation: 'Thank you for your continued support',
+    answer: 'お世話になっております',
+    answerReading: 'おせわになっております',
+    cardType: 'expression',
+  };
+
+  test('shows both sides of a verb card by default', () => {
+    expect(getPromptFace(verbCard, 'both')).toEqual({
+      label: '尊敬語 — Respectful',
+      primary: '食べる',
+      primaryVariant: 'headword',
+      reading: 'たべる',
+      translation: 'to eat',
+    });
+  });
+
+  test('drops only the English meaning in Japanese mode', () => {
+    expect(getPromptFace(verbCard, 'japanese')).toEqual({
+      label: '尊敬語 — Respectful',
+      primary: '食べる',
+      primaryVariant: 'headword',
+      reading: 'たべる',
+      translation: null,
+    });
+  });
+
+  test('asks for the keigo of the English meaning in English mode', () => {
+    expect(getPromptFace(verbCard, 'english')).toEqual({
+      label: '尊敬語 — Respectful',
+      primary: 'How do you say “to eat” in keigo?',
+      primaryVariant: 'sentence',
+      reading: null,
+      translation: null,
+    });
+  });
+
+  test('falls back to the Japanese headword when a verb has no translation', () => {
+    const face = getPromptFace({ ...verbCard, translation: '' }, 'english');
+
+    expect(face.primary).toBe('食べる');
+    expect(face.primaryVariant).toBe('headword');
+  });
+
+  test('keeps expression cards English-prompted in every mode', () => {
+    const expected = {
+      label: 'How do you say this in keigo?',
+      primary: 'Thank you for your continued support',
+      primaryVariant: 'sentence',
+      reading: null,
+      translation: null,
+    };
+    const languages: PromptLanguage[] = ['japanese', 'english', 'both'];
+
+    for (const language of languages) {
+      expect(getPromptFace(expressionCard, language)).toEqual(expected);
+    }
+  });
+
+  test('builds the English prompt from the meaning alone', () => {
+    expect(englishPromptFor('to receive')).toBe('How do you say “to receive” in keigo?');
+  });
+});
+
+describe('FlashcardScreen prompt language wiring', () => {
+  const expressionQuestion = 'How do you say this in keigo?';
+
+  const promptTextOf = (view: ReturnType<typeof render>) => {
+    const label = view.getByLabelText(/Flashcard prompt:/).props.accessibilityLabel as string;
+    return /^Flashcard prompt: (.*)\. Tap to reveal the answer\.$/.exec(label)![1];
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockPracticeSettingsState.promptLanguage = 'both';
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    mockPracticeSettingsState.promptLanguage = 'both';
+  });
+
+  test('keeps expression cards out of the pool when prompts are Japanese', () => {
+    // generateCard spends its first draw on the 30% expression branch, so 0.1
+    // forces an expression card whenever expressions are still enabled.
+    jest.spyOn(Math, 'random').mockReturnValue(0.1);
+
+    const mixed = render(<FlashcardScreen />);
+    expect(mixed.getByText(expressionQuestion)).toBeTruthy();
+    mixed.unmount();
+
+    mockPracticeSettingsState.promptLanguage = 'japanese';
+    const japaneseOnly = render(<FlashcardScreen />);
+
+    expect(japaneseOnly.queryByText(expressionQuestion)).toBeNull();
+    expect(verbs as Record<string, VerbData>).toHaveProperty(promptTextOf(japaneseOnly));
+  });
+
+  test('hides the English meaning on a Japanese-prompted verb card', () => {
+    // A fixed draw picks the same verb in both renders, so the mixed render is
+    // an exact control for the absent translation rather than a bare absence.
+    jest.spyOn(Math, 'random').mockReturnValue(0.9);
+
+    const mixed = render(<FlashcardScreen />);
+    const headword = promptTextOf(mixed);
+    const data = (verbs as Record<string, VerbData>)[headword];
+    expect(data).toBeDefined();
+    expect(mixed.getByText(data.translation)).toBeTruthy();
+    mixed.unmount();
+
+    mockPracticeSettingsState.promptLanguage = 'japanese';
+    const japaneseOnly = render(<FlashcardScreen />);
+
+    expect(promptTextOf(japaneseOnly)).toBe(headword);
+    expect(japaneseOnly.getByText(data.reading)).toBeTruthy();
+    expect(japaneseOnly.queryByText(data.translation)).toBeNull();
+  });
+
+  test('prompts a verb card by its English meaning in English mode', () => {
+    jest.spyOn(Math, 'random').mockReturnValue(0.9);
+    mockPracticeSettingsState.promptLanguage = 'english';
+
+    const view = render(<FlashcardScreen />);
+    const prompt = promptTextOf(view);
+    const headword = /^How do you say “(.+)” in keigo\?$/.exec(prompt)?.[1];
+
+    expect(headword).toBeDefined();
+    expect(
+      Object.values(verbs as Record<string, VerbData>).some(
+        (data) => data.translation === headword,
+      ),
+    ).toBe(true);
+    expect(view.getByText(prompt)).toBeTruthy();
   });
 });
 

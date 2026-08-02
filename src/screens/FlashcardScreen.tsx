@@ -22,6 +22,7 @@ import {
   ExpressionData,
   KeigoForm,
   BusinessLevel,
+  PromptLanguage,
   KEIGO_FORM_LABELS,
 } from '../utils/keigoTypes';
 import {
@@ -78,6 +79,58 @@ export function FlashcardAnswerText({
       {card.answer}
     </Text>
   );
+}
+
+export interface PromptFace {
+  label: string | null;
+  /** The line the learner is asked to convert. */
+  primary: string;
+  /** 'headword' is a single Japanese word; 'sentence' is a wrapping English line. */
+  primaryVariant: 'headword' | 'sentence';
+  reading: string | null;
+  translation: string | null;
+}
+
+export function englishPromptFor(translation: string): string {
+  return `How do you say “${translation}” in keigo?`;
+}
+
+/**
+ * Decides what the prompt side of a card shows. Expression cards are always
+ * English-prompted — their Japanese headword is the answer — so 'japanese' is
+ * enforced by keeping expressions out of the pool, not by rewriting them here.
+ */
+export function getPromptFace(card: Card, promptLanguage: PromptLanguage): PromptFace {
+  if (card.cardType === 'expression') {
+    return {
+      label: 'How do you say this in keigo?',
+      primary: card.front,
+      primaryVariant: 'sentence',
+      reading: null,
+      translation: null,
+    };
+  }
+
+  const formLabel = card.form ? KEIGO_FORM_LABELS[card.form] : null;
+  const label = formLabel ? `${formLabel.ja} — ${formLabel.en}` : null;
+
+  if (promptLanguage === 'english' && card.translation) {
+    return {
+      label,
+      primary: englishPromptFor(card.translation),
+      primaryVariant: 'sentence',
+      reading: null,
+      translation: null,
+    };
+  }
+
+  return {
+    label,
+    primary: card.front,
+    primaryVariant: 'headword',
+    reading: card.reading || null,
+    translation: promptLanguage === 'japanese' ? null : card.translation || null,
+  };
 }
 
 const MIN_SELECTION_WEIGHT = 0.2;
@@ -185,7 +238,7 @@ export default function FlashcardScreen() {
   const colors = useColors();
   const { width } = useWindowDimensions();
   const navigation = useNavigation<NativeStackNavigationProp<FlashcardStackParamList, 'FlashcardMain'>>();
-  const { activeForms, activeLevels, includeExpressions, loaded: settingsLoaded, loadPracticeSettings } = usePracticeSettingsStore();
+  const { activeForms, activeLevels, includeExpressions, promptLanguage, loaded: settingsLoaded, loadPracticeSettings } = usePracticeSettingsStore();
   const { sessions, loadSessions, saveSession } = useFlashcardSessionStore();
   const { loadStats, recordReview } = useFlashcardStatsStore();
   const { loaded: weightsLoaded, loadWeights, recordResult, getWeight } = useSpacedRepStore();
@@ -264,11 +317,15 @@ export default function FlashcardScreen() {
     });
   }, [navigation, colors]);
 
+  // Expression cards have no Japanese prompt side, so Japanese-only practice
+  // drops them from the pool regardless of the include-expressions switch.
+  const expressionsEnabled = includeExpressions && promptLanguage !== 'japanese';
+
   const selectNextCard = useCallback(() => {
     const next = generateCard(
       filteredVerbs,
       filteredExpressions,
-      includeExpressions,
+      expressionsEnabled,
       activeForms,
       getWeight,
       recentCardKeys.current,
@@ -280,7 +337,7 @@ export default function FlashcardScreen() {
       ].slice(0, RECENT_CARD_WINDOW);
     }
     return next;
-  }, [activeForms, filteredExpressions, filteredVerbs, getWeight, includeExpressions]);
+  }, [activeForms, filteredExpressions, filteredVerbs, getWeight, expressionsEnabled]);
 
   useEffect(() => {
     if (!settingsLoaded) return;
@@ -390,6 +447,7 @@ export default function FlashcardScreen() {
   );
 
   const formLabel = card.form ? KEIGO_FORM_LABELS[card.form] : null;
+  const promptFace = getPromptFace(card, promptLanguage);
   const usesLongExpressionLayout =
     card.cardType === 'expression' && isLongExpression(card.answer);
 
@@ -428,7 +486,7 @@ export default function FlashcardScreen() {
           accessibilityRole="button"
           accessibilityLabel={
             !flipped
-              ? `Flashcard prompt: ${card.front}. Tap to reveal the answer.`
+              ? `Flashcard prompt: ${promptFace.primary}. Tap to reveal the answer.`
               : undefined
           }
           accessibilityState={{ disabled: flipped }}
@@ -446,40 +504,37 @@ export default function FlashcardScreen() {
               },
             ]}
           >
-            {card.cardType === 'expression' ? (
-              <>
-                <Text style={[styles.formLabel, { color: colors.textSecondary }]}>
-                  How do you say this in keigo?
-                </Text>
-                <Text
-                  style={[styles.translationPrompt, { color: colors.primary }]}
-                  adjustsFontSizeToFit
-                  numberOfLines={3}
-                >
-                  {card.front}
-                </Text>
-              </>
+            {promptFace.label && (
+              <Text style={[styles.formLabel, { color: colors.textSecondary }]}>
+                {promptFace.label}
+              </Text>
+            )}
+            {promptFace.primaryVariant === 'headword' ? (
+              <Text
+                style={[styles.verbText, { color: colors.primary }]}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+              >
+                {promptFace.primary}
+              </Text>
             ) : (
-              <>
-                {formLabel && (
-                  <Text style={[styles.formLabel, { color: colors.textSecondary }]}>
-                    {formLabel.ja} — {formLabel.en}
-                  </Text>
-                )}
-                <Text
-                  style={[styles.verbText, { color: colors.primary }]}
-                  numberOfLines={1}
-                  adjustsFontSizeToFit
-                >
-                  {card.front}
-                </Text>
-                <Text style={[styles.readingText, { color: colors.textSecondary }]}>
-                  {card.reading}
-                </Text>
-                <Text style={[styles.translationText, { color: colors.textSecondary }]}>
-                  {card.translation}
-                </Text>
-              </>
+              <Text
+                style={[styles.translationPrompt, { color: colors.primary }]}
+                adjustsFontSizeToFit
+                numberOfLines={3}
+              >
+                {promptFace.primary}
+              </Text>
+            )}
+            {promptFace.reading && (
+              <Text style={[styles.readingText, { color: colors.textSecondary }]}>
+                {promptFace.reading}
+              </Text>
+            )}
+            {promptFace.translation && (
+              <Text style={[styles.translationText, { color: colors.textSecondary }]}>
+                {promptFace.translation}
+              </Text>
             )}
             <Text style={[styles.tapHint, { color: colors.textMuted }]}>Tap to reveal</Text>
           </Animated.View>

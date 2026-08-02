@@ -111,6 +111,28 @@ export const LEVEL_LABELS: Record<BusinessLevel, string> = {
   advanced: 'Advanced',
 };
 
+// Which language a flashcard's prompt side is written in. Expression cards
+// only exist in the English direction — their Japanese headword is the answer —
+// so 'japanese' drills verbs alone.
+export const PROMPT_LANGUAGES = ['japanese', 'english', 'both'] as const;
+
+export type PromptLanguage = typeof PROMPT_LANGUAGES[number];
+
+export const PROMPT_LANGUAGE_LABELS: Record<PromptLanguage, { title: string; detail: string }> = {
+  japanese: {
+    title: 'Japanese',
+    detail: 'Verb cards only, shown without their English meaning.',
+  },
+  english: {
+    title: 'English',
+    detail: 'Every card asks for the keigo of an English meaning.',
+  },
+  both: {
+    title: 'Both',
+    detail: 'Mixes Japanese verb prompts with English expression prompts.',
+  },
+};
+
 export const CATEGORY_LABELS: Record<ExpressionCategory, { ja: string; en: string }> = {
   greeting: { ja: '挨拶', en: 'Greeting' },
   opening: { ja: '前置き', en: 'Opening' },
