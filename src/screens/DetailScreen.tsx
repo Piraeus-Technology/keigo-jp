@@ -13,6 +13,7 @@ import {
   VerbData,
   ExpressionData,
   KEIGO_FORM_LABELS,
+  KEIGO_REGISTER_LABELS,
   KeigoForm,
   CATEGORY_LABELS,
   LEVEL_LABELS,
@@ -250,6 +251,18 @@ export default function DetailScreen() {
                                 ? `（${alternative.reading}）`
                                 : ''}
                             </Text>
+                            {/* Same strings the flashcard prompt uses, so the
+                                label a learner is graded on is recognisable
+                                here rather than only on the card. */}
+                            <Text style={[
+                              styles.formAlternativeRegister,
+                              {
+                                backgroundColor: colors.pillBg,
+                                color: colors.pillText,
+                              },
+                            ]}>
+                              {KEIGO_REGISTER_LABELS[alternative.register]}
+                            </Text>
                             <SpeakButton
                               text={alternative.reading}
                               size={16}
@@ -403,6 +416,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   formAlternativeText: { flex: 1 },
+  formAlternativeRegister: {
+    fontSize: fonts.sizes.xs,
+    fontWeight: fonts.weights.semibold,
+    borderRadius: radius.full,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+    marginLeft: spacing.xs,
+    overflow: 'hidden',
+  },
   formAlternativeCondition: {
     fontSize: fonts.sizes.xs,
     lineHeight: 18,

@@ -1,8 +1,16 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import verbs from '../data/verbs.json';
 import { useColors, fonts, spacing, radius } from '../utils/theme';
 import type { ThemeColors } from '../utils/theme';
+import {
+  GRADABLE_FORMS,
+  KEIGO_REGISTER_LABELS,
+  type KeigoRegister,
+  type VerbData,
+} from '../utils/keigoTypes';
+import { getGradableAlternatives } from '../utils/gradableVerbs';
 import { speak } from '../utils/speech';
 
 /* ─── data ─── */
@@ -84,10 +92,22 @@ const KENJOUGO_PATTERNS: PatternInfo[] = [
     formula: 'ご + Sino-Japanese noun + する',
     examples: [
       { ja: '後ほどご連絡します', en: 'I will contact you later (humble)' },
-      { ja: 'ご案内いたします', en: 'I will guide you (humble)' },
+      { ja: 'ご案内します', en: 'I will guide you (humble)' },
     ],
   },
 ];
+
+// Replacing する in お/ご〜する with いたす combines 謙譲語I and 謙譲語II.
+// This relative variant is distinct from bare …いたす, which is the canonical
+// 謙譲語II form for some サ変 verbs and therefore has no flashcard label.
+const KENJOUGO_ITASU: PatternInfo = {
+  formula: 'お + verb stem + いたす　/　ご + Sino-Japanese noun + いたす',
+  examples: [
+    { ja: 'ご案内いたします', en: 'I will guide you (humble, more formal)' },
+    { ja: 'お待ちいたします', en: 'I will wait (humble, more formal)' },
+    { ja: 'お書きいたします', en: 'I will write (humble, more formal)' },
+  ],
+};
 
 const KENJOUGO_SPECIAL: TableSection = {
   title: 'Special Humble Verbs',
@@ -135,6 +155,85 @@ const TEINEIGO_UPGRADES: UpgradeRow[] = [
   { casual: 'すみません', polite: '申し訳ございません', meaning: 'I\'m sorry' },
   { casual: 'ちょっと', polite: '少々', meaning: 'a little' },
 ];
+
+// What card and Detail labels mean. Labels are read from the same source the
+// prompt renders, and card availability is derived through the same eligibility
+// rules as the deck so this explanation cannot drift from practice behavior.
+interface RegisterRow {
+  register: KeigoRegister | null;
+  meaning: string;
+  example: string;
+}
+
+const REGISTER_ROWS: RegisterRow[] = [
+  {
+    register: null,
+    meaning: 'The canonical answer stored for that verb — commonly a special form, Pattern 1 or 2, or bare …いたす for a サ変 verb.',
+    example: 'Dictionary → unlabelled answer: 読む → お読みになる',
+  },
+  {
+    register: 'less_formal',
+    meaning: 'The 尊敬語 passive, Pattern 4. Respectful but lighter.',
+    example: 'Dictionary → labelled answer: 読む → 読まれる',
+  },
+  {
+    register: 'more_formal',
+    meaning: 'A step up from a canonical お/ご〜する form, using いたす in place of する.',
+    example: 'Canonical → labelled answer: お書きする → お書きいたす',
+  },
+  {
+    register: 'when_granted',
+    meaning: 'させていただく, for when you are permitted to act and benefit from it.',
+    example: 'Dictionary → conditional alternative: 利用する → 利用させていただく',
+  },
+  {
+    register: 'contextual',
+    meaning: 'Which form is right depends on the situation, not on how formal you want to be.',
+    example: 'Canonical / contextual alternative: 申す / 申し上げる',
+  },
+];
+
+export type PatternGuideVerbEntry = [string, VerbData];
+
+const ALL_VERB_ENTRIES = Object.entries(
+  verbs as Record<string, VerbData>,
+) as PatternGuideVerbEntry[];
+
+/** Derive register availability from the same eligibility rules as the deck. */
+export function getAskableRegisters(
+  verbEntries: PatternGuideVerbEntry[],
+): ReadonlySet<KeigoRegister> {
+  return new Set(
+    verbEntries.flatMap(([verb, data]) =>
+      GRADABLE_FORMS.flatMap((form) =>
+        getGradableAlternatives(verb, data, form).map(
+          (alternative) => alternative.register,
+        )
+      )
+    ),
+  );
+}
+
+function registerAvailabilityText(
+  register: KeigoRegister | null,
+  askableRegisters: ReadonlySet<KeigoRegister>,
+): string {
+  if (register === null) return 'Asked on flashcards.';
+  return askableRegisters.has(register)
+    ? 'Asked on flashcards and shown on detail pages.'
+    : 'Shown on detail pages; not currently asked on flashcards.';
+}
+
+function registerPatternHeading(
+  prefix: string,
+  register: KeigoRegister,
+  askableRegisters: ReadonlySet<KeigoRegister>,
+): string {
+  const label = KEIGO_REGISTER_LABELS[register];
+  return askableRegisters.has(register)
+    ? `${prefix} — flashcards call this “${label}”`
+    : `${prefix} — detail pages call this “${label}”; not currently asked on flashcards`;
+}
 
 const COMMON_MISTAKES: MistakeInfo[] = [
   {
@@ -280,10 +379,83 @@ function MistakeCard({ mistake, colors }: { mistake: MistakeInfo; colors: ThemeC
   );
 }
 
+function RegisterKeyCard({
+  colors,
+  askableRegisters,
+}: {
+  colors: ReturnType<typeof useColors>;
+  askableRegisters: ReadonlySet<KeigoRegister>;
+}) {
+  return (
+    <View
+      testID="register-key-card"
+      style={[sty.card, { backgroundColor: colors.card }]}
+    >
+      <Text style={[sty.introText, { color: colors.textPrimary }]}>
+        Many verbs accept more than one correct keigo pattern. Flashcards label
+        the alternatives they can ask for, while detail pages also show forms
+        that depend on context. A card with no label asks for the canonical form.
+      </Text>
+      <View style={sty.typeList}>
+        {REGISTER_ROWS.map((row) => {
+          const key = row.register ?? 'canonical';
+          const label = row.register
+            ? KEIGO_REGISTER_LABELS[row.register]
+            : null;
+          return (
+            <View
+              key={key}
+              testID={`register-row-${key}`}
+              style={sty.registerRow}
+            >
+              {label ? (
+                <Text
+                  style={[
+                    sty.registerBadge,
+                    { backgroundColor: colors.pillBg, color: colors.pillText },
+                  ]}
+                >
+                  {label}
+                </Text>
+              ) : (
+                <Text
+                  style={[
+                    sty.registerBadge,
+                    sty.registerBadgeEmpty,
+                    { borderColor: colors.textMuted, color: colors.textMuted },
+                  ]}
+                >
+                  No label
+                </Text>
+              )}
+              <View style={sty.registerBody}>
+                <Text style={[sty.typeDesc, { color: colors.textSecondary }]}>
+                  {row.meaning}
+                </Text>
+                <Text style={[sty.registerStatus, { color: colors.textMuted }]}>
+                  {registerAvailabilityText(row.register, askableRegisters)}
+                </Text>
+                <Text style={[sty.registerExample, { color: colors.textMuted }]}>
+                  {row.example}
+                </Text>
+              </View>
+            </View>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
 /* ─── main screen ─── */
 
-export default function PatternGuideScreen() {
+export function PatternGuideContent({
+  verbEntries,
+}: {
+  verbEntries: PatternGuideVerbEntry[];
+}) {
   const colors = useColors();
+  const askableRegisters = getAskableRegisters(verbEntries);
 
   return (
     <ScrollView style={[sty.container, { backgroundColor: colors.bg }]}>
@@ -328,6 +500,20 @@ export default function PatternGuideScreen() {
         </View>
       </View>
 
+      {/* ─── Section 1b: How card and Detail labels work ─── */}
+      <View style={sty.section}>
+        <SectionHeader
+          title="カードと詳細の読み方"
+          subtitle="What card and detail labels mean"
+          color={colors.primary}
+          bgColor={colors.pillBg}
+        />
+        <RegisterKeyCard
+          colors={colors}
+          askableRegisters={askableRegisters}
+        />
+      </View>
+
       {/* ─── Section 2: Sonkeigo ─── */}
       <View style={sty.section}>
         <SectionHeader
@@ -346,7 +532,9 @@ export default function PatternGuideScreen() {
           colors={colors}
         />
         <View style={[sty.card, { backgroundColor: colors.card }]}>
-          <Text style={[sty.patternLabel, { color: colors.textSecondary }]}>Pattern 4 (less formal)</Text>
+          <Text style={[sty.patternLabel, { color: colors.textSecondary }]}>
+            {registerPatternHeading('Pattern 4', 'less_formal', askableRegisters)}
+          </Text>
           <FormulaBox formula={SONKEIGO_PASSIVE.formula} colors={colors} />
           {SONKEIGO_PASSIVE.examples.map((ex, i) => (
             <ExampleRow key={i} example={ex} colors={colors} />
@@ -371,8 +559,30 @@ export default function PatternGuideScreen() {
           tagText={colors.kenjougoTagText}
           colors={colors}
         />
+        <View
+          testID="kenjougo-itasu-card"
+          style={[sty.card, { backgroundColor: colors.card }]}
+        >
+          <Text style={[sty.patternLabel, { color: colors.textSecondary }]}>
+            {registerPatternHeading(
+              'More formal variant',
+              'more_formal',
+              askableRegisters,
+            )}
+          </Text>
+          <FormulaBox formula={KENJOUGO_ITASU.formula} colors={colors} />
+          {KENJOUGO_ITASU.examples.map((ex, i) => (
+            <ExampleRow key={i} example={ex} colors={colors} />
+          ))}
+        </View>
         <View style={[sty.card, { backgroundColor: colors.card }]}>
-          <Text style={[sty.patternLabel, { color: colors.textSecondary }]}>Pattern 4</Text>
+          <Text style={[sty.patternLabel, { color: colors.textSecondary }]}>
+            {registerPatternHeading(
+              'Pattern 4',
+              'when_granted',
+              askableRegisters,
+            )}
+          </Text>
           <FormulaBox formula={KENJOUGO_SASETE.formula} colors={colors} />
           {KENJOUGO_SASETE.examples.map((ex, i) => (
             <ExampleRow key={i} example={ex} colors={colors} />
@@ -447,6 +657,10 @@ export default function PatternGuideScreen() {
   );
 }
 
+export default function PatternGuideScreen() {
+  return <PatternGuideContent verbEntries={ALL_VERB_ENTRIES} />;
+}
+
 /* ─── styles ─── */
 
 const sty = StyleSheet.create({
@@ -507,6 +721,36 @@ const sty = StyleSheet.create({
   typeDesc: {
     fontSize: fonts.sizes.sm,
     flex: 1,
+  },
+  registerRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.sm,
+  },
+  registerBadge: {
+    fontSize: fonts.sizes.xs,
+    fontWeight: fonts.weights.semibold,
+    borderRadius: radius.full,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 3,
+    overflow: 'hidden',
+    minWidth: 104,
+    textAlign: 'center',
+  },
+  registerBadgeEmpty: {
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    backgroundColor: 'transparent',
+  },
+  registerBody: { flex: 1 },
+  registerStatus: {
+    fontSize: fonts.sizes.xs,
+    fontWeight: fonts.weights.semibold,
+    marginTop: 2,
+  },
+  registerExample: {
+    fontSize: fonts.sizes.xs,
+    marginTop: 2,
   },
 
   patternLabel: {
