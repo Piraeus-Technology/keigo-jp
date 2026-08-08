@@ -122,6 +122,26 @@ describe('DetailScreen', () => {
       .toBeTruthy();
   });
 
+  test('labels each alternative with its stored register', () => {
+    mockRouteParams = { key: '利用する', type: 'verb' };
+    const view = render(<DetailScreen />);
+
+    // 利用される is the respectful passive; 利用させていただく is permission-and-benefit.
+    expect(view.getByText('Less formal')).toBeTruthy();
+    expect(view.getByText('When granted')).toBeTruthy();
+    expect(view.queryByText('More formal')).toBeNull();
+  });
+
+  test('renders the context-dependent register, which no card can show', () => {
+    // 申し上げる is never asked on a flashcard, but Detail still exposes
+    // the same label that the guide explains.
+    mockRouteParams = { key: '言う', type: 'verb' };
+    const view = render(<DetailScreen />);
+
+    expect(view.getByText('申し上げる（もうしあげる）')).toBeTruthy();
+    expect(view.getByText('Context-dependent')).toBeTruthy();
+  });
+
   test('keeps context-selected humble alternatives visible in Detail', () => {
     const records = [
       ['言う', '申し上げる（もうしあげる）'],
