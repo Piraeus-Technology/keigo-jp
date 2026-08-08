@@ -10,7 +10,11 @@ import {
   type KeigoRegister,
   type VerbData,
 } from '../utils/keigoTypes';
-import { getGradableAlternatives } from '../utils/gradableVerbs';
+import {
+  getCanonicalRegister,
+  getGradableAlternatives,
+  isAskableVerbForm,
+} from '../utils/gradableVerbs';
 import { speak } from '../utils/speech';
 
 /* ─── data ─── */
@@ -124,11 +128,11 @@ const KENJOUGO_SPECIAL: TableSection = {
 };
 
 const KENJOUGO_SASETE: PatternInfo = {
-  formula: 'verb stem + させていただく',
+  formula: 'godan: final u → a-row + せていただく / ichidan: stem + させていただく / する → させていただく',
   examples: [
-    { ja: '確認させていただきます', en: 'Allow me to confirm' },
-    { ja: '説明させていただきます', en: 'Allow me to explain' },
-    { ja: '退席させていただきます', en: 'Allow me to excuse myself' },
+    { ja: '使わせていただきます', en: '使う (godan) — Allow me to use it' },
+    { ja: '着させていただきます', en: '着る (ichidan) — Allow me to wear it' },
+    { ja: '確認させていただきます', en: '確認する (サ変) — Allow me to confirm' },
   ],
 };
 
@@ -205,11 +209,18 @@ export function getAskableRegisters(
 ): ReadonlySet<KeigoRegister> {
   return new Set(
     verbEntries.flatMap(([verb, data]) =>
-      GRADABLE_FORMS.flatMap((form) =>
-        getGradableAlternatives(verb, data, form).map(
-          (alternative) => alternative.register,
-        )
-      )
+      GRADABLE_FORMS.flatMap((form) => {
+        if (!isAskableVerbForm(verb, data, form)) return [];
+        // A canonical form can carry a register of its own, so the deck's
+        // registers are not only the ones its alternatives declare.
+        const canonical = getCanonicalRegister(data, form);
+        return [
+          ...(canonical ? [canonical] : []),
+          ...getGradableAlternatives(verb, data, form).map(
+            (alternative) => alternative.register,
+          ),
+        ];
+      })
     ),
   );
 }
@@ -575,7 +586,10 @@ export function PatternGuideContent({
             <ExampleRow key={i} example={ex} colors={colors} />
           ))}
         </View>
-        <View style={[sty.card, { backgroundColor: colors.card }]}>
+        <View
+          testID="kenjougo-sasete-card"
+          style={[sty.card, { backgroundColor: colors.card }]}
+        >
           <Text style={[sty.patternLabel, { color: colors.textSecondary }]}>
             {registerPatternHeading(
               'Pattern 4',

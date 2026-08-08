@@ -28,8 +28,9 @@ import {
   KEIGO_REGISTER_LABELS,
 } from '../utils/keigoTypes';
 import {
+  getAskableForms,
+  getCanonicalRegister,
   getGradableAlternatives,
-  getGradableForms,
   getVerbFormData,
 } from '../utils/gradableVerbs';
 import { isLongExpression } from '../utils/expressionDisplay';
@@ -243,22 +244,27 @@ export function generateCard(
 
   if (filteredVerbs.length === 0 || activeForms.length === 0) return null;
   const eligibleVerbs = filteredVerbs.filter(([verb, data]) =>
-    getGradableForms(verb, data, activeForms).length > 0
+    getAskableForms(verb, data, activeForms).length > 0
   );
   const selected = selectWeightedEntry(eligibleVerbs, getWeight, recentKeys, random);
   if (!selected) return null;
   const [verb, data] = selected;
-  const eligibleForms = getGradableForms(verb, data, activeForms);
+  const eligibleForms = getAskableForms(verb, data, activeForms);
   const form = eligibleForms[Math.floor(random() * eligibleForms.length)];
   const formData = getVerbFormData(data, form);
   if (formData.availability === 'absent') return null;
 
   // The canonical form and each unconditional alternative are separate cards.
-  // Only the alternatives carry a register label; the canonical face is the
-  // unlabelled one, which is what makes "unlabelled means the preferred form"
-  // readable as a rule.
+  // The canonical face is normally the unlabelled one, which is what makes
+  // "unlabelled means the preferred form" readable as a rule — but a canonical
+  // form that depends on permission and benefit carries a register too, since
+  // the prompt has to supply that context to be answerable at all.
   const faces: { answer: string; answerReading: string; register?: KeigoRegister }[] = [
-    { answer: formData.form, answerReading: formData.reading },
+    {
+      answer: formData.form,
+      answerReading: formData.reading,
+      register: getCanonicalRegister(data, form),
+    },
     ...getGradableAlternatives(verb, data, form).map((alternative) => ({
       answer: alternative.form,
       answerReading: alternative.reading,
