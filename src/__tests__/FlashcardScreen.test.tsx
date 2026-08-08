@@ -305,6 +305,7 @@ describe('FlashcardScreen prompt language', () => {
   test('shows both sides of a verb card by default', () => {
     expect(getPromptFace(verbCard, 'both')).toEqual({
       label: '尊敬語 — Respectful',
+      registerLabel: null,
       primary: '食べる',
       primaryVariant: 'headword',
       reading: 'たべる',
@@ -315,6 +316,7 @@ describe('FlashcardScreen prompt language', () => {
   test('drops only the English meaning in Japanese mode', () => {
     expect(getPromptFace(verbCard, 'japanese')).toEqual({
       label: '尊敬語 — Respectful',
+      registerLabel: null,
       primary: '食べる',
       primaryVariant: 'headword',
       reading: 'たべる',
@@ -325,6 +327,7 @@ describe('FlashcardScreen prompt language', () => {
   test('asks for the keigo of the English meaning in English mode', () => {
     expect(getPromptFace(verbCard, 'english')).toEqual({
       label: '尊敬語 — Respectful',
+      registerLabel: null,
       primary: 'How do you say “to eat” in keigo?',
       primaryVariant: 'sentence',
       reading: null,
@@ -360,6 +363,67 @@ describe('FlashcardScreen prompt language', () => {
       .toBe('How do you say “to know” in keigo?');
   });
 
+  test('asks for the canonical form on the unlabelled face of a verb', () => {
+    const source = (verbs as unknown as Record<string, VerbData>)['読む'];
+    const card = generateCard(
+      [['読む', source]],
+      [],
+      false,
+      ['sonkeigo'],
+      () => 1,
+      [],
+      () => 0,
+    );
+
+    expect(card?.answer).toBe('お読みになる');
+    expect(card?.register).toBeUndefined();
+    expect(card && getPromptFace(card, 'both').registerLabel).toBeNull();
+  });
+
+  test('asks for the passive alternative on the labelled face of the same verb', () => {
+    // The last draw picks among the faces, so a high roll lands on the
+    // alternative — the exact case a learner could not previously answer.
+    const source = (verbs as unknown as Record<string, VerbData>)['読む'];
+    const card = generateCard(
+      [['読む', source]],
+      [],
+      false,
+      ['sonkeigo'],
+      () => 1,
+      [],
+      () => 0.99,
+    );
+
+    expect(card?.answer).toBe('読まれる');
+    expect(card?.answerReading).toBe('よまれる');
+    expect(card?.register).toBe('less_formal');
+    expect(card && getPromptFace(card, 'both')).toMatchObject({
+      label: '尊敬語 — Respectful',
+      registerLabel: 'Less formal',
+      primary: '読む',
+    });
+  });
+
+  test('never labels a card with the pattern that would answer it', () => {
+    // 'Less formal' must name the register only. A formula on the prompt would
+    // reduce the card to filling in a stem.
+    const source = (verbs as unknown as Record<string, VerbData>)['読む'];
+    const card = generateCard(
+      [['読む', source]],
+      [],
+      false,
+      ['sonkeigo'],
+      () => 1,
+      [],
+      () => 0.99,
+    );
+    const face = card && getPromptFace(card, 'both');
+
+    for (const part of [face?.label, face?.registerLabel, face?.primary]) {
+      expect(part).not.toMatch(/になる|られる|れる|いたす/);
+    }
+  });
+
   test('falls back to the Japanese headword when a verb has no translation', () => {
     const face = getPromptFace({ ...verbCard, translation: '' }, 'english');
 
@@ -370,6 +434,7 @@ describe('FlashcardScreen prompt language', () => {
   test('keeps expression cards English-prompted in every mode', () => {
     const expected = {
       label: 'How do you say this in keigo?',
+      registerLabel: null,
       primary: 'Thank you for your continued support',
       primaryVariant: 'sentence',
       reading: null,
@@ -390,10 +455,15 @@ describe('FlashcardScreen prompt language', () => {
 describe('FlashcardScreen prompt language wiring', () => {
   const expressionQuestion = 'How do you say this in keigo?';
 
+  const promptLabelOf = (view: ReturnType<typeof render>) =>
+    view.getByLabelText(/Flashcard prompt:/).props.accessibilityLabel as string;
+
+  // The register segment is optional and sits between the form and the prompt,
+  // so it has to be consumed explicitly — otherwise it is captured as part of
+  // the prompt text and every caller silently compares the wrong string.
   const promptTextOf = (view: ReturnType<typeof render>) => {
-    const label = view.getByLabelText(/Flashcard prompt:/).props.accessibilityLabel as string;
-    const prompt = /^Flashcard prompt: (?:尊敬語 — Respectful|謙譲語 — Humble)\. (.*) Tap to reveal the answer\.$/
-      .exec(label)![1];
+    const prompt = /^Flashcard prompt: (?:尊敬語 — Respectful|謙譲語 — Humble)\. (?:(?:Less formal|More formal|When granted)\. )?(.*) Tap to reveal the answer\.$/
+      .exec(promptLabelOf(view))![1];
     return prompt.endsWith('.') ? prompt.slice(0, -1) : prompt;
   };
 
@@ -433,6 +503,35 @@ describe('FlashcardScreen prompt language wiring', () => {
 
     expect(japaneseOnly.queryByText(expressionQuestion)).toBeNull();
     expect(verbs as Record<string, VerbData>).toHaveProperty(promptTextOf(japaneseOnly));
+  });
+
+  test('shows the register on the prompt and announces it to a screen reader', () => {
+    // A 0.6 draw lands on a verb whose humble slot has an unconditional
+    // alternative, and the face draw then picks that alternative.
+    jest.spyOn(Math, 'random').mockReturnValue(0.6);
+
+    const view = render(<FlashcardScreen />);
+
+    expect(promptTextOf(view)).toBe('調べる');
+    expect(view.getByText('More formal')).toBeTruthy();
+    expect(promptLabelOf(view)).toBe(
+      'Flashcard prompt: 謙譲語 — Humble. More formal. 調べる. Tap to reveal the answer.',
+    );
+    // The prompt must not leak the construction that answers it.
+    expect(promptLabelOf(view)).not.toContain('いたす');
+  });
+
+  test('leaves the prompt unlabelled when it wants the canonical form', () => {
+    jest.spyOn(Math, 'random').mockReturnValue(0.9);
+
+    const view = render(<FlashcardScreen />);
+
+    for (const register of ['Less formal', 'More formal', 'When granted']) {
+      expect(view.queryByText(register)).toBeNull();
+    }
+    expect(promptLabelOf(view)).toBe(
+      'Flashcard prompt: 謙譲語 — Humble. 辞退する. Tap to reveal the answer.',
+    );
   });
 
   test('hides the English meaning on a Japanese-prompted verb card', () => {

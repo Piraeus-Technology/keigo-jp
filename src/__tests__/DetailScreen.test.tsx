@@ -95,7 +95,10 @@ describe('DetailScreen', () => {
     expect(view.getByLabelText('Play pronunciation of りよういたす'))
       .toBeTruthy();
     expect(view.queryByText('Applies when')).toBeNull();
-    expect(view.getByText('Alternatives')).toBeTruthy();
+    // Both gradable forms carry an alternative now: the respectful side has the
+    // unconditional 利用される, the humble side the conditional させていただく.
+    expect(view.getAllByText('Alternatives')).toHaveLength(2);
+    expect(view.getByText('利用される（りようされる）')).toBeTruthy();
     expect(view.getByText(
       '利用させていただく（りようさせていただく）',
     )).toBeTruthy();
@@ -119,12 +122,27 @@ describe('DetailScreen', () => {
       .toBeTruthy();
   });
 
+  test('keeps context-selected humble alternatives visible in Detail', () => {
+    const records = [
+      ['言う', '申し上げる（もうしあげる）'],
+      ['聞く', '承る（うけたまわる）'],
+    ] as const;
+
+    for (const [key, alternative] of records) {
+      mockRouteParams = { key, type: 'verb' };
+      const view = render(<DetailScreen />);
+
+      expect(view.getByText(alternative)).toBeTruthy();
+      view.unmount();
+    }
+  });
+
   test('leaves an unannotated form row free of metadata chrome', () => {
-    mockRouteParams = { key: '食べる', type: 'verb' };
+    mockRouteParams = { key: 'いる', type: 'verb' };
     const view = render(<DetailScreen />);
 
-    expect(view.getByText('いただく')).toBeTruthy();
-    expect(view.getByLabelText('Play pronunciation of いただく'))
+    expect(view.getByText('おる')).toBeTruthy();
+    expect(view.getByLabelText('Play pronunciation of おる'))
       .toBeTruthy();
     expect(view.queryByText('Applies when')).toBeNull();
     expect(view.queryByText('Alternatives')).toBeNull();
