@@ -71,6 +71,9 @@ export type KeigoReviewState =
 
 interface KeigoFormMetadata {
   note?: string;
+  /** Dictionary form that supplies the conjugation when it differs from the
+   * card's headword, such as 休む for the 寝る card. */
+  patternSource?: string;
   humbleSubclass?: HumbleSubclass;
   conditions?: string[];
   alternatives?: KeigoAlternative[];
@@ -184,9 +187,57 @@ const LEXICALIZED_SPECIAL_FORMS = new Set([
   'お亡くなりになる',
 ]);
 
-export function inferKeigoPattern(form: string): KeigoPattern {
+const GODAN_CAUSATIVE_STEMS: Record<string, string> = {
+  'う': 'わ', 'く': 'か', 'ぐ': 'が', 'す': 'さ', 'つ': 'た',
+  'ぬ': 'な', 'ぶ': 'ば', 'む': 'ま',
+};
+
+/**
+ * Derive the complete permission-and-benefit form from its source verb.
+ * Surface spelling is insufficient: 聞かせて is the causative of 聞く, while the
+ * same suffix in 合わせて belongs to the lexical verb 合わせる. For a 〜る verb,
+ * its existing polite form supplies the otherwise ambiguous conjugation class.
+ */
+function deriveCausativeTeItadaku(
+  sourceVerb: string,
+  politeForm?: string,
+): string | undefined {
+  if (sourceVerb.endsWith('する')) {
+    return `${sourceVerb.slice(0, -2)}させていただく`;
+  }
+  if (sourceVerb === '来る') return '来させていただく';
+  if (sourceVerb === 'くる') return 'こさせていただく';
+
+  const ending = sourceVerb.at(-1) ?? '';
+  const stem = sourceVerb.slice(0, -1);
+  if (ending === 'る') {
+    if (politeForm === `${stem}ます`) {
+      return `${stem}させていただく`;
+    }
+    if (politeForm === `${stem}ります`) {
+      return `${stem}らせていただく`;
+    }
+    // Without conjugation-class evidence, fail closed instead of guessing.
+    return undefined;
+  }
+
+  const causativeEnding = GODAN_CAUSATIVE_STEMS[ending];
+  return causativeEnding
+    ? `${stem}${causativeEnding}せていただく`
+    : undefined;
+}
+
+export function inferKeigoPattern(
+  form: string,
+  sourceVerb: string,
+  politeForm?: string,
+): KeigoPattern {
   if (LEXICALIZED_SPECIAL_FORMS.has(form)) return 'special';
-  if (/させていただく$/.test(form)) return 'sase_te_itadaku';
+  if (form.endsWith('せていただく')) {
+    return deriveCausativeTeItadaku(sourceVerb, politeForm) === form
+      ? 'sase_te_itadaku'
+      : 'special';
+  }
   if (/^お.+いたす$/.test(form)) return 'o_itasu';
   if (/^ご.+いたす$/.test(form)) return 'go_itasu';
   if (/いたす$/.test(form)) return 'itasu';
@@ -206,8 +257,10 @@ export function isKeigoPattern(value: unknown): value is KeigoPattern {
 export function isKeigoPatternConsistent(
   form: string,
   pattern: KeigoPattern,
+  sourceVerb: string,
+  politeForm?: string,
 ): boolean {
-  return inferKeigoPattern(form) === pattern;
+  return inferKeigoPattern(form, sourceVerb, politeForm) === pattern;
 }
 
 function isNonEmptyString(value: unknown): value is string {
@@ -266,9 +319,13 @@ function isValidReviewState(value: unknown): value is KeigoReviewState {
 
 export function isValidKeigoFormData(
   value: unknown,
+  sourceVerb?: string,
+  politeForm?: string,
 ): value is KeigoFormData {
   if (!isRecord(value)) return false;
   if (value.note !== undefined && !isNonEmptyString(value.note)) return false;
+  if (value.patternSource !== undefined
+    && !isNonEmptyString(value.patternSource)) return false;
   if (value.humbleSubclass !== undefined
     && !(HUMBLE_SUBCLASSES as readonly unknown[])
       .includes(value.humbleSubclass)) {
@@ -303,5 +360,12 @@ export function isValidKeigoFormData(
   }
   return value.pattern === undefined
     || (isKeigoPattern(value.pattern)
-      && isKeigoPatternConsistent(value.form, value.pattern));
+      && isKeigoPatternConsistent(
+        value.form,
+        value.pattern,
+        isNonEmptyString(value.patternSource)
+          ? value.patternSource
+          : sourceVerb ?? '',
+        politeForm,
+      ));
 }

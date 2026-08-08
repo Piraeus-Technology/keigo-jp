@@ -12,7 +12,7 @@ import FlashcardScreen, {
   selectWeightedEntry,
 } from '../screens/FlashcardScreen';
 import type { Card } from '../screens/FlashcardScreen';
-import { isGradableVerbForm } from '../utils/gradableVerbs';
+import { isAskableVerbForm } from '../utils/gradableVerbs';
 import type { ExpressionData, PromptLanguage, VerbData } from '../utils/keigoTypes';
 
 const mockRecordReview = jest.fn(() => Promise.resolve());
@@ -271,7 +271,9 @@ describe('FlashcardScreen weighted card selection', () => {
           [],
           () => 0,
         );
-        if (!isGradableVerbForm(entry[0], entry[1], form)) {
+        // Askable, not gradable: a permission-and-benefit form is a card now,
+        // it just has to announce its register.
+        if (!isAskableVerbForm(entry[0], entry[1], form)) {
           expect(card).toBeNull();
         } else {
           expect(card?.answer).not.toBe(card?.front);
@@ -519,6 +521,38 @@ describe('FlashcardScreen prompt language wiring', () => {
     );
     // The prompt must not leak the construction that answers it.
     expect(promptLabelOf(view)).not.toContain('いたす');
+  });
+
+  test('carries a conditional canonical register through to the rendered prompt', () => {
+    const source = (verbs as unknown as Record<string, VerbData>)['終わる'];
+    const card = generateCard(
+      [['終わる', source]],
+      [],
+      false,
+      ['kenjougo'],
+      () => 1,
+      [],
+      () => 0,
+    );
+
+    expect(card).toMatchObject({
+      answer: '終わらせていただく',
+      register: 'when_granted',
+    });
+    expect(card && getPromptFace(card, 'both').registerLabel)
+      .toBe('When granted');
+
+    // This fixed draw selects the same conditional canonical face through the
+    // screen's real generateCard path, proving the label is rendered as well as
+    // present on the returned Card object.
+    jest.spyOn(Math, 'random').mockReturnValue(0.55);
+    const view = render(<FlashcardScreen />);
+
+    expect(promptTextOf(view)).toBe('終わる');
+    expect(view.getByText('When granted')).toBeTruthy();
+    expect(promptLabelOf(view)).toBe(
+      'Flashcard prompt: 謙譲語 — Humble. When granted. 終わる. Tap to reveal the answer.',
+    );
   });
 
   test('leaves the prompt unlabelled when it wants the canonical form', () => {

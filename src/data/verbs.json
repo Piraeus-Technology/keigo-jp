@@ -232,7 +232,7 @@
     "translation": "to sleep",
     "level": "intermediate",
     "sonkeigo": { "form": "お休みになる", "reading": "おやすみになる", "pattern": "special", "availability": "present", "alternatives": [{ "form": "寝られる", "reading": "ねられる", "register": "less_formal" }] },
-    "kenjougo": { "form": "休ませていただく", "reading": "やすませていただく", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "休ませていただく", "reading": "やすませていただく", "pattern": "sase_te_itadaku", "patternSource": "休む", "availability": "present", "humbleSubclass": "kenjougo_i", "conditions": ["The listener permits the speaker to rest or retire, and the speaker benefits from that permission."], "review": { "status": "reviewed", "rationale": "Under the guidance's general rule, 休ませていただく is appropriate only when permission and benefit are present; it is not an unconditional humble equivalent.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "medium" } },
     "teineigo": { "form": "寝ます", "reading": "ねます", "availability": "present" },
     "examples": [
       { "context": "Checking if a superior slept well", "ja": "昨日はよくお休みになれましたか。", "en": "Did you sleep well last night?", "type": "sonkeigo" },
@@ -304,7 +304,7 @@
     "translation": "to use",
     "level": "intermediate",
     "sonkeigo": { "form": "お使いになる", "reading": "おつかいになる", "pattern": "o_ni_naru", "availability": "present", "alternatives": [{ "form": "使われる", "reading": "つかわれる", "register": "less_formal" }] },
-    "kenjougo": { "form": "使わせていただく", "reading": "つかわせていただく", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "使わせていただく", "reading": "つかわせていただく", "pattern": "sase_te_itadaku", "availability": "present", "humbleSubclass": "kenjougo_i", "conditions": ["The owner or provider permits the speaker to use something, and the speaker benefits from being allowed to use it."], "review": { "status": "reviewed", "rationale": "The godan causative 使わせて combines with いただく to request permission and acknowledge benefit; it is not an unconditional humble equivalent of 使う.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "high" } },
     "teineigo": { "form": "使います", "reading": "つかいます", "availability": "present" },
     "examples": [
       { "context": "Asking a client if they use something", "ja": "こちらのサービスをお使いになっていますか。", "en": "Are you using this service?", "type": "sonkeigo" },
@@ -664,7 +664,7 @@
     "translation": "to end / to finish",
     "level": "intermediate",
     "sonkeigo": { "form": "お終わりになる", "reading": "おおわりになる", "pattern": "o_ni_naru", "availability": "present", "alternatives": [{ "form": "終わられる", "reading": "おわられる", "register": "less_formal" }] },
-    "kenjougo": { "form": "終わらせていただく", "reading": "おわらせていただく", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "終わらせていただく", "reading": "おわらせていただく", "pattern": "sase_te_itadaku", "availability": "present", "humbleSubclass": "kenjougo_i", "conditions": ["The listener accepts that the speaker may bring something to a close, and the speaker benefits from being allowed to conclude."], "review": { "status": "reviewed", "rationale": "終わらせていただく asks leave to conclude, as when closing a presentation; the permission and benefit conditions are required rather than incidental.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "high" } },
     "teineigo": { "form": "終わります", "reading": "おわります", "availability": "present" },
     "examples": [
       { "context": "Asking if a superior is done", "ja": "お仕事はお終わりになりましたか。", "en": "Have you finished your work?", "type": "sonkeigo" },
@@ -784,7 +784,7 @@
     "translation": "to enter",
     "level": "basic",
     "sonkeigo": { "form": "お入りになる", "reading": "おはいりになる", "pattern": "o_ni_naru", "availability": "present", "alternatives": [{ "form": "入られる", "reading": "はいられる", "register": "less_formal" }] },
-    "kenjougo": { "form": "入らせていただく", "reading": "はいらせていただく", "pattern": "special", "availability": "present" },
+    "kenjougo": { "form": "入らせていただく", "reading": "はいらせていただく", "pattern": "sase_te_itadaku", "availability": "present", "humbleSubclass": "kenjougo_i", "conditions": ["The speaker is permitted to enter, and benefits from being allowed in."], "review": { "status": "reviewed", "rationale": "入らせていただく requests permission to enter and acknowledges the benefit of being admitted; it is not an unconditional humble equivalent of 入る.", "citations": [{ "source": "文化審議会「敬語の指針」", "locator": "printed pp. 40–41 (PDF pp. 43–44), 2007", "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/sokai/sokai_6/pdf/keigo_tousin.pdf" }], "confidence": "high" } },
     "teineigo": { "form": "入ります", "reading": "はいります", "availability": "present" },
     "examples": [
       { "context": "Inviting a guest to enter", "ja": "どうぞお入りになってください。", "en": "Please come in.", "type": "sonkeigo" },

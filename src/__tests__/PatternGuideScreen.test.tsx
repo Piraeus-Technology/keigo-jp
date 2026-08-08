@@ -62,19 +62,31 @@ describe('PatternGuideScreen', () => {
     expect(itasuCard.queryByText('確認いたします')).toBeNull();
   });
 
+  test('teaches the godan, ichidan and サ変 causative shapes', () => {
+    const view = render(<PatternGuideScreen />);
+    const saseteCard = within(view.getByTestId('kenjougo-sasete-card'));
+
+    expect(saseteCard.getByText(
+      'godan: final u → a-row + せていただく / ichidan: stem + させていただく / する → させていただく',
+    )).toBeTruthy();
+    expect(saseteCard.getByText('使わせていただきます')).toBeTruthy();
+    expect(saseteCard.getByText('着させていただきます')).toBeTruthy();
+    expect(saseteCard.getByText('確認させていただきます')).toBeTruthy();
+  });
+
   test('states card availability for every register from current practice data', () => {
     const view = render(<PatternGuideScreen />);
 
-    for (const register of ['less_formal', 'more_formal'] as const) {
+    // when_granted joined the asked set when conditional canonical forms became
+    // askable with a label; contextual is the one that stays detail-only.
+    for (const register of ['less_formal', 'more_formal', 'when_granted'] as const) {
       expect(within(view.getByTestId(`register-row-${register}`)).getByText(
         'Asked on flashcards and shown on detail pages.',
       )).toBeTruthy();
     }
-    for (const register of ['when_granted', 'contextual'] as const) {
-      expect(within(view.getByTestId(`register-row-${register}`)).getByText(
-        'Shown on detail pages; not currently asked on flashcards.',
-      )).toBeTruthy();
-    }
+    expect(within(view.getByTestId('register-row-contextual')).getByText(
+      'Shown on detail pages; not currently asked on flashcards.',
+    )).toBeTruthy();
     expect(view.getByText(
       `Pattern 4 — flashcards call this “${KEIGO_REGISTER_LABELS.less_formal}”`,
     )).toBeTruthy();
@@ -82,31 +94,36 @@ describe('PatternGuideScreen', () => {
       `More formal variant — flashcards call this “${KEIGO_REGISTER_LABELS.more_formal}”`,
     )).toBeTruthy();
     expect(view.getByText(
-      `Pattern 4 — detail pages call this “${KEIGO_REGISTER_LABELS.when_granted}”; not currently asked on flashcards`,
+      `Pattern 4 — flashcards call this “${KEIGO_REGISTER_LABELS.when_granted}”`,
     )).toBeTruthy();
   });
 
-  test('changes the guide claim when a register becomes askable', () => {
+  test('changes the guide claim when a register stops being askable', () => {
+    // Proves the claim is derived, not written down. Stripping `conditions`
+    // leaves those forms askable but unlabelled, so when_granted disappears
+    // from the deck and the guide has to say so on its own.
     const scratch = JSON.parse(JSON.stringify(verbs)) as Record<string, VerbData>;
-    const humble = scratch['利用する'].kenjougo;
-    if (humble.availability !== 'present' || !humble.alternatives) {
-      throw new Error('Expected 利用する to have a humble alternative');
+    let stripped = 0;
+    for (const data of Object.values(scratch)) {
+      for (const form of ['sonkeigo', 'kenjougo'] as const) {
+        const slot = data[form];
+        if (slot.availability === 'present' && slot.conditions) {
+          delete slot.conditions;
+          stripped += 1;
+        }
+      }
     }
-    const whenGranted = humble.alternatives.find(
-      (alternative) => alternative.register === 'when_granted',
-    );
-    if (!whenGranted) throw new Error('Expected a when_granted alternative');
-    delete whenGranted.conditions;
+    expect(stripped).toBe(10);
 
     const view = render(
       <PatternGuideContent verbEntries={Object.entries(scratch)} />,
     );
 
     expect(within(view.getByTestId('register-row-when_granted')).getByText(
-      'Asked on flashcards and shown on detail pages.',
+      'Shown on detail pages; not currently asked on flashcards.',
     )).toBeTruthy();
     expect(view.getByText(
-      `Pattern 4 — flashcards call this “${KEIGO_REGISTER_LABELS.when_granted}”`,
+      `Pattern 4 — detail pages call this “${KEIGO_REGISTER_LABELS.when_granted}”; not currently asked on flashcards`,
     )).toBeTruthy();
   });
 

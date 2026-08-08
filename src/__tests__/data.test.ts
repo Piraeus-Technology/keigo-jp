@@ -3,8 +3,10 @@ import { createHash } from 'crypto';
 import verbs from '../data/verbs.json';
 import expressions from '../data/expressions.json';
 import {
+  getCanonicalRegister,
   getGradableAlternatives,
   getGradableVerbPairs,
+  isAskableVerbForm,
   getVerbFormData,
   hasCanonicalVerbForm,
   isGradableVerbForm,
@@ -32,6 +34,7 @@ type RawKeigoFormEntry = {
   form?: string;
   reading?: string;
   pattern?: string;
+  patternSource?: unknown;
   note?: string;
   humbleSubclass?: unknown;
   conditions?: unknown;
@@ -102,6 +105,11 @@ const B3_BATCH_ONE_SLOTS = [
   '遠慮する:sonkeigo',
   '閉める:kenjougo',
   '開ける:kenjougo',
+  // Adjudicated later, when the godan causative classifier stopped hiding them.
+  '寝る:kenjougo',
+  '使う:kenjougo',
+  '終わる:kenjougo',
+  '入る:kenjougo',
 ].sort();
 const OFFICIAL_GUIDANCE_SOURCE = '文化審議会「敬語の指針」';
 const OFFICIAL_GUIDANCE_URL =
@@ -160,6 +168,7 @@ function getContentDigest(data: unknown): {
     'reading',
     'translation',
     'pattern',
+    'patternSource',
     'note',
     'humbleSubclass',
     'conditions',
@@ -202,8 +211,18 @@ function getContentDigest(data: unknown): {
   };
 }
 
-function getExampleDemonstrationStem(form: string): string {
-  if (form.endsWith('させていただく')) return form.slice(0, -1);
+function getExampleDemonstrationStem(
+  form: string,
+  sourceVerb: string,
+  politeForm?: string,
+): string {
+  // Ask the shared classifier rather than re-matching the pattern here. This
+  // line used to test `endsWith('させていただく')`, the same incomplete match
+  // that hid the godan causatives from `inferKeigoPattern` — so the helper
+  // meant to police the data carried the identical blind spot.
+  if (inferKeigoPattern(form, sourceVerb, politeForm) === 'sase_te_itadaku') {
+    return form.slice(0, -1);
+  }
   if (form.endsWith('いたす')) return form.slice(0, -1);
   if (form.endsWith('なさる')) return form.slice(0, -1);
   if (form.endsWith('する')) return `${form.slice(0, -2)}し`;
@@ -409,7 +428,11 @@ describe('Verb data validation', () => {
 
     test('teineigo shares the same form-data shape', () => {
       expect(verb.teineigo).toHaveProperty('availability');
-      expect(isValidKeigoFormData(verb.teineigo)).toBe(true);
+      expect(isValidKeigoFormData(
+        verb.teineigo,
+        verbKey,
+        verb.teineigo.form,
+      )).toBe(true);
     });
 
     test('sonkeigo pattern is valid and consistent with its form', () => {
@@ -418,6 +441,10 @@ describe('Verb data validation', () => {
         expect(isKeigoPatternConsistent(
           verb.sonkeigo.form ?? '',
           verb.sonkeigo.pattern as typeof KEIGO_PATTERNS[number],
+          typeof verb.sonkeigo.patternSource === 'string'
+            ? verb.sonkeigo.patternSource
+            : verbKey,
+          verb.teineigo.form,
         )).toBe(true);
       } else {
         expect(verb.sonkeigo.pattern).toBeUndefined();
@@ -430,6 +457,10 @@ describe('Verb data validation', () => {
         expect(isKeigoPatternConsistent(
           verb.kenjougo.form ?? '',
           verb.kenjougo.pattern as typeof KEIGO_PATTERNS[number],
+          typeof verb.kenjougo.patternSource === 'string'
+            ? verb.kenjougo.patternSource
+            : verbKey,
+          verb.teineigo.form,
         )).toBe(true);
       } else {
         expect(verb.kenjougo.pattern).toBeUndefined();
@@ -466,7 +497,11 @@ describe('Verb data validation', () => {
         verb.kenjougo,
         verb.teineigo,
       ]) {
-        expect(isValidKeigoFormData(formData)).toBe(true);
+        expect(isValidKeigoFormData(
+          formData,
+          verbKey,
+          verb.teineigo.form,
+        )).toBe(true);
         if (formData.availability === 'present') {
           expect(formData.form?.trim()).toBeTruthy();
           expect(formData.reading?.trim()).toBeTruthy();
@@ -507,29 +542,57 @@ describe('Verb data validation', () => {
   });
 
   test('classifies construction shape rather than only checking membership', () => {
-    expect(inferKeigoPattern('確認させていただく'))
+    expect(inferKeigoPattern('確認させていただく', '確認する'))
       .toBe('sase_te_itadaku');
-    expect(inferKeigoPattern('お電話になる')).toBe('o_ni_naru');
-    expect(inferKeigoPattern('ご迷惑をおかけする')).toBe('go_suru');
-    expect(inferKeigoPattern('ご覧になる')).toBe('special');
-    expect(inferKeigoPattern('検討いたす')).toBe('itasu');
-    expect(inferKeigoPattern('賛成なさる')).toBe('nasaru');
-    expect(inferKeigoPattern('お待ちいたす')).toBe('o_itasu');
-    expect(inferKeigoPattern('ご案内いたす')).toBe('go_itasu');
-    expect(inferKeigoPattern('いたす')).toBe('special');
-    expect(inferKeigoPattern('なさる')).toBe('special');
-    expect(isKeigoPatternConsistent('お電話になる', 'go_ni_naru'))
+    expect(inferKeigoPattern('使わせていただく', '使う'))
+      .toBe('sase_te_itadaku');
+    expect(inferKeigoPattern('着させていただく', '着る', '着ます'))
+      .toBe('sase_te_itadaku');
+    expect(inferKeigoPattern('入らせていただく', '入る', '入ります'))
+      .toBe('sase_te_itadaku');
+    expect(inferKeigoPattern('お電話になる', '電話する')).toBe('o_ni_naru');
+    expect(inferKeigoPattern('ご迷惑をおかけする', '迷惑をかける')).toBe('go_suru');
+    expect(inferKeigoPattern('ご覧になる', '見る')).toBe('special');
+    expect(inferKeigoPattern('検討いたす', '検討する')).toBe('itasu');
+    expect(inferKeigoPattern('賛成なさる', '賛成する')).toBe('nasaru');
+    expect(inferKeigoPattern('お待ちいたす', '待つ')).toBe('o_itasu');
+    expect(inferKeigoPattern('ご案内いたす', '案内する')).toBe('go_itasu');
+    expect(inferKeigoPattern('いたす', 'する')).toBe('special');
+    expect(inferKeigoPattern('なさる', 'する')).toBe('special');
+    expect(isKeigoPatternConsistent('お電話になる', 'go_ni_naru', '電話する'))
       .toBe(false);
     expect(isKeigoPatternConsistent(
       '確認させていただく',
       'special',
+      '確認する',
     )).toBe(false);
-    expect(isKeigoPatternConsistent('検討いたす', 'special'))
+    expect(isKeigoPatternConsistent('検討いたす', 'special', '検討する'))
       .toBe(false);
-    expect(isKeigoPatternConsistent('賛成なさる', 'special'))
+    expect(isKeigoPatternConsistent('賛成なさる', 'special', '賛成する'))
       .toBe(false);
-    expect(isKeigoPatternConsistent('いたす', 'itasu')).toBe(false);
-    expect(isKeigoPatternConsistent('なさる', 'nasaru')).toBe(false);
+    expect(isKeigoPatternConsistent('いたす', 'itasu', 'する')).toBe(false);
+    expect(isKeigoPatternConsistent('なさる', 'nasaru', 'する')).toBe(false);
+  });
+
+  test('uses the source verb to reject lexical 〜せる stems', () => {
+    for (const [form, source, polite] of [
+      ['見せていただく', '見せる', '見せます'],
+      ['合わせていただく', '合わせる', '合わせます'],
+      ['知らせていただく', '知らせる', '知らせます'],
+      ['済ませていただく', '済ませる', '済ませます'],
+      ['聞かせていただく', '聞かせる', '聞かせます'],
+    ] as const) {
+      expect(inferKeigoPattern(form, source, polite)).toBe('special');
+    }
+    expect(inferKeigoPattern('聞かせていただく', '聞く'))
+      .toBe('sase_te_itadaku');
+  });
+
+  test('fails closed for ambiguous る-source verbs without polite class evidence', () => {
+    expect(inferKeigoPattern('食べさせていただく', '食べる'))
+      .toBe('special');
+    expect(inferKeigoPattern('食べさせていただく', '食べる', '食べています'))
+      .toBe('special');
   });
 
   test('adjudicates every B3 slot without leaving a residual worklist', () => {
@@ -589,9 +652,14 @@ describe('Verb data validation', () => {
   test('every gradable verb/form pair has an answer distinct from its prompt', () => {
     const pairs = getGradableVerbPairs(typedVerbEntries, GRADABLE_FORMS);
 
-    expect(pairs).toHaveLength(195);
+    // 191, not the askable 201: this pool is the context-free one, so the ten
+    // permission-and-benefit forms are excluded from it by design.
+    expect(pairs).toHaveLength(191);
     expect(pairs.every(({ verb, formData }) =>
       formData.form !== verb
+    )).toBe(true);
+    expect(pairs.every(({ formData }) =>
+      formData.conditions === undefined
     )).toBe(true);
   });
 
@@ -683,7 +751,13 @@ describe('Verb data validation', () => {
       expect(formData.form).toEqual(expect.any(String));
       if (typeof formData.form !== 'string') return;
 
-      const stem = getExampleDemonstrationStem(formData.form);
+      const stem = getExampleDemonstrationStem(
+        formData.form,
+        typeof formData.patternSource === 'string'
+          ? formData.patternSource
+          : verb,
+        data.teineigo.form,
+      );
       expect(data.examples.some((example) =>
         example.type === form && example.ja.includes(stem)
       )).toBe(true);
@@ -845,6 +919,89 @@ describe('Alternative register metadata', () => {
     }
   });
 
+  test('treats every させていただく form the same way, whatever its verb class', () => {
+    // The split used to track a regex gap: a godan causative ends in ませて /
+    // わせて / らせて, so `させていただく` matched only the ichidan and サ変
+    // forms, and only those got conditions and were held out of practice.
+    const causatives = typedVerbEntries.flatMap(([verb, data]) =>
+      GRADABLE_FORMS.flatMap((form) => {
+        const formData = getVerbFormData(data, form);
+        if (formData.availability === 'absent') return [];
+        const sourceVerb = formData.patternSource ?? verb;
+        return inferKeigoPattern(
+          formData.form,
+          sourceVerb,
+          data.teineigo.availability === 'present'
+            ? data.teineigo.form
+            : undefined,
+        ) === 'sase_te_itadaku'
+          ? [{ verb, form, formData }]
+          : [];
+      })
+    );
+
+    expect(causatives).toHaveLength(10);
+    for (const { verb, form, formData } of causatives) {
+      expect({ verb, form, pattern: formData.pattern })
+        .toEqual({ verb, form, pattern: 'sase_te_itadaku' });
+      expect({ verb, conditional: formData.conditions !== undefined })
+        .toEqual({ verb, conditional: true });
+      expect({ verb, reviewed: formData.review?.status })
+        .toEqual({ verb, reviewed: 'reviewed' });
+      // Askable with a label, never askable without one.
+      expect({ verb, askable: isAskableVerbForm(verb, (verbs as unknown as Record<string, VerbData>)[verb], form) })
+        .toEqual({ verb, askable: true });
+      expect({ verb, gradable: isGradableVerbForm(verb, (verbs as unknown as Record<string, VerbData>)[verb], form) })
+        .toEqual({ verb, gradable: false });
+    }
+  });
+
+  test('derives When granted for a conditional canonical form and nothing else', () => {
+    const data = verbs as unknown as Record<string, VerbData>;
+    for (const [verb, entry] of typedVerbEntries) {
+      for (const form of GRADABLE_FORMS) {
+        const formData = getVerbFormData(entry, form);
+        if (formData.availability === 'absent') continue;
+        const expected = formData.conditions === undefined
+          ? undefined
+          : 'when_granted';
+        expect({ verb, form, register: getCanonicalRegister(data[verb], form) })
+          .toEqual({ verb, form, register: expected });
+      }
+    }
+  });
+
+  test('keeps an unconditional alternative askable on a conditional canonical slot', () => {
+    const source = (verbs as unknown as Record<string, VerbData>)['使う'];
+    const alternative = {
+      form: '使用いたす',
+      reading: 'しよういたす',
+      register: 'more_formal' as const,
+    };
+    const conditionalWithAlternative: VerbData = {
+      ...source,
+      kenjougo: {
+        availability: 'present',
+        form: '使わせていただく',
+        reading: 'つかわせていただく',
+        pattern: 'sase_te_itadaku',
+        conditions: ['Use only with permission and benefit.'],
+        alternatives: [alternative],
+      },
+    };
+
+    expect(isGradableVerbForm(
+      '使う',
+      conditionalWithAlternative,
+      'kenjougo',
+    )).toBe(false);
+    expect(getGradableAlternatives(
+      '使う',
+      conditionalWithAlternative,
+      'kenjougo',
+    )).toEqual([alternative]);
+  });
+
   test('records the register split the practice deck is built from', () => {
     const split = {
       less_formal: 0,
@@ -913,9 +1070,10 @@ describe('Alternative register metadata', () => {
 
   test('leaves the canonical practice pool untouched by the alternatives', () => {
     // The quiz reads getGradableVerbPairs, which must keep answering with
-    // canonical forms only — alternatives are a flashcard-side concept.
+    // unlabelled canonical forms only — it is multiple-choice with no way to
+    // state a register, so alternatives and conditional forms stay out.
     const pairs = getGradableVerbPairs(typedVerbEntries, GRADABLE_FORMS);
-    expect(pairs).toHaveLength(195);
+    expect(pairs).toHaveLength(191);
     for (const pair of pairs) {
       const alternatives = pair.formData.alternatives ?? [];
       expect(alternatives.map((a) => a.form)).not.toContain(pair.formData.form);
@@ -927,8 +1085,13 @@ describe('Alternative register metadata', () => {
       GRADABLE_FORMS.flatMap((form) => getGradableAlternatives(verb, data, form))
     );
     expect(askable).toHaveLength(139);
-    expect(getGradableVerbPairs(typedVerbEntries, GRADABLE_FORMS).length + askable.length)
-      .toBe(334);
+    // The deck is askable canonical faces plus askable alternatives — NOT the
+    // gradable pool, which excludes the ten When granted canonical cards.
+    const canonicalFaces = typedVerbEntries.flatMap(([verb, data]) =>
+      GRADABLE_FORMS.filter((form) => isAskableVerbForm(verb, data, form))
+    );
+    expect(canonicalFaces).toHaveLength(201);
+    expect(canonicalFaces.length + askable.length).toBe(340);
     expect(askable.every((alternative) =>
       alternative.conditions === undefined && alternative.register !== 'contextual'
     )).toBe(true);
@@ -938,8 +1101,10 @@ describe('Alternative register metadata', () => {
 describe('Content integrity', () => {
   test('locks the adjudicated verb content', () => {
     expect(getContentDigest(verbs)).toEqual({
-      count: 2834,
-      digest: '1512f97d02a0041d03bbe3eaea1f43c3887142c3fa1b559fb11c70c89934702f',
+      // 2834 + 3×9 ordinary adjudication fields + 1×10 for 寝る, whose
+      // explicit patternSource records that its stored form conjugates 休む.
+      count: 2871,
+      digest: 'd278cfbbded56246a7c397bb24338628c9dc62269d37e2582dcd06d64cccff17',
     });
   });
 
