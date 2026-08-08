@@ -1,4 +1,5 @@
 import type {
+  KeigoAlternative,
   KeigoForm,
   KeigoFormData,
   PresentKeigoFormData,
@@ -45,6 +46,28 @@ export function getGradableForms(
   activeForms: KeigoForm[],
 ): KeigoForm[] {
   return activeForms.filter((form) => isGradableVerbForm(verb, data, form));
+}
+
+/**
+ * An alternative can be asked for on its own card only when it holds
+ * unconditionally — the same bar `isGradableVerbForm` applies to a canonical
+ * form. A permission-and-benefit form like 利用させていただく depends on context
+ * the prompt cannot supply, so it stays Detail-only.
+ */
+export function isGradableAlternative(alternative: KeigoAlternative): boolean {
+  return alternative.conditions === undefined
+    && alternative.register !== 'contextual';
+}
+
+export function getGradableAlternatives(
+  verb: string,
+  data: VerbData,
+  form: KeigoForm,
+): KeigoAlternative[] {
+  if (!isGradableVerbForm(verb, data, form)) return [];
+  const formData = getVerbFormData(data, form);
+  if (formData.availability === 'absent') return [];
+  return (formData.alternatives ?? []).filter(isGradableAlternative);
 }
 
 export function getGradableVerbPairs(

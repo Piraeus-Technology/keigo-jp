@@ -23,9 +23,12 @@ import {
   KeigoForm,
   BusinessLevel,
   PromptLanguage,
+  KeigoRegister,
   KEIGO_FORM_LABELS,
+  KEIGO_REGISTER_LABELS,
 } from '../utils/keigoTypes';
 import {
+  getGradableAlternatives,
   getGradableForms,
   getVerbFormData,
 } from '../utils/gradableVerbs';
@@ -54,6 +57,8 @@ export interface Card {
   form?: KeigoForm;
   answer: string;
   answerReading: string;
+  /** Absent means the card asks for the canonical form. */
+  register?: KeigoRegister;
   cardType: CardType;
 }
 
@@ -84,6 +89,12 @@ export function FlashcardAnswerText({
 
 export interface PromptFace {
   label: string | null;
+  /**
+   * Which register the card wants, when it is not the canonical form. Names the
+   * register only — a learner still has to know which pattern expresses it and
+   * still has to build the form.
+   */
+  registerLabel: string | null;
   /** The line the learner is asked to convert. */
   primary: string;
   /** 'headword' is a single Japanese word; 'sentence' is a wrapping English line. */
@@ -102,7 +113,7 @@ function asSentence(text: string): string {
 }
 
 function promptAccessibilityLabel(promptFace: PromptFace): string {
-  const prompt = [promptFace.label, promptFace.primary]
+  const prompt = [promptFace.label, promptFace.registerLabel, promptFace.primary]
     .filter((part): part is string => Boolean(part))
     .map(asSentence)
     .join(' ');
@@ -118,6 +129,7 @@ export function getPromptFace(card: Card, promptLanguage: PromptLanguage): Promp
   if (card.cardType === 'expression') {
     return {
       label: 'How do you say this in keigo?',
+      registerLabel: null,
       primary: card.front,
       primaryVariant: 'sentence',
       reading: null,
@@ -127,11 +139,13 @@ export function getPromptFace(card: Card, promptLanguage: PromptLanguage): Promp
 
   const formLabel = card.form ? KEIGO_FORM_LABELS[card.form] : null;
   const label = formLabel ? `${formLabel.ja} — ${formLabel.en}` : null;
+  const registerLabel = card.register ? KEIGO_REGISTER_LABELS[card.register] : null;
 
   const gloss = card.promptGloss || card.translation;
   if (promptLanguage === 'english' && gloss) {
     return {
       label,
+      registerLabel,
       primary: englishPromptFor(gloss),
       primaryVariant: 'sentence',
       reading: null,
@@ -141,6 +155,7 @@ export function getPromptFace(card: Card, promptLanguage: PromptLanguage): Promp
 
   return {
     label,
+    registerLabel,
     primary: card.front,
     primaryVariant: 'headword',
     reading: card.reading || null,
@@ -237,6 +252,21 @@ export function generateCard(
   const form = eligibleForms[Math.floor(random() * eligibleForms.length)];
   const formData = getVerbFormData(data, form);
   if (formData.availability === 'absent') return null;
+
+  // The canonical form and each unconditional alternative are separate cards.
+  // Only the alternatives carry a register label; the canonical face is the
+  // unlabelled one, which is what makes "unlabelled means the preferred form"
+  // readable as a rule.
+  const faces: { answer: string; answerReading: string; register?: KeigoRegister }[] = [
+    { answer: formData.form, answerReading: formData.reading },
+    ...getGradableAlternatives(verb, data, form).map((alternative) => ({
+      answer: alternative.form,
+      answerReading: alternative.reading,
+      register: alternative.register,
+    })),
+  ];
+  const face = faces[Math.floor(random() * faces.length)];
+
   return {
     srKey: verb,
     front: verb,
@@ -244,8 +274,9 @@ export function generateCard(
     translation: data.translation,
     promptGloss: data.promptGloss,
     form,
-    answer: formData.form,
-    answerReading: formData.reading,
+    answer: face.answer,
+    answerReading: face.answerReading,
+    register: face.register,
     cardType: 'verb',
   };
 }
@@ -528,8 +559,24 @@ export default function FlashcardScreen() {
             ]}
           >
             {promptFace.label && (
-              <Text style={[styles.formLabel, { color: colors.textSecondary }]}>
+              <Text
+                style={[
+                  styles.formLabel,
+                  promptFace.registerLabel ? styles.formLabelWithRegister : null,
+                  { color: colors.textSecondary },
+                ]}
+              >
                 {promptFace.label}
+              </Text>
+            )}
+            {promptFace.registerLabel && (
+              <Text
+                style={[
+                  styles.registerPill,
+                  { backgroundColor: colors.pillBg, color: colors.pillText },
+                ]}
+              >
+                {promptFace.registerLabel}
               </Text>
             )}
             {promptFace.primaryVariant === 'headword' ? (
@@ -718,6 +765,19 @@ const styles = StyleSheet.create({
     fontWeight: fonts.weights.semibold,
     letterSpacing: 1,
     marginBottom: spacing.md,
+    textAlign: 'center',
+  },
+  formLabelWithRegister: {
+    marginBottom: spacing.sm,
+  },
+  registerPill: {
+    fontSize: fonts.sizes.sm,
+    fontWeight: fonts.weights.semibold,
+    borderRadius: radius.full,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    marginBottom: spacing.md,
+    overflow: 'hidden',
     textAlign: 'center',
   },
   verbText: {

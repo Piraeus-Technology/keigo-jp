@@ -3,6 +3,7 @@ import { createHash } from 'crypto';
 import verbs from '../data/verbs.json';
 import expressions from '../data/expressions.json';
 import {
+  getGradableAlternatives,
   getGradableVerbPairs,
   getVerbFormData,
   hasCanonicalVerbForm,
@@ -13,6 +14,7 @@ import {
   ALL_LEVELS,
   GRADABLE_FORMS,
   KEIGO_PATTERNS,
+  KEIGO_REGISTERS,
   inferKeigoPattern,
   isKeigoPatternConsistent,
   isValidKeigoFormData,
@@ -114,6 +116,40 @@ const VERIFIED_GUIDANCE_LOCATORS = new Set([
   'printed pp. 40–41 (PDF pp. 43–44), 2007',
 ]);
 
+type PassiveClass = 'godan' | 'ichidan' | 'kuru' | 'suru';
+
+const NEW_PASSIVE_ALTERNATIVES = [
+  ['言う', 'godan'],
+  ['行く', 'godan'],
+  ['来る', 'kuru'],
+  ['する', 'suru'],
+  ['食べる', 'ichidan'],
+  ['飲む', 'godan'],
+  ['見る', 'ichidan'],
+  ['知る', 'godan'],
+  ['座る', 'godan'],
+  ['寝る', 'ichidan'],
+  ['着る', 'ichidan'],
+  ['賛成する', 'suru'],
+  ['反対する', 'suru'],
+  ['遠慮する', 'suru'],
+] as const satisfies readonly (readonly [string, PassiveClass])[];
+
+function derivePassive(value: string, verbClass: PassiveClass): string {
+  if (verbClass === 'kuru') return value === 'くる' ? 'こられる' : '来られる';
+  if (verbClass === 'suru') return `${value.slice(0, -2)}される`;
+  if (verbClass === 'ichidan') return `${value.slice(0, -1)}られる`;
+
+  const aRow: Record<string, string> = {
+    'う': 'わ', 'く': 'か', 'ぐ': 'が', 'す': 'さ', 'つ': 'た',
+    'ぬ': 'な', 'ぶ': 'ば', 'む': 'ま', 'る': 'ら',
+  };
+  const ending = value.at(-1) ?? '';
+  const stemEnding = aRow[ending];
+  if (!stemEnding) throw new Error(`Unsupported godan ending: ${ending}`);
+  return `${value.slice(0, -1)}${stemEnding}れる`;
+}
+
 function getContentDigest(data: unknown): {
   count: number;
   digest: string;
@@ -128,6 +164,7 @@ function getContentDigest(data: unknown): {
     'humbleSubclass',
     'conditions',
     'alternatives',
+    'register',
     'review',
     'status',
     'rationale',
@@ -201,6 +238,7 @@ describe('Keigo form schema', () => {
       alternatives: [{
         form: 'お届けいたす',
         reading: 'おとどけいたす',
+        register: 'more_formal',
         conditions: ['Use in a more formal register.'],
       }],
       review: {
@@ -223,6 +261,19 @@ describe('Keigo form schema', () => {
       reading: 'おとどけする',
       pattern: 'o_suru',
     })).toBe(true);
+  });
+
+  test('rejects two alternatives that would share one register-labelled prompt', () => {
+    expect(isValidKeigoFormData({
+      availability: 'present',
+      form: 'お届けする',
+      reading: 'おとどけする',
+      pattern: 'o_suru',
+      alternatives: [
+        { form: 'お届けいたす', reading: 'おとどけいたす', register: 'more_formal' },
+        { form: 'お届け申し上げる', reading: 'おとどけもうしあげる', register: 'more_formal' },
+      ],
+    })).toBe(false);
   });
 
   test.each([
@@ -676,11 +727,11 @@ describe('Verb data validation', () => {
     }
   });
 
-  test('promotes orphaned humble forms to plain-verb alternatives', () => {
+  test('keeps context-selected humble forms visible but out of practice', () => {
     const data = verbs as unknown as Record<string, VerbData>;
     const expected = [
-      ['言う', { form: '申し上げる', reading: 'もうしあげる' }],
-      ['聞く', { form: '承る', reading: 'うけたまわる' }],
+      ['言う', { form: '申し上げる', reading: 'もうしあげる', register: 'contextual' }],
+      ['聞く', { form: '承る', reading: 'うけたまわる', register: 'contextual' }],
     ] as const;
 
     for (const [verb, alternative] of expected) {
@@ -689,6 +740,10 @@ describe('Verb data validation', () => {
       expect(formData.alternatives).toEqual(
         expect.arrayContaining([alternative]),
       );
+      expect(getGradableAlternatives(verb, data[verb], 'kenjougo'))
+        .not.toEqual(expect.arrayContaining([expect.objectContaining({
+          form: alternative.form,
+        })]));
     }
   });
 
@@ -724,11 +779,167 @@ describe('Verb data validation', () => {
   });
 });
 
+describe('Alternative register metadata', () => {
+  const alternativeSlots = typedVerbEntries.flatMap(([verb, data]) =>
+    GRADABLE_FORMS.flatMap((form) => {
+      const formData = getVerbFormData(data, form);
+      if (formData.availability === 'absent' || !formData.alternatives) return [];
+      return [{ verb, data, form, formData, alternatives: formData.alternatives }];
+    })
+  );
+
+  test('every alternative declares a register from the shared whitelist', () => {
+    expect(alternativeSlots.length).toBeGreaterThan(0);
+    for (const { verb, form, alternatives } of alternativeSlots) {
+      for (const alternative of alternatives) {
+        expect({
+          verb,
+          form,
+          register: alternative.register,
+          known: (KEIGO_REGISTERS as readonly string[]).includes(alternative.register),
+        }).toEqual({ verb, form, register: alternative.register, known: true });
+        expect(alternative.form.trim()).not.toBe('');
+        expect(alternative.reading.trim()).not.toBe('');
+      }
+    }
+  });
+
+  test('an alternative never repeats the prompt, the canonical answer or a sibling', () => {
+    for (const { verb, form, formData, alternatives } of alternativeSlots) {
+      const seen = new Set<string>();
+      for (const alternative of alternatives) {
+        expect({ verb, form, clashesWithCanonical: alternative.form === formData.form })
+          .toEqual({ verb, form, clashesWithCanonical: false });
+        expect({ verb, form, clashesWithPrompt: alternative.form === verb })
+          .toEqual({ verb, form, clashesWithPrompt: false });
+        expect({ verb, form, duplicate: seen.has(alternative.form) })
+          .toEqual({ verb, form, duplicate: false });
+        seen.add(alternative.form);
+      }
+    }
+  });
+
+  test('keeps permission-dependent and contextual alternatives out of practice', () => {
+    for (const { verb, data, form, alternatives } of alternativeSlots) {
+      const askable = getGradableAlternatives(verb, data, form).map((a) => a.form);
+      for (const alternative of alternatives) {
+        const conditional = alternative.conditions !== undefined;
+        // when_granted and "has conditions" must agree in both directions, since
+        // that equivalence is the whole reason a conditional form cannot be asked
+        // for on a context-free card.
+        expect({
+          verb,
+          form: alternative.form,
+          conditional,
+          whenGranted: alternative.register === 'when_granted',
+        }).toEqual({
+          verb,
+          form: alternative.form,
+          conditional,
+          whenGranted: conditional,
+        });
+        const contextFree = !conditional && alternative.register !== 'contextual';
+        expect({ form: alternative.form, askable: askable.includes(alternative.form) })
+          .toEqual({ form: alternative.form, askable: contextFree });
+      }
+    }
+  });
+
+  test('records the register split the practice deck is built from', () => {
+    const split = {
+      less_formal: 0,
+      more_formal: 0,
+      when_granted: 0,
+      contextual: 0,
+    };
+    for (const { alternatives } of alternativeSlots) {
+      for (const alternative of alternatives) split[alternative.register] += 1;
+    }
+    expect(split).toEqual({
+      less_formal: 92,
+      more_formal: 47,
+      when_granted: 9,
+      contextual: 2,
+    });
+  });
+
+  test('derives every newly authored passive form and reading by conjugation', () => {
+    const data = verbs as unknown as Record<string, VerbData>;
+    for (const [verb, verbClass] of NEW_PASSIVE_ALTERNATIVES) {
+      const formData = getVerbFormData(data[verb], 'sonkeigo');
+      expect(formData.availability).toBe('present');
+      const alternative = formData.availability === 'present'
+        ? formData.alternatives?.find((item) => item.register === 'less_formal')
+        : undefined;
+      expect({
+        verb,
+        form: alternative?.form,
+        reading: alternative?.reading,
+      }).toEqual({
+        verb,
+        form: derivePassive(verb, verbClass),
+        reading: derivePassive(data[verb].reading, verbClass),
+      });
+    }
+  });
+
+  test('records why every misleading passive alternative is withheld', () => {
+    const withheld = {
+      'もらう': 'もらわれる would be read outside the intended honorific use; the canonical form uses a different lexical stem.',
+      'あげる': 'あげられる would be read outside the intended honorific use; the canonical form uses a different lexical stem.',
+      '届く': '届かれる would misleadingly honor an inanimate subject in the target sense.',
+      'わかる': 'わかられる is not accepted as the standard honorific for this slot; use おわかりになる.',
+      'いる': 'いられる is the potential of いる, not its standard honorific; use いらっしゃる.',
+      '死ぬ': '死なれる is an adversative passive, not an honorific alternative.',
+      'くれる': 'くれられる has no standard honorific reading; use くださる.',
+      '願う': '願われる is dominated by its spontaneous reading in isolation.',
+      '迷惑をかける': '迷惑をかけられる is ordinarily adversative passive and reverses the participant roles.',
+    } as const;
+    const data = verbs as unknown as Record<string, VerbData>;
+    for (const [verb, reason] of Object.entries(withheld)) {
+      const formData = getVerbFormData(data[verb], 'sonkeigo');
+      expect(reason.trim()).not.toBe('');
+      expect(reason).not.toContain('\n');
+      expect(formData.availability).toBe('present');
+      const registers = formData.availability === 'present'
+        ? (formData.alternatives ?? []).map((alternative) => alternative.register)
+        : [];
+      expect({ verb, registers }).toEqual({
+        verb,
+        registers: expect.not.arrayContaining(['less_formal']),
+      });
+    }
+  });
+
+  test('leaves the canonical practice pool untouched by the alternatives', () => {
+    // The quiz reads getGradableVerbPairs, which must keep answering with
+    // canonical forms only — alternatives are a flashcard-side concept.
+    const pairs = getGradableVerbPairs(typedVerbEntries, GRADABLE_FORMS);
+    expect(pairs).toHaveLength(195);
+    for (const pair of pairs) {
+      const alternatives = pair.formData.alternatives ?? [];
+      expect(alternatives.map((a) => a.form)).not.toContain(pair.formData.form);
+    }
+  });
+
+  test('adds one askable card per unconditional alternative', () => {
+    const askable = typedVerbEntries.flatMap(([verb, data]) =>
+      GRADABLE_FORMS.flatMap((form) => getGradableAlternatives(verb, data, form))
+    );
+    expect(askable).toHaveLength(139);
+    expect(getGradableVerbPairs(typedVerbEntries, GRADABLE_FORMS).length + askable.length)
+      .toBe(334);
+    expect(askable.every((alternative) =>
+      alternative.conditions === undefined && alternative.register !== 'contextual'
+    )).toBe(true);
+  });
+});
+
 describe('Content integrity', () => {
   test('locks the adjudicated verb content', () => {
     expect(getContentDigest(verbs)).toEqual({
-      count: 2269,
-      digest: 'a235d90faeac58aca60f222a957e765dd0f004b28c901d05ef97dfde931a6044',
+      count: 2834,
+      digest: '1512f97d02a0041d03bbe3eaea1f43c3887142c3fa1b559fb11c70c89934702f',
     });
   });
 

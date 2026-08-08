@@ -20,12 +20,35 @@ export type KeigoPattern = typeof KEIGO_PATTERNS[number];
 export const HUMBLE_SUBCLASSES = ['kenjougo_i', 'kenjougo_ii'] as const;
 export type HumbleSubclass = typeof HUMBLE_SUBCLASSES[number];
 
+// How an alternative form's register sits relative to the canonical form of the
+// same slot. This is relative, not absolute: いたす is the plain canonical humble
+// for 利用する, but お書きいたす is a step above お書きする for 書く — so the
+// register belongs on the alternative, not on the pattern.
+export const KEIGO_REGISTERS = [
+  'less_formal',
+  'more_formal',
+  'when_granted',
+  'contextual',
+] as const;
+export type KeigoRegister = typeof KEIGO_REGISTERS[number];
+
+// Shown on the prompt side so the learner knows which register is wanted. An
+// unlabelled card asks for the canonical form. The wording deliberately names
+// the register and not the pattern — 'Less formal' must not give away れる/られる.
+export const KEIGO_REGISTER_LABELS: Record<KeigoRegister, string> = {
+  less_formal: 'Less formal',
+  more_formal: 'More formal',
+  when_granted: 'When granted',
+  contextual: 'Context-dependent',
+};
+
 export const REVIEW_CONFIDENCE_LEVELS = ['low', 'medium', 'high'] as const;
 export type ReviewConfidence = typeof REVIEW_CONFIDENCE_LEVELS[number];
 
 export interface KeigoAlternative {
   form: string;
   reading: string;
+  register: KeigoRegister;
   conditions?: string[];
 }
 
@@ -205,8 +228,17 @@ function isValidAlternative(value: unknown): value is KeigoAlternative {
   if (!isRecord(value)) return false;
   return isNonEmptyString(value.form)
     && isNonEmptyString(value.reading)
+    && typeof value.register === 'string'
+    && (KEIGO_REGISTERS as readonly string[]).includes(value.register)
     && (value.conditions === undefined
       || isNonEmptyStringArray(value.conditions));
+}
+
+function hasUniqueAlternativeRegisters(
+  alternatives: KeigoAlternative[],
+): boolean {
+  const registers = alternatives.map((alternative) => alternative.register);
+  return new Set(registers).size === registers.length;
 }
 
 function isValidCitation(value: unknown): value is KeigoReviewCitation {
@@ -246,11 +278,13 @@ export function isValidKeigoFormData(
     && !isNonEmptyStringArray(value.conditions)) {
     return false;
   }
-  if (value.alternatives !== undefined
-    && (!Array.isArray(value.alternatives)
+  if (value.alternatives !== undefined) {
+    if (!Array.isArray(value.alternatives)
       || value.alternatives.length === 0
-      || !value.alternatives.every(isValidAlternative))) {
-    return false;
+      || !value.alternatives.every(isValidAlternative)
+      || !hasUniqueAlternativeRegisters(value.alternatives)) {
+      return false;
+    }
   }
   if (value.review !== undefined && !isValidReviewState(value.review)) {
     return false;
